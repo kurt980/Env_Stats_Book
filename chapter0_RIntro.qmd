@@ -1,4 +1,4 @@
-# **Chapter 0: Introduction to R See if anything changes**
+# **Chapter 0: Introduction to R**
 
 ## Section 1: Getting Started With R
 
