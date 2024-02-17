@@ -1,8 +1,4 @@
----
-title: "test"
----
-
-# **Chapter 1: Introduction to R**
+# **Chapter 0: Introduction to R**
 
 ## Section 1: Getting Started With R
 
