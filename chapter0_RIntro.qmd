@@ -63,7 +63,7 @@ Read data from local files, load data from online source, write data into local 
 
 ```{r}
 # Load text file
-data <- read.csv("CMI_TRH.csv")
+data <- read.csv("data/CMI_TRH.csv")
 
 head(data, 5)
 ```

@@ -22,11 +22,11 @@
   {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "2  Summary",
+    "title": "3  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
@@ -37,6 +37,46 @@
     "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
     "crumbs": [
       "References"
+    ]
+  },
+  {
+    "objectID": "chapter0_RIntro.html",
+    "href": "chapter0_RIntro.html",
+    "title": "2  Chapter 0: Introduction to R",
+    "section": "",
+    "text": "2.1 Section 1: Getting Started With R\nR is an integrated suite of software facilities for data manipulation, calculation and graphical display. Among other things it has\nThe term “environment” is intended to characterize it as a fully planned and coherent system, rather than an incremental accretion of very specific and inflexible tools, as is frequently the case with other data analysis software. R is very much a vehicle for newly developing methods of interactive data analysis. It has developed rapidly, and has been extended by a large collection of packages. However, most programs written in R are essentially ephemeral, written for a single piece of data analysis.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Chapter 0: Introduction to R**</span>"
+    ]
+  },
+  {
+    "objectID": "chapter0_RIntro.html#section-1-getting-started-with-r",
+    "href": "chapter0_RIntro.html#section-1-getting-started-with-r",
+    "title": "2  Chapter 0: Introduction to R",
+    "section": "",
+    "text": "an effective data handling and storage facility,\na suite of operators for calculations on arrays, in particular matrices,\na large, coherent, integrated collection of intermediate tools for data analysis,\ngraphical facilities for data analysis and display either directly at the computer or on hard copy, and a well developed, simple and effective programming language (called ‘S’) which includes conditionals,\nloops, user defined recursive functions and input and output facilities. (Indeed most of the system supplied functions are themselves written in the S language.)\n\n\n\n2.1.1 Environment Setup\nBefore you start, you want to do these 3 things first:\n\nInstall R R is a programming language\nInstall RStudio RStudio is the most widely-used IDE for R\nInstall tidyverse tidyverse is the collection of packages that are widely used for data analysis. The detailed introduction to tidyverse can be found in Section 1.2. You can use the below command in R to install tidyverse\n\n# &lt;&lt;cache=F, fig.width=6, fig.height=4&gt;&gt;=\n# install.packages(\"tidyverse\")\nlibrary(tidyverse)\nlibrary(dplyr)\nlibrary(magrittr)\n\n\n\n\nThe pipe operator\nThe %&gt;% operator, also known as the “pipe operator”, is a powerful feature introduced by the magrittr package in R. It allows for a more readable and concise way of chaining together multiple function calls or operations. The pipe operator facilitates the creation of efficient and streamlined data analysis pipelines.\n\n# Using pipe operator to integrate commands\nexample &lt;- data.frame(x = c(1, 2, 3, 4, 5), y = c(2, 4, 6, 8, 10))\n\n# Calculate the mean of y for rows where x is greater than 2\nmean_y &lt;- example %&gt;% subset(x &gt; 2) %&gt;% pull(y) %&gt;% mean()\n\n# Print the mean\nprint(mean_y)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Chapter 0: Introduction to R**</span>"
+    ]
+  },
+  {
+    "objectID": "chapter0_RIntro.html#section-2.-readloadoutput-data",
+    "href": "chapter0_RIntro.html#section-2.-readloadoutput-data",
+    "title": "2  Chapter 0: Introduction to R",
+    "section": "2.2 Section 2. Read/Load/Output Data",
+    "text": "2.2 Section 2. Read/Load/Output Data\nRead data from local files, load data from online source, write data into local files.\n\n2.2.1 Read Data\n\n# Load text file\ndata &lt;- read.csv(\"data/CMI_TRH.csv\")\n\nhead(data, 5)\n\n  X year month day avg_rel_hum avg_air_temp_f avg_air_temp_c date_string\n1 1 1989     2  16        87.7           26.6     -3.0000000   1989-2-16\n2 2 1989     2  17        89.4           26.4     -3.1111111   1989-2-17\n3 3 1989     2  18        88.0           27.1     -2.7222222   1989-2-18\n4 4 1989     2  19        96.7           32.5      0.2777778   1989-2-19\n5 5 1989     2  20       100.0           34.5      1.3888889   1989-2-20\n        date\n1 1989-02-16\n2 1989-02-17\n3 1989-02-18\n4 1989-02-19\n5 1989-02-20",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Chapter 0: Introduction to R**</span>"
+    ]
+  },
+  {
+    "objectID": "chapter0_RIntro.html#plots-and-graphics",
+    "href": "chapter0_RIntro.html#plots-and-graphics",
+    "title": "2  Chapter 0: Introduction to R",
+    "section": "2.3 Plots and Graphics",
+    "text": "2.3 Plots and Graphics\n\n2.3.1 Basic Plots\nThe built-in plot function in R allows you to create scatter plots, line charts and other common graphics for statistical analysis.\nscatter plot\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(dplyr)\nlibrary(magrittr)\n\n\nAttaching package: 'magrittr'\n\nThe following object is masked from 'package:purrr':\n\n    set_names\n\nThe following object is masked from 'package:tidyr':\n\n    extract\n\n# Select average humidity and date\ndata_between_2010_2012 &lt;- data %&gt;%\n    filter(year &gt;= 2010 & year &lt;= 2012)\n\n# Create a scatter plot\nplot(data_between_2010_2012$avg_rel_hum, data_between_2010_2012$avg_air_temp_c, main = \"AVG Rel Humidity VS. AVG Rel Temperature in C, between 2010-2012\", xlab = \"X\", ylab = \"Y\", pch = 16, col = \"blue\")\n\n\n\n\n\n\n\n\nhistogram and bar plot\n\n# Create a histogram \nhist(data_between_2010_2012$avg_rel_hum, main = \"AVG Rel Humidity between 2010 and 2012\", xlab = \"Value\", ylab = \"Frequency\", col = \"lightblue\")",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Chapter 0: Introduction to R**</span>"
     ]
   }
 ]
