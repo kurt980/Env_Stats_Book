@@ -1,0 +1,97 @@
+---
+title: "test"
+---
+
+# **Chapter 1: Introduction to R**
+
+## Section 1: Getting Started With R
+
+R is an integrated suite of software facilities for data manipulation, calculation and graphical display. Among other things it has
+
+-   an effective data handling and storage facility,
+
+-   a suite of operators for calculations on arrays, in particular matrices,
+
+-   a large, coherent, integrated collection of intermediate tools for data analysis,
+
+-   graphical facilities for data analysis and display either directly at the computer or on hard copy, and a well developed, simple and effective programming language (called ‘S’) which includes conditionals,
+
+-   loops, user defined recursive functions and input and output facilities. (Indeed most of the system supplied functions are themselves written in the S language.)
+
+The term “environment” is intended to characterize it as a fully planned and coherent system, rather than an incremental accretion of very specific and inflexible tools, as is frequently the case with other data analysis software. R is very much a vehicle for newly developing methods of interactive data analysis. It has developed rapidly, and has been extended by a large collection of packages. However, most programs written in R are essentially ephemeral, written for a single piece of data analysis.
+
+### Environment Setup
+
+Before you start, you want to do these 3 things first:
+
+-   **Install R** R is a programming language
+
+-   **Install RStudio** RStudio is the most widely-used IDE for R
+
+-   **Install tidyverse** tidyverse is the collection of packages that are widely used for data analysis. The detailed introduction to tidyverse can be found in Section 1.2. You can use the below command in R to install tidyverse
+
+    ```{r, eval=FALSE}
+    # <<cache=F, fig.width=6, fig.height=4>>=
+    # install.packages("tidyverse")
+    library(tidyverse)
+    library(dplyr)
+    library(magrittr)
+    ```
+
+<!-- -->
+
+-   **The pipe operator**
+
+    The %\>% operator, also known as the "pipe operator", is a powerful feature introduced by the `magrittr` package in R. It allows for a more readable and concise way of chaining together multiple function calls or operations. The pipe operator facilitates the creation of efficient and streamlined data analysis pipelines.
+
+    ```{r, eval=FALSE}
+    # Using pipe operator to integrate commands
+    example <- data.frame(x = c(1, 2, 3, 4, 5), y = c(2, 4, 6, 8, 10))
+
+    # Calculate the mean of y for rows where x is greater than 2
+    mean_y <- example %>% subset(x > 2) %>% pull(y) %>% mean()
+
+    # Print the mean
+    print(mean_y)
+    ```
+
+## Section 2. Read/Load/Output Data
+
+Read data from local files, load data from online source, write data into local files.
+
+### Read Data
+
+```{r}
+# Load text file
+data <- read.csv("CMI_TRH.csv")
+
+head(data, 5)
+```
+
+## Plots and Graphics
+
+### Basic Plots
+
+The built-in `plot` function in R allows you to create scatter plots, line charts and other common graphics for statistical analysis.
+
+**scatter plot**
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(magrittr)
+
+# Select average humidity and date
+data_between_2010_2012 <- data %>%
+    filter(year >= 2010 & year <= 2012)
+
+# Create a scatter plot
+plot(data_between_2010_2012$avg_rel_hum, data_between_2010_2012$avg_air_temp_c, main = "AVG Rel Humidity VS. AVG Rel Temperature in C, between 2010-2012", xlab = "X", ylab = "Y", pch = 16, col = "blue")
+```
+
+**histogram and bar plot**
+
+```{r}
+# Create a histogram 
+hist(data_between_2010_2012$avg_rel_hum, main = "AVG Rel Humidity between 2010 and 2012", xlab = "Value", ylab = "Frequency", col = "lightblue")
+```

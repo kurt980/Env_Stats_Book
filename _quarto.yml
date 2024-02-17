@@ -2,12 +2,13 @@ project:
   type: book
 
 book:
-  title: "Envir_Stats_Book"
-  author: "Norah Jones"
+  title: "Environmental Statistics Book"
+  author: "Professor Bravo"
   date: "2/16/2024"
   chapters:
     - index.qmd
     - intro.qmd
+    - chapter0_RIntro.qmd
     - summary.qmd
     - references.qmd
 
