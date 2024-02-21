@@ -8,3 +8,19 @@ To learn more about Quarto books visit <https://quarto.org/docs/books>.
 1 + 1
 2 + 2
 ```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

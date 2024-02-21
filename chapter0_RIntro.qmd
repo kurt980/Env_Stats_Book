@@ -34,8 +34,6 @@ Before you start, you want to do these 3 things first:
     library(magrittr)
     ```
 
-<!-- -->
-
 -   **The pipe operator**
 
     The %\>% operator, also known as the "pipe operator", is a powerful feature introduced by the `magrittr` package in R. It allows for a more readable and concise way of chaining together multiple function calls or operations. The pipe operator facilitates the creation of efficient and streamlined data analysis pipelines.
@@ -51,7 +49,368 @@ Before you start, you want to do these 3 things first:
     print(mean_y)
     ```
 
-## Section 2. Read/Load/Output Data
+### Introduction to Packages
+
+In R, "packages" are collections of functions, data, and documentation designed to extend the functionality of the base R system. These packages serve as valuable tools that provide specialized capabilities, making complex tasks easier to accomplish and expanding the scope of data analysis and statistical modeling. Each package is designed to address specific data analysis needs, making it easier for users to perform tasks from different disciplines.
+
+Using packages in R is a seamless process. Once a package is installed, you can load it into your R session using the `library()` function. This makes all the functions and datasets within the package available for use. The packages and collections covered in this book are listed below. Most of them are integrated into the `tidyverse` collection.
+
+-   **MASS** The "MASS" package includes various functions for statistical modeling, linear and nonlinear regression, generalized linear models, time series analysis, clustering, and more. Additionally, it offers datasets used in the book's examples and exercises, allowing users to replicate and experiment with the presented statistical methods.
+
+-   **Tidyverse** The \`tidyverse\` package is a collection of R packages that provides a consistent and coherent framework for data manipulation, exploration, and visualization, promoting a tidy data format and streamlined data analysis workflows. The core packages within the \`tidyverse\`, including \`dplyr\`, \`ggplot2\`, \`tidyr\`, \`readr\`, \`lubridate\`, \`magrittr\` and \`purrr\`, among others, offer powerful tools for data import, transformation, visualization, and modeling.
+
+-   **magrittr** The `magrittr` package provides a set of operators, most notably the pipe operator `%>%`, that enhances code readability and promotes a more fluent programming style in R. By chaining functions together, \`magrittr\` allows users to create a more structured and expressive data manipulation workflow.
+
+-   **ggplot2** \`ggplot2\` is a versatile and comprehensive data visualization package based on the Grammar of Graphics. With \`ggplot2\`, users can effortlessly create sophisticated and aesthetically pleasing visualizations that effectively communicate insights from their data.
+
+-   **dplyr** \`dplyr\` is a powerful package designed for data manipulation tasks in R. With a concise syntax and intuitive functions like \`filter()\`, \`arrange()\`, \`mutate()\`, and \`summarise()\`, \`dplyr\` simplifies and streamlines data wrangling, making it an essential tool for data analysts and data scientists.
+
+-   **lubridate** \`lubridate\` is a package specifically tailored for working with dates and times in R. Its user-friendly functions enable users to parse, manipulate, and format date-time data, making time-related analysis and data manipulation tasks more efficient and accurate.
+
+-   **readr** \`readr\` is a fast and efficient package for reading and importing data into R. By providing easy-to-use functions to read various file formats, readr simplifies the data reading process and ensures accurate representation of data, enabling smoother data analysis workflows.
+
+### Variables
+
+You can create variables like in all other programming languages using "-\textgreater{" or "="
+
+```{r}
+x <- 21 
+print(x)
+
+x <- "text" 
+print(x)
+```
+
+### Numbers and Vectors
+
+You can also assign numeric values or vectors to your variables
+
+-   **Numbers can be in many forms**
+
+```{r}
+# Create numbers in r 
+x <- 3.5 # numeric 
+y <- 3L # integer 
+z <- 1i # complex
+```
+
+-   **Vectors**
+
+```{r}
+# Using the combine operator `c()` in r 
+u <- c(1,1,2,3,5) 
+# Using the sequence operator `:` in r 
+v <- 1:5
+
+print(u) 
+print(v)
+
+# length of vectors 
+length(u)
+```
+
+### Strings and Boolean
+
+Other types of variables include strings and booleans
+
+-   **String**
+
+```{r}
+# String 
+s <- "This is a string" 
+print(s)
+```
+
+-   **Boolean**
+
+```{r}
+# Boolean 
+a <- TRUE 
+b <- (1 > 2)
+
+print(a) 
+print(b)
+```
+
+### Working with Dates
+
+Working with dates is supported by R. Date is a specific type of object implemented in R and supplemented by other packages such as lubridate
+
+-   **Date formatting**
+
+```{r}
+# Date formatting 
+date <- as.Date("2023-07-10") 
+formatted_date <- format(date, "%A, %B %d, %Y") 
+print(formatted_date)
+```
+
+-   **Date manipulation**
+
+```{r}
+require(lubridate)
+
+# Adding days to a date 
+date <- as.Date("2023-07-10") 
+new_date <- date + 7 
+print(new_date)
+
+# Subtracting months from a date 
+date <- as.Date("2023-07-10") 
+new_date <- date - months(3) 
+print(new_date)
+
+# Calculating the difference between two dates 
+date1 <- as.Date("2023-07-10") 
+date2 <- as.Date("2023-06-10") 
+diff <- date1 - date2 
+print(diff)
+```
+
+## Section 2: Fundamentals
+
+To perform meaningful tasks, you need to use operators, functions and loops smartly
+
+### Math and Logical Operators
+
+-   Fundamental operators
+
+```{r}
+# plus, minus, multiply and subtraction
+x <- 1
+y <- 2
+
+# print multiple arguments together using `cat`
+cat(x+y, x-y, x*y, x/y)
+```
+
+-   Logarithm and exponential
+
+```{r}
+# print exp(2) and log(1)
+cat(exp(y), log(x))
+```
+
+-   Operations on vectors
+
+```{r}
+# compute the vector max,min and median
+u <- c(-1, 0, 3, -12.5, 8.3)
+cat(max(u), min(u), median(u))
+# compute the sum and length
+cat(sum(u), length(u))
+```
+
+-   Logical operators
+
+```{r}
+# and or
+x <- TRUE
+y <- FALSE
+
+cat(x && y, x || y)
+```
+
+### Functions
+
+Functions in R are blocks of organized code designed to perform specific tasks, allowing you to efficiently reuse and modularize your code.
+
+```{r}
+# Write a function that calculates the correlation between 2 vectors of the same length
+my_function <- function(v1, v2) {
+    # add a guard clause for the input
+    if (length(v1) != length(v2)) {
+        stop("input vectors have different lengths")
+    }
+
+    mean1 <- mean(v1)
+    mean2 <- mean(v2)
+    
+    numerator <- sum((v1 - mean1) * (v2 - mean2))
+    denominator <- sqrt(sum((v1 - mean1)^2) * sum((v2 - mean2)^2))
+    
+    correlation <- numerator / denominator
+    return(correlation)
+}
+
+my_function(c(1,3,5,7), c(2,4,6,8)) # call the function named my_function
+```
+
+### If/Else Statements
+
+```{r}
+# Example: Determine if a number is even or odd
+num <- 7
+
+# use the mod operator `%%`
+if (num %% 2 == 0) {
+  result <- "Even"
+} else {
+  result <- "Odd"
+}
+
+# print text and variables together using `cat`
+cat("The number", num, "is", result)
+```
+
+### Loops
+
+Loops in R, such as for and while, enable iterative execution of code for efficient repetitive tasks.
+
+```{r}
+# Use a for loop to print the first 10 elements of the Fibonacci sequence
+for (i in 1:10) {
+    if (i == 1 || i == 2) {
+        prevprev = 1
+        prev = 1
+        cat(1, " ")
+    } else {
+        curr = prevprev + prev
+        cat(curr, " ")
+        prevprev = prev
+        prev = curr
+    }
+}
+```
+
+```{r}
+# Use a while loop to find all the divisors of 336
+n = 336
+divisor = 2
+
+while (divisor <= sqrt(n)) {
+    if (n %% divisor == 0) {
+      cat(divisor, ' ')  # Found a divisor, print it out
+    }
+    divisor <- divisor + 1
+    }
+```
+
+## Section 3: Data Fundamentals
+
+### Lists
+
+We can store data in a list:
+
+```{r}
+# List of strings
+thislist <- list("apple", "banana", "cherry")
+
+# Print the list
+print(thislist)
+```
+
+```{r}
+# access a list element
+print(thislist[1])
+# access multiple elements
+print(thislist[1:2])
+```
+
+### Matrices and Arrays
+
+```{=tex}
+\begin{itemize}
+    \item Matrix
+    
+    Matrix is 2-D
+
+    <<cache=F, fig.width=6, fig.height=4>>=
+    # placeholder for matrix
+    # Create a matrix
+    mat <- matrix(c(1,2,3,4,5,6), nrow = 3, ncol = 2)
+    
+    # Print the matrix
+    mat
+    @
+
+    \item Array
+    
+    Array can be more than 2-D
+
+    <<cache=F, fig.width=6, fig.height=4>>=
+    # create a 3-dimensional array
+    arr <- array(c(1,2,3,4,5,6,7,8), dim = c(2,2,2))
+    
+    # Print the array
+    arr
+    @
+
+\end{itemize}
+```
+### Manipulating Matrices and Arrays
+
+You can access, edit, do operations and even combine matrices and arrays using the parsing technique
+
+```{=tex}
+\begin{itemize}
+    \item Access elements
+
+    <<cache=F, fig.width=6, fig.height=4>>=
+    # Print the 2nd row of a matrix
+    mat[2,]
+    
+    # Use multi-level parsing
+    arr[1,2,1]
+    @
+
+    \item Edit elements
+    
+    <<cache=F, fig.width=6, fig.height=4>>=
+    # Change the second element of the first row
+    mat[1,2] = 96
+    # Change the second column of the first matrix
+    arr[,2,1] = c(97,98)
+    
+    # Print the matrix
+    mat
+    arr
+    @
+
+    \item Perform element-wise operations
+
+    <<cache=F, fig.width=6, fig.height=4>>=
+    # Creating 2 matrices
+    mat1 <- matrix(1:4, nrow = 2)
+    mat2 <- matrix(5:8, nrow = 2)
+    
+    # Addition of two matrices
+    print(mat1 + mat2)
+    # Element-wise multiplication of two matrices
+    print(mat1 * mat2)
+    @
+
+    \item Combine matrices
+    You can bind matrices use `rbind` and `cbind`
+    
+    <<cache=F, fig.width=6, fig.height=4>>=
+    # Stack a matrix on the top of the other
+    print(rbind(mat1,mat2))
+    # Link matrices side by side
+    print(cbind(mat1,mat2))
+    @
+
+\end{itemize}
+```
+### Dataframes
+
+Dataframe is a powerful object that allows you to perform all kinds of operations on your data
+
+```{r}
+# create a dataframe
+Data_Frame <- data.frame (
+  Training = c("Strength", "Stamina", "Other"),
+  Pulse = c(100, 150, 120),
+  Duration = c(60, 30, 45)
+)
+
+# Print the data frame
+Data_Frame
+# access dataframe elements using the dollar sign
+print(Data_Frame$Pulse)
+```
+
+## Section 4. Read/Load/Output Data
 
 Read data from local files, load data from online source, write data into local files.
 
