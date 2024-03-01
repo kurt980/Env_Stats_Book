@@ -143,6 +143,7 @@ Working with dates is supported by R. Date is a specific type of object implemen
 date <- as.Date("2023-07-10") 
 formatted_date <- format(date, "%A, %B %d, %Y") 
 print(formatted_date)
+# test
 ```
 
 -   **Date manipulation**
