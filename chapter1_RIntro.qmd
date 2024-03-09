@@ -1,6 +1,6 @@
-# **Chapter 0: Introduction to R**
+# **Chapter 1: Introduction to R**
 
-## Section 1: Getting Started With R
+## Section 1. Getting Started With R
 
 R is an integrated suite of software facilities for data manipulation, calculation and graphical display. Among other things it has
 
@@ -27,7 +27,6 @@ Before you start, you want to do these 3 things first:
 -   **Install tidyverse** tidyverse is the collection of packages that are widely used for data analysis. The detailed introduction to tidyverse can be found in Section 1.2. You can use the below command in R to install tidyverse
 
     ```{r, eval=FALSE}
-    # <<cache=F, fig.width=6, fig.height=4>>=
     # install.packages("tidyverse")
     library(tidyverse)
     library(dplyr)
@@ -87,27 +86,27 @@ You can also assign numeric values or vectors to your variables
 
 -   **Numbers can be in many forms**
 
-```{r}
-# Create numbers in r 
-x <- 3.5 # numeric 
-y <- 3L # integer 
-z <- 1i # complex
-```
+    ```{r}
+    # Create numbers in r 
+    x <- 3.5 # numeric 
+    y <- 3L # integer 
+    z <- 1i # complex
+    ```
 
 -   **Vectors**
 
-```{r}
-# Using the combine operator `c()` in r 
-u <- c(1,1,2,3,5) 
-# Using the sequence operator `:` in r 
-v <- 1:5
+    ```{r}
+    # Using the combine operator `c()` in r 
+    u <- c(1,1,2,3,5) 
+    # Using the sequence operator `:` in r 
+    v <- 1:5
 
-print(u) 
-print(v)
+    print(u) 
+    print(v)
 
-# length of vectors 
-length(u)
-```
+    # length of vectors 
+    length(u)
+    ```
 
 ### Strings and Boolean
 
@@ -115,22 +114,22 @@ Other types of variables include strings and booleans
 
 -   **String**
 
-```{r}
-# String 
-s <- "This is a string" 
-print(s)
-```
+    ```{r}
+    # String 
+    s <- "This is a string" 
+    print(s)
+    ```
 
 -   **Boolean**
 
-```{r}
-# Boolean 
-a <- TRUE 
-b <- (1 > 2)
+    ```{r}
+    # Boolean 
+    a <- TRUE 
+    b <- (1 > 2)
 
-print(a) 
-print(b)
-```
+    print(a) 
+    print(b)
+    ```
 
 ### Working with Dates
 
@@ -168,7 +167,7 @@ diff <- date1 - date2
 print(diff)
 ```
 
-## Section 2: Fundamentals
+## Section 2. Fundamentals
 
 To perform meaningful tasks, you need to use operators, functions and loops smartly
 
@@ -176,41 +175,41 @@ To perform meaningful tasks, you need to use operators, functions and loops smar
 
 -   Fundamental operators
 
-```{r}
-# plus, minus, multiply and subtraction
-x <- 1
-y <- 2
+    ```{r}
+    # plus, minus, multiply and subtraction
+    x <- 1
+    y <- 2
 
-# print multiple arguments together using `cat`
-cat(x+y, x-y, x*y, x/y)
-```
+    # print multiple arguments together using `cat`
+    cat(x+y, x-y, x*y, x/y)
+    ```
 
 -   Logarithm and exponential
 
-```{r}
-# print exp(2) and log(1)
-cat(exp(y), log(x))
-```
+    ```{r}
+    # print exp(2) and log(1)
+    cat(exp(y), log(x))
+    ```
 
 -   Operations on vectors
 
-```{r}
-# compute the vector max,min and median
-u <- c(-1, 0, 3, -12.5, 8.3)
-cat(max(u), min(u), median(u))
-# compute the sum and length
-cat(sum(u), length(u))
-```
+    ```{r}
+    # compute the vector max,min and median
+    u <- c(-1, 0, 3, -12.5, 8.3)
+    cat(max(u), min(u), median(u))
+    # compute the sum and length
+    cat(sum(u), length(u))
+    ```
 
 -   Logical operators
 
-```{r}
-# and or
-x <- TRUE
-y <- FALSE
+    ```{r}
+    # and or
+    x <- TRUE
+    y <- FALSE
 
-cat(x && y, x || y)
-```
+    cat(x && y, x || y)
+    ```
 
 ### Functions
 
@@ -287,7 +286,7 @@ while (divisor <= sqrt(n)) {
     }
 ```
 
-## Section 3: Data Fundamentals
+## Section 3. Data Fundamentals
 
 ### Lists
 
@@ -310,89 +309,79 @@ print(thislist[1:2])
 
 ### Matrices and Arrays
 
-```{=tex}
-\begin{itemize}
-    \item Matrix
-    
+-   Matrix
+
     Matrix is 2-D
 
-    <<cache=F, fig.width=6, fig.height=4>>=
-    # placeholder for matrix
+    ```{r}
     # Create a matrix
     mat <- matrix(c(1,2,3,4,5,6), nrow = 3, ncol = 2)
-    
+
     # Print the matrix
     mat
-    @
+    ```
 
-    \item Array
-    
+-   Array
+
     Array can be more than 2-D
 
-    <<cache=F, fig.width=6, fig.height=4>>=
+    ```{r}
     # create a 3-dimensional array
     arr <- array(c(1,2,3,4,5,6,7,8), dim = c(2,2,2))
-    
+
     # Print the array
     arr
-    @
+    ```
 
-\end{itemize}
-```
 ### Manipulating Matrices and Arrays
 
 You can access, edit, do operations and even combine matrices and arrays using the parsing technique
 
-```{=tex}
-\begin{itemize}
-    \item Access elements
+-   Access elements
 
-    <<cache=F, fig.width=6, fig.height=4>>=
+    ```{r}
     # Print the 2nd row of a matrix
     mat[2,]
-    
+
     # Use multi-level parsing
     arr[1,2,1]
-    @
+    ```
 
-    \item Edit elements
-    
-    <<cache=F, fig.width=6, fig.height=4>>=
+-   Edit elements
+
+    ```{r}
     # Change the second element of the first row
     mat[1,2] = 96
     # Change the second column of the first matrix
     arr[,2,1] = c(97,98)
-    
+
     # Print the matrix
-    mat
-    arr
-    @
+    print(mat)
+    print(arr)
+    ```
 
-    \item Perform element-wise operations
+-   Perform element-wise operations
 
-    <<cache=F, fig.width=6, fig.height=4>>=
+    ```{r}
     # Creating 2 matrices
     mat1 <- matrix(1:4, nrow = 2)
     mat2 <- matrix(5:8, nrow = 2)
-    
+
     # Addition of two matrices
     print(mat1 + mat2)
     # Element-wise multiplication of two matrices
     print(mat1 * mat2)
-    @
+    ```
 
-    \item Combine matrices
-    You can bind matrices use `rbind` and `cbind`
-    
-    <<cache=F, fig.width=6, fig.height=4>>=
+-   Combine matrices You can bind matrices use `rbind` and `cbind`
+
+    ```{r}
     # Stack a matrix on the top of the other
     print(rbind(mat1,mat2))
     # Link matrices side by side
     print(cbind(mat1,mat2))
-    @
+    ```
 
-\end{itemize}
-```
 ### Dataframes
 
 Dataframe is a powerful object that allows you to perform all kinds of operations on your data
@@ -424,7 +413,205 @@ data <- read.csv("data/CMI_TRH.csv")
 head(data, 5)
 ```
 
-## Plots and Graphics
+### Write Data
+
+```{{r}}
+# write.csv(data, file = "filename.csv", row.names = FALSE)
+```
+
+### Readr
+
+You can use `Readr` to perform more advanced file operations in r
+
+```{r}
+install.packages("readr")
+library(readr)
+```
+
+-   `read\_csv()`: comma-separated values (CSV)
+-   `read\_tsv()`: tab-separated values (TSV)
+-   `read\_csv2()`: semicolon-separated values with , as the decimal mark
+-   `read\_delim()`: delimited files (CSV and TSV are important special cases)
+-   `read\_fwf()`: fixed-width files
+-   `read\_table()`: whitespace-separated files
+-   `read\_log()`: web log files
+
+**Operations of Readr**
+
+-   You can specify column types with a series of codes
+
+    ```{r}
+    # Use `spec()` to find the types of columns
+    spec(data)
+    ```
+
+    ```{r}
+    # Read with custom column types
+    data <- read.csv("CMI_TRH.csv", col_types = cols(
+    X = col_character(),
+    year = col_integer(),
+    month = col_integer(),
+    day = col_integer(),
+    avg_rel_hum = col_double(),
+    avg_air_temp_f = col_double(),
+    avg_air_temp_c = col_double(),
+    date_string = col_character(),
+    date = col_date(format = "%Y-%m-%d")
+    ))
+    ```
+
+## Section 5. Working with Dataframes
+
+Dataframe is powerful with geostatistical data analysis.
+
+### Manipulate Data
+
+-   Parsing data
+
+    You can parse data by location to get different portions of the data.
+
+    ```{r}
+    # Print first 3 rows
+    data[1:3,]
+    ```
+
+    ```{r}
+    # Print first 3 rows and 3 columns
+    data[1:3,1:3]
+    ```
+
+-   Add a new column
+
+    ```{r}
+    # Add a new column
+    New_df <- cbind(Data_Frame, NewCol = c('new1','new2','new3'))
+
+    # Print the new dataframe
+    New_df
+    ```
+
+-   Remove a column
+
+    ```{r}
+    # Remove a column using the dollar sign
+    New_df$NewCol <- NULL
+
+    # Print the new dataframe
+    New_df
+    ```
+
+### Apply functions
+
+The apply function family in R provides powerful tools for efficiently working with arrays, lists, and data frames by applying custom functions across dimensions, simplifying complex operations and data transformations.
+
+-   apply
+
+    Applies a function to rows or columns of an array-like object.
+
+    ```{r}
+    df <- matrix(rnorm(100), ncol = 5)
+    apply(df, 2, function(x) c(mean(x), sd(x)))
+    ```
+
+-   lapply
+
+    Applies a function to each element of a list, maintaining a list structure.
+
+    ```{r}
+    list_of_dfs <- list(data.frame(x = 1:3, y = 4:6), data.frame(x = 7:9, y = 10:12))
+    lapply(list_of_dfs, function(df) colSums(df))
+    ```
+
+-   sapply
+
+    Applies a function to each element of a list, aiming to streamline output.
+
+    ```{r}
+    df <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6), c = c(7, 8, 9))
+    sapply(df, cumsum)
+    ```
+
+-   mapply
+
+    Applies a function to corresponding elements from multiple vectors or lists.
+
+    ```{r}
+    # Use mapply to find if each "divisor" divides its corresponding "integer"
+    integers <- c(14, 196, 1321, 948, 123)
+    divisors <- c(2, 4, 7, 12, 3)
+    mapply(function(s, r) return(b %% a == 0), integers, divisors)
+    ```
+
+### Dplyr
+
+`dplyr` is a powerful package within the `tidyverse` that provides a set of intuitive and efficient functions for data manipulation, transformation, and summarization in R.
+
+```{r}
+# Load dplyr library
+library(dplyr)
+```
+
+#### Study Data
+
+-   **Descriptive Statistics**
+
+    You can get descriptive statistics for a dataframe using dplyr and the 'pipe' operator easily.
+
+    ```{r}
+    # Calculate descriptive statistics using dplyr
+    summary_df <- data %>%
+      summarise(
+        Mean_Hum = mean(avg_rel_hum),
+        Median_Hum = median(avg_rel_hum),
+        SD_Hum = sd(avg_rel_hum),
+        Min_Hum = min(avg_rel_hum),
+        Max_Hum = max(avg_rel_hum),
+        Count = n()
+      )
+
+    print(summary_df)
+    ```
+
+-   **Select and Filter data**
+
+    ```{r}
+    # Select average humidity and date
+    selected_data <- data %>%
+      select(avg_rel_hum, date_string)
+
+    print(selected_data[1:5,])
+
+    # Filter rows based on the value of average humidity
+    filtered_data <- data %>%
+      filter(avg_rel_hum > 100)
+
+    print(filtered_data)
+    ```
+
+-   **Sort data**
+
+    ```{r}
+    # Sorting the data frame by "year" column in ascending order
+    data_sorted <- data %>%
+      arrange(avg_rel_hum)
+
+    print(data_sorted[1:5, ])
+    ```
+
+-   **Group by data**
+
+    You can also find the aggregate values by grouping data.
+
+    ```{r}
+    # Find the mean average humidity of each year
+    grouped_data <- data %>%
+      group_by(year) %>%
+      summarise(Avg_Hum = mean(avg_rel_hum))
+
+    print(grouped_data[1:5, ])
+    ```
+
+## Section 6. Plots and Graphics
 
 ### Basic Plots
 

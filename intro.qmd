@@ -11,3 +11,25 @@ See @knuth84 for additional discussion of literate programming.
 This line is for testing Git
 
 This is for Lely's test
+
+adjust color here: [https://quarto.org/docs/authoring/markdown-basics.html#divs-and-spans](URL)
+
+This is a sentence with [red]{style="color: red;"} text.
+
+[write more stuff in blue]{style="color: blue;"}
+
+::: border
+This content can be styled with a border
+:::
+
+$$\int^{b}_{a} (ax+b) dx$$
+
+{{< good >}}
+
+|     | Col2 | Col3 |
+|-----|------|------|
+|     |      |      |
+|     |      |      |
+|     |      |      |
+
+anything, blah

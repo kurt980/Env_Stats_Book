@@ -1,0 +1,20 @@
+# **Chapter 0: Introduction**
+
+## Section 1. Why Environmental Statistics?\]
+
+Statistics is a fundamental science in many applications. Normally we observe or collect data from an experiment, a phenomenon, an ecosystem, a population, and we use statistic for collecting, describing, visualizing, modelling and predicting important variables associated with the study problem.
+
+The development of environmental statistics as a specific branch or section within statistics has dramatically grown in the past 25 years. The need for applications of a wide range of methods adapted to solve the complexities of environmental data collection, modeling and prediction has been recognized by many institutions worldwide. Many national and international statistical societies as the American Statistical Association (ASA), the International Statistical Institute (ISI), the Royal Statistical Society (RSS), the International Society of Bayesian Analysis (ISBA) and Statistical Society of Australia (SSA) have a devoted section to environmental statistics.
+
+The application of Statistics to analyze environmental issues requires using a variety of tools and methodologies raging from Multivariate Analysis, Time Series analysis to Spatial Statistics. Each application requires specific tools, and data exploration and visualization are necessary first steps to understand potential assumptions on probabilistic models to fit collected data.
+
+## Section 2. Most pressing Environmental problems of our times
+
+Environmental Statistics has a wide range of applications and offers a variety of tools to solve some of the most important environmental problems of our times:
+
+-   Biodiversity Loss: Many plant and animal species are rapidly disappearing due to the increment of human activities and environmental degradation. [https://www.europarl.europa.eu/news/en/headlines/society/20200109STO69929/biodiversity-loss-what-is-causing-it-and-why-is-it-a-concern](URL)
+-   Air pollution, or the release of pollutants into the air, has negative impacts on human health. The World Health Organization (WHO) estimates that nine out of ten people breath air with toxic pollutants exceeding the recommended thresholds by the WHO. [https://www.nrdc.org/stories/air-pollution-everything-you-need-know](URL)
+-   Water pollution, or the release of chemicals or microorganisms into water reservoirs like streams, rivers, lakes, aquifers, oceans or any other water bodies, has become a public health issue worldwide. Water pollution sources from human activities include agriculture, sewage and wastewater, oil pollution/spills, radioactive waste. These sources of pollution would affect groundwater, surface water and oceans. [https://www.nrdc.org/stories/water-pollution-everything-you-need-know](URL)
+-   Ecosystems degradation including habitat losses, loss of biodiversity and the spread of invasive, species [https://www.sciencedirect.com/science/article/pii/B9780128227947000083](URL) have important consequences on the availability of ecosystem services with harmful impacts on minorities and vulnerable populations. [https://www.nature.com/articles/s41467-021-23905-3](URL)
+-   Climate change is one of the most pressing enevironmental problems of our times. According to the Inter-governmental Panel of Climate Change (IPCC) sith report, "emissions of greenhouse gases from human activities are responsible for approximately 1.1°C of warming since 1850-1900", and on average over the next 20 years, "global temperature is expected to reach or exceed 1.5°C of warming". This degree of warming will cause increasing heat waves, shorter cold seasons and longer warm season. [https://www.ipcc.ch/2021/08/09/ar6-wg1-20210809-pr/](URL)
+-   Deforestation is driven by agricultural expansion, increasing urbanization and illegal logging and mining around the world, and it has important consequences on biodiversity losses and climate change. [https://www.conservation.org/stories/11-deforestation-facts-you-need-to-know](URL)
