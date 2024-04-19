@@ -415,9 +415,12 @@ head(data, 5)
 
 ### Write Data
 
-```{{r}}
+```` r
+```{r}
 # write.csv(data, file = "filename.csv", row.names = FALSE)
+
 ```
+````
 
 ### Readr
 
@@ -552,6 +555,10 @@ library(dplyr)
 ```
 
 #### Study Data
+
+```{python}
+print("ok")
+```
 
 -   **Descriptive Statistics**
 
