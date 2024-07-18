@@ -56,17 +56,17 @@ Using packages in R is a seamless process. Once a package is installed, you can 
 
 -   **MASS** The "MASS" package includes various functions for statistical modeling, linear and nonlinear regression, generalized linear models, time series analysis, clustering, and more. Additionally, it offers datasets used in the book's examples and exercises, allowing users to replicate and experiment with the presented statistical methods.
 
--   **Tidyverse** The \`tidyverse\` package is a collection of R packages that provides a consistent and coherent framework for data manipulation, exploration, and visualization, promoting a tidy data format and streamlined data analysis workflows. The core packages within the \`tidyverse\`, including \`dplyr\`, \`ggplot2\`, \`tidyr\`, \`readr\`, \`lubridate\`, \`magrittr\` and \`purrr\`, among others, offer powerful tools for data import, transformation, visualization, and modeling.
+-   **Tidyverse** The `tidyverse` package is a collection of R packages that provides a consistent and coherent framework for data manipulation, exploration, and visualization, promoting a tidy data format and streamlined data analysis workflows. The core packages within the `tidyverse`, including `dplyr`, `ggplot2`, `tidyr`, `readr`, `lubridate`, `magrittr` and `purrr`, among others, offer powerful tools for data import, transformation, visualization, and modeling.
 
--   **magrittr** The `magrittr` package provides a set of operators, most notably the pipe operator `%>%`, that enhances code readability and promotes a more fluent programming style in R. By chaining functions together, \`magrittr\` allows users to create a more structured and expressive data manipulation workflow.
+-   **magrittr** The `magrittr` package provides a set of operators, most notably the pipe operator `%>%`, that enhances code readability and promotes a more fluent programming style in R. By chaining functions together, `magrittr` allows users to create a more structured and expressive data manipulation workflow.
 
--   **ggplot2** \`ggplot2\` is a versatile and comprehensive data visualization package based on the Grammar of Graphics. With \`ggplot2\`, users can effortlessly create sophisticated and aesthetically pleasing visualizations that effectively communicate insights from their data.
+-   **ggplot2** `ggplot2` is a versatile and comprehensive data visualization package based on the Grammar of Graphics. With `ggplot2`, users can effortlessly create sophisticated and aesthetically pleasing visualizations that effectively communicate insights from their data.
 
--   **dplyr** \`dplyr\` is a powerful package designed for data manipulation tasks in R. With a concise syntax and intuitive functions like \`filter()\`, \`arrange()\`, \`mutate()\`, and \`summarise()\`, \`dplyr\` simplifies and streamlines data wrangling, making it an essential tool for data analysts and data scientists.
+-   **dplyr** `dplyr` is a powerful package designed for data manipulation tasks in R. With a concise syntax and intuitive functions like `filter()`, `arrange()`, `mutate()`, and `summarise()`, `dplyr` simplifies and streamlines data wrangling, making it an essential tool for data analysts and data scientists.
 
--   **lubridate** \`lubridate\` is a package specifically tailored for working with dates and times in R. Its user-friendly functions enable users to parse, manipulate, and format date-time data, making time-related analysis and data manipulation tasks more efficient and accurate.
+-   **lubridate** `lubridate` is a package specifically tailored for working with dates and times in R. Its user-friendly functions enable users to parse, manipulate, and format date-time data, making time-related analysis and data manipulation tasks more efficient and accurate.
 
--   **readr** \`readr\` is a fast and efficient package for reading and importing data into R. By providing easy-to-use functions to read various file formats, readr simplifies the data reading process and ensures accurate representation of data, enabling smoother data analysis workflows.
+-   **readr** `readr` is a fast and efficient package for reading and importing data into R. By providing easy-to-use functions to read various file formats, readr simplifies the data reading process and ensures accurate representation of data, enabling smoother data analysis workflows.
 
 ### Variables
 
@@ -415,53 +415,49 @@ head(data, 5)
 
 ### Write Data
 
-```` r
 ```{r}
 # write.csv(data, file = "filename.csv", row.names = FALSE)
 
 ```
-````
 
 ### Readr
 
-You can use `Readr` to perform more advanced file operations in r
+The `read` package is designed to read rectangular data (like 'csv', 'tsv', and 'fwf'). You can use the `readr` package to perform more advanced file operations in r
 
 ```{r}
-install.packages("readr")
+# install.packages("readr")
 library(readr)
 ```
 
--   `read\_csv()`: comma-separated values (CSV)
--   `read\_tsv()`: tab-separated values (TSV)
--   `read\_csv2()`: semicolon-separated values with , as the decimal mark
--   `read\_delim()`: delimited files (CSV and TSV are important special cases)
--   `read\_fwf()`: fixed-width files
--   `read\_table()`: whitespace-separated files
--   `read\_log()`: web log files
+-   `read_csv()`: comma-separated values (CSV)
+-   `read_tsv()`: tab-separated values (TSV)
+-   `read_csv2()`: semicolon-separated values with , as the decimal mark
+-   `read_delim()`: delimited files (CSV and TSV are important special cases)
+-   `read_fwf()`: fixed-width files
+-   `read_table()`: whitespace-separated files
+-   `read_log()`: web log files
 
 **Operations of Readr**
 
--   You can specify column types with a series of codes
-
-    ```{r}
-    # Use `spec()` to find the types of columns
-    spec(data)
-    ```
+-   You can specify column types with a series of codes, note we are using `read_csv` from the `readr` package, not the built-in `read.csv`
 
     ```{r}
     # Read with custom column types
-    data <- read.csv("CMI_TRH.csv", col_types = cols(
-    X = col_character(),
-    year = col_integer(),
-    month = col_integer(),
-    day = col_integer(),
-    avg_rel_hum = col_double(),
-    avg_air_temp_f = col_double(),
-    avg_air_temp_c = col_double(),
-    date_string = col_character(),
-    date = col_date(format = "%Y-%m-%d")
-    ))
+    data <- read_csv("data/CMI_TRH.csv", 
+                      col_types = cols(
+                                      year = col_integer(),
+                                      month = col_integer(),
+                                      day = col_integer(),
+                                      avg_rel_hum = col_double(),
+                                      avg_air_temp_f = col_double(),
+                                      avg_air_temp_c = col_double(),
+                                      date_string = col_character(),
+                                      date = col_date(format = "%m/%d/%Y") # be sure this format matches the one in your data
+                                      )
+                     )
     ```
+
+Now the "date" column in your dataset has the date type
 
 ## Section 5. Working with Dataframes
 
@@ -485,13 +481,18 @@ Dataframe is powerful with geostatistical data analysis.
 
 -   Add a new column
 
-    ```{r}
+```{r}
+    # Remember this dataset we used?
+    head(Data_Frame)
+```
+
+```{r}
     # Add a new column
     New_df <- cbind(Data_Frame, NewCol = c('new1','new2','new3'))
 
-    # Print the new dataframe
+    # A new column is added to the end
     New_df
-    ```
+```
 
 -   Remove a column
 
@@ -499,7 +500,7 @@ Dataframe is powerful with geostatistical data analysis.
     # Remove a column using the dollar sign
     New_df$NewCol <- NULL
 
-    # Print the new dataframe
+    # The new column is gone
     New_df
     ```
 
@@ -512,8 +513,10 @@ The apply function family in R provides powerful tools for efficiently working w
     Applies a function to rows or columns of an array-like object.
 
     ```{r}
-    df <- matrix(rnorm(100), ncol = 5)
-    apply(df, 2, function(x) c(mean(x), sd(x)))
+    # apply the mean and sd function to a dataframe to get the mean and standard deviation of columns
+    df <- matrix(rnorm(25), ncol = 5) # 100 random variables organzied into 5 columns
+    print(df)
+    apply(df, 2, function(x) c(mean=mean(x), sd=sd(x)))
     ```
 
 -   lapply
@@ -521,7 +524,9 @@ The apply function family in R provides powerful tools for efficiently working w
     Applies a function to each element of a list, maintaining a list structure.
 
     ```{r}
+    # use lapply to find the column sums of the 2 dataframes
     list_of_dfs <- list(data.frame(x = 1:3, y = 4:6), data.frame(x = 7:9, y = 10:12))
+    print(list_of_dfs)
     lapply(list_of_dfs, function(df) colSums(df))
     ```
 
@@ -530,6 +535,7 @@ The apply function family in R provides powerful tools for efficiently working w
     Applies a function to each element of a list, aiming to streamline output.
 
     ```{r}
+    # use sapply to find the cumulative sum along columns
     df <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6), c = c(7, 8, 9))
     sapply(df, cumsum)
     ```
@@ -540,9 +546,9 @@ The apply function family in R provides powerful tools for efficiently working w
 
     ```{r}
     # Use mapply to find if each "divisor" divides its corresponding "integer"
-    integers <- c(14, 196, 1321, 948, 123)
+    integers <- c(14, 196, 1321, 948, 125)
     divisors <- c(2, 4, 7, 12, 3)
-    mapply(function(s, r) return(b %% a == 0), integers, divisors)
+    mapply(function(s, r) s %% r == 0, integers, divisors)
     ```
 
 ### Dplyr
@@ -555,10 +561,6 @@ library(dplyr)
 ```
 
 #### Study Data
-
-```{python}
-print("ok")
-```
 
 -   **Descriptive Statistics**
 
@@ -624,24 +626,171 @@ print("ok")
 
 The built-in `plot` function in R allows you to create scatter plots, line charts and other common graphics for statistical analysis.
 
-**scatter plot**
+-   **scatter plot**
+
+    ```{r}
+    library(tidyverse)
+    library(dplyr)
+    library(magrittr)
+
+    # Select average humidity and date
+    data_between_2010_2012 <- data %>%
+        filter(year >= 2010 & year <= 2012)
+
+    # Create a scatter plot
+    plot(data_between_2010_2012$avg_rel_hum, data_between_2010_2012$avg_air_temp_c, main = "AVG Rel Humidity VS. AVG Rel Temperature in C, between 2010-2012", xlab = "X", ylab = "Y", pch = 16, col = "blue")
+    ```
+
+-   **histogram and bar plot**
+
+    ```{r}
+    # Create a histogram 
+    hist(data_between_2010_2012$avg_rel_hum, main = "AVG Rel Humidity between 2010 and 2012", xlab = "Value", ylab = "Frequency", col = "lightblue")
+    ```
+
+-   **box plot**
+
+    ```{r}
+    # Create a box plot for average realative humidity each year
+    boxplot(avg_rel_hum ~ year, data = data_between_2010_2012,
+            main = "Distribution of AVG Rel Humidity by Year",
+            xlab = "Year", ylab = "AVG Rel Humidity",
+            col = "lightblue", border = "black")
+    ```
+
+-   **multiple plots and organize plots**
+
+    You can use par() to organize the positions of multiple plots
+
+    ```{r}
+    data_cmi <- read.csv("data/CMI_TRH.csv")
+        
+        # Set up a 3x4 grid for 12 plots
+        par(mfrow = c(3, 4), mar = c(4, 4, 2, 1))
+        
+        # Loop through each month
+        for (m in unique(data_cmi$month)) {
+          # Subset data for the current month
+          month_data <- subset(data_cmi, month == m)
+        
+          # Create a histogram
+          hist(month_data$avg_air_temp_c, main = paste("Histogram for Month=", m), breaks=20,
+               xlab = "Average Air Temperature [C]", col = "lightgreen", probability = TRUE)
+        
+          # Add a bell curve
+          curve(dnorm(x, mean = mean(month_data$avg_air_temp_c), sd = sd(month_data$avg_air_temp_c)),
+                add = TRUE, col = "red", lwd = 2)
+        }
+        
+        # Reset par settings
+        par(mfrow = c(1, 1), mar = c(5, 4, 4, 2) + 0.1)
+    ```
+
+### ggplot2
+
+`ggplot2` is another package that allows you to create elegant and customized plots with a concise and intuitive syntax. The `ggplot2` package uses a streamlined style of grammar with multiple "layers", allowing you to compose your own plot in a more elegant and intuitive way.
 
 ```{r}
-library(tidyverse)
-library(dplyr)
-library(magrittr)
-
-# Select average humidity and date
-data_between_2010_2012 <- data %>%
-    filter(year >= 2010 & year <= 2012)
-
-# Create a scatter plot
-plot(data_between_2010_2012$avg_rel_hum, data_between_2010_2012$avg_air_temp_c, main = "AVG Rel Humidity VS. AVG Rel Temperature in C, between 2010-2012", xlab = "X", ylab = "Y", pch = 16, col = "blue")
+# install.packages('ggplot2')
+library(ggplot2)
 ```
 
-**histogram and bar plot**
+-   **Adding other dimensions for the plot**
 
-```{r}
-# Create a histogram 
-hist(data_between_2010_2012$avg_rel_hum, main = "AVG Rel Humidity between 2010 and 2012", xlab = "Value", ylab = "Frequency", col = "lightblue")
-```
+    You can also add color and size to represent more dimensions.
+
+    ```{r}
+    # Create the bubble chart
+    ggplot(data[1:100, ], 
+           aes(x = avg_rel_hum, y = avg_air_temp_f, size = avg_air_temp_c, color = month)) +
+    geom_point() +
+    labs(x = "avg_rel_hum", y = "avg_air_temp_f", title = "Bubble Chart")
+    ```
+
+-   **Create insightful visualizations**
+
+    We will do an example to find the highest and lowest average air temperature in the year 2012, and plot them using `ggplot2`, along with the average relative humidity
+
+    ```{r}
+    # Find the highest temperature in 2012
+    data %>%
+      filter(year(date) == 2012) %>%
+      arrange(desc(avg_air_temp_f)) %>%
+      head(1)
+
+    # Find the lowest temperature in 2012
+    data %>%
+      filter(year(date) == 2012) %>%
+      arrange(avg_air_temp_f) %>%
+      head(1)
+    ```
+
+    ```{r}
+    data$date <- as.Date(data$date) # Convert date strings to date objects
+
+    # plot the temperature and humidity of the year 2012, labeling the highest and lowest point
+    data %>% 
+      filter(year(date) == 2012) %>%  # Filter for the year 2012
+      ggplot(aes(x = date)) + 
+        geom_line(aes(y = avg_air_temp_f, color = "Temperature"), linewidth = 0.5) +
+        geom_line(aes(y = avg_rel_hum, color = "Humidity"), linewidth = 0.5) +
+        ylim(-15, 95) +  # Adjusted to include the range for -14.8
+        annotate(geom = "text", x = as.Date("2012-07-07"), y = 93.9, 
+                 label = "Temperature reached 89.9°F \nat in 2012 summer") +
+        annotate(geom = "point", x = as.Date("2012-07-07"), y = 89.9, size = 4, shape = 21) +
+        annotate(geom = "text", x = as.Date("2012-01-14"), y = 14.3,  # Adjust y for visibility if needed
+                 label = "Lowest temperature was 14.3°F \non 2012-01-14", hjust = 0) +
+        annotate(geom = "point", x = as.Date("2012-01-14"), y = 14.3, size = 4, shape = 21) +
+        scale_color_manual(values = c("Temperature" = "#69b3a2", "Humidity" = "#404080")) + 
+        labs(color = "Legend") +
+        theme_minimal()
+    ```
+
+-   **Plot multiple plots**
+
+    You can also plot multiple in one chart
+
+    ```{r}
+    data %>%
+      filter(year(date) == 2012) %>% 
+      ggplot(aes(x=date, y=avg_air_temp_f, group=month(date), fill=month(date))) +
+        geom_area() +
+        ggtitle("Temperature by month in year 2012") +
+        theme(
+          legend.position="none",
+        ) +
+        facet_wrap(~month(date), scale="free_x") + 
+        scale_fill_gradient(low = "green", high = "darkgreen")
+    ```
+
+<!-- -   **Using geospatial data** -->
+
+<!--     gglot2 allows coordinated data. -->
+
+<!--     ```{r} -->
+
+<!--     # Create a heat map with coordinated data -->
+
+<!--     census_data <- read.csv("data/us2021census.csv") -->
+
+<!--     head(census_data) -->
+
+<!--     ``` -->
+
+<!--     ```{r} -->
+
+<!--     # Create a clustered bar plot -->
+
+<!--     census_data %>%  -->
+
+<!--     filter(State=='WY') %>%  -->
+
+<!--     ggplot(aes(x = City, y = Population)) + -->
+
+<!--       geom_bar(stat = "identity", position = "dodge") + -->
+
+<!--       labs(title = "City Population by State") + -->
+
+<!--       theme_minimal() -->
+
+<!--     ``` -->

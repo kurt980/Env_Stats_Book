@@ -1,0 +1,319 @@
+---
+title: "DL_in_r"
+author: "Chengyan Ji"
+date: "2024-07-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load the drought data and join them together
+
+```{r}
+# Set the working directory to the folder containing the CSV files
+directory_path <- "C:/Users/KurtJi/OneDrive - University of Illinois - Urbana/Desktop/Geostatistics202306/data/drought_data/"
+file_names <- list.files(path = directory_path, pattern = "^[A-Z]+\\.csv$", full.names = TRUE)
+
+# Read each file and create a list of dataframes
+data_list <- lapply(file_names, read_csv)
+# Assume all dataframes have a common column named 'date'
+combined_data <- reduce(data_list, full_join, by = "Time")
+
+```
+
+```{r}
+library(zoo)
+# Import your dataset
+data_path <- "../data/merge_spei_2.csv"
+
+# Load your data, assuming it's in a CSV file
+data_spei <- read.csv(data_path)
+
+# Convert the Time column to a Date object
+data_spei$Time <- as.Date(as.yearmon(data_spei$Time, "%Y %b"))
+
+# Create lagged NAO features
+data_spei$NAO_lag1 <- c(NA, head(data_spei$NAO, -1))
+data_spei$NAO_lag2 <- c(NA, NA, head(data_spei$NAO, -2))
+
+# Remove rows with NAs caused by lagging
+data_spei <- na.omit(data_spei)
+```
+
+```{r}
+# Plot NAO and SPEI against Time
+ggplot(data = data_spei, aes(x = Time)) +
+  geom_line(aes(y = NAO, colour = "NAO")) +  # Plot NAO
+  geom_line(aes(y = SPEI, colour = "SPEI")) +  # Plot SPEI
+  labs(title = "Time Series of NAO and SPEI",
+       x = "Time",
+       y = "Index Value",
+       colour = "Legend") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate date labels for better readability
+```
+
+### Do a split
+
+```{r}
+# Assuming data_spei is already loaded and preprocessed
+n <- nrow(data_spei)
+
+# Calculate indices for splitting
+train_size <- floor(0.7 * n)
+val_size <- floor(0.15 * n)
+
+# Index ranges for each dataset
+train_indices <- 1:train_size
+val_indices <- (train_size + 1):(train_size + val_size)
+test_indices <- (train_size + val_size + 1):n
+
+# Create the datasets
+train_data <- data_spei[train_indices, ]
+val_data <- data_spei[val_indices, ]
+test_data <- data_spei[test_indices, ]
+
+print(sprintf("Total records: %d", n))
+print(sprintf("Training records: %d, Validation records: %d, Test records: %d", 
+              nrow(train_data), nrow(val_data), nrow(test_data)))
+```
+
+## H2O Package
+
+-   A big packages with more functionalities, good for illustrating concepts
+-   very integrated and might need lots of pre-processing
+-   does not show intermediate steps
+-   This package needs to load data into its interface so that it also has functions for processing and manipulating data. Interesting.
+
+```{r}
+library(h2o)
+h2o.init()
+
+# Convert your R dataframe to an H2O object
+h2o_data <- as.h2o(data_spei)
+```
+
+### Split train/test
+
+```{r}
+# Split the data into training, validation, and testing sets
+train = h2o.splitFrame(h2o_data, ratios = c(0.7,0.15), seed =1)[[1]] 
+valid = h2o.splitFrame(h2o_data, ratios = c(0.7,0.15), seed =1)[[2]] 
+test = h2o.splitFrame(h2o_data, ratios = c(0.7,0.15), seed =1)[[3]] 
+```
+
+### Specify model structure
+
+```{r}
+# Define and train the deep learning model
+dl_model <- h2o.deeplearning(
+  x = c("NAO", "NAO_lag1", "NAO_lag2"), # Using NAO and its lags as predictors
+  y = "SPEI",                           # Target variable
+  training_frame = train,
+  validation_frame = valid,
+  activation = "Rectifier",
+  hidden = c(200, 100, 50),                   # Two hidden layers with 50 neurons each
+  epochs = 100
+)
+```
+
+### Train
+
+```{r}
+# Evaluate the model performance
+performance <- h2o.performance(dl_model, newdata = valid)
+print(performance)
+
+```
+
+```{r}
+# Make predictions on the test set
+predictions <- h2o.predict(dl_model, newdata = test)
+print(predictions)
+```
+
+```{r}
+train
+```
+
+### Plot
+
+```{r}
+# Extract actual values and predictions
+actuals_vs_preds <- as.data.frame(test[,"SPEI"])
+actuals_vs_preds$Predicted_SPEI <- as.vector(predictions)
+```
+
+```{r}
+library(ggplot2)
+
+# Plotting actual vs. predicted
+ggplot(actuals_vs_preds, aes(x = Time)) +
+  geom_line(aes(y = SPEI, colour = "Actual"), linewidth = 1) +
+  geom_line(aes(y = Predicted_SPEI, colour = "Predicted"), linewidth = 1) +
+  labs(title = "Actual vs Predicted SPEI",
+       x = "Time",
+       y = "SPEI Index",
+       colour = "Legend") +
+  theme_minimal()
+```
+
+## deepNet
+
+-   easy syntax, small package, allows only linear neural networks
+-   can use different weight initialization
+-   does not show intermediate steps
+
+```{r}
+library(deepnet)
+
+# Assuming the target variable 'SPEI' and predictors are 'NAO', 'NAO_lag1', 'NAO_lag2'
+train_x <- as.matrix(train_data[, c("NAO", "NAO_lag1", "NAO_lag2")])
+train_y <- as.matrix(train_data[,"SPEI"])
+
+test_x <- as.matrix(test_data[, c("NAO", "NAO_lag1", "NAO_lag2")])
+test_y <- as.matrix(test_data[,"SPEI"])
+```
+
+**dbn is for weight initialization by a deep belief network**
+
+```{r}
+set.seed(123)  # For reproducibility
+dbn_model <- dbn.dnn.train(train_x, train_y, hidden = c(25, 15), 
+                       learningrate = 0.05, momentum = 0.1, 
+                       output = "linear", numepochs = 100)
+```
+
+```{r}
+# Predicting on the test set
+predictions <- nn.predict(dbn_model, test_x)
+
+# Calculate RMSE as the performance metric
+rmse <- sqrt(mean((predictions - test_y)^2))
+print(paste("Root Mean Squared Error (RMSE):", rmse))
+```
+
+## neuralNet
+
+-   a small packages, neat syntax, allows visualization
+-   supports limited functionalities, does not show intermediate steps
+-   little slow compared with deepNet
+
+```{r}
+library(neuralnet)
+
+set.seed(123)
+nn <- neuralnet(SPEI ~ NAO + NAO_lag1 + NAO_lag2, 
+                data = train_data, 
+                hidden = c(4,2), 
+                linear.output = TRUE,
+                threshold = 0.01)
+```
+
+```{r}
+plot(nn,rep = "best")
+```
+
+```{r}
+pred <- predict(model, test_data)
+
+# Actual vs Predicted
+predicted_values <- nn_results$net.result
+actual_values <- test_data$SPEI
+
+# Calculate RMSE
+rmse <- sqrt(mean((predicted_values - actual_values)^2))
+print(paste("Root Mean Squared Error (RMSE):", rmse))
+
+# Visual comparison
+plot(actual_values, type = 'o', col = 'blue', ylim = range(c(actual_values, predicted_values)), pch = 16, xlab = "Index", ylab = "SPEI")
+points(predicted_values, type = 'o', pch = 15, col = 'red')
+legend("bottomright", legend = c("Actual", "Predicted"), col = c("blue", "red"), pch = c(16, 15))
+```
+
+## keras in R
+
+-   detailed, allows visualization, allows intermediate steps, good for illustrating concepts
+-   allows most model structures including the most advanced ones
+-   more complicated, more data processing
+
+```{r}
+# Scale data
+scale_data <- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+
+# Prepare training data
+train_x <- as.matrix(train_data[, c("NAO", "NAO_lag1", "NAO_lag2")])
+train_y <- as.matrix(train_data[,"SPEI"])
+
+train_x <- scale_data(train_x)
+train_y <- scale_data(train_y)
+
+# Reshape input to be [samples, time steps, features]
+train_x <- array(train_x, dim = c(nrow(train_x), 1, ncol(train_x)))
+
+# Prepare test data similarly
+test_x <- as.matrix(test_data[, c("NAO", "NAO_lag1", "NAO_lag2")])
+test_y <- as.matrix(test_data[,"SPEI"])
+
+test_x <- scale_data(test_x)
+test_x <- array(test_x, dim = c(nrow(test_x), 1, ncol(test_x)))
+```
+
+### A LSTM model
+
+```{r}
+model <- keras_model_sequential()
+model %>%
+  layer_embedding(input_dim = 500, output_dim = 32) %>%
+  layer_simple_rnn(units = 32) %>% 
+  layer_dense(units = 1, activation = "sigmoid")
+
+model %>% compile(optimizer = "rmsprop",
+                  loss = "binary_crossentropy",
+                  metrics = c("acc"))
+```
+
+```{r}
+history <- model %>% fit(train_x, train_y,
+                         epochs = 25,
+                         batch_size = 128,
+                         validation_split = 0.2)
+plot(history)
+```
+
+**Check performance**
+
+```{r}
+score <- model %>% evaluate(test_x, test_y, verbose = 0)
+cat('Test loss:', score$loss, '/n')
+cat('Test mean absolute error:', score$mean_absolute_error, '/n')
+```
+
+```{r}
+predictions <- model %>% predict(test_x)
+plot(test_y, type = 'l', col = 'blue', ylim = c(min(c(test_y, predictions)), max(c(test_y, predictions))))
+lines(predictions, col = 'red')
+legend("topright", legend = c("Actual", "Predicted"), col = c("blue", "red"), lty = 1)
+```
+
+## Tidymodels package
+
+-   not an independent package, uses keras, tensorflow or other packages to operate
+-   uses tidyverse symbols, more integrated and neat
+-   takes longer to learn
+
+```{r}
+library(tidymodels)
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

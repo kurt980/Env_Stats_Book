@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>chapter2_stats</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="chapter2_Stats_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter2_Stats_files/libs/quarto-html/quarto.js"></script>
+<script src="chapter2_Stats_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter2_Stats_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="chapter2_Stats_files/libs/quarto-html/anchor.min.js"></script>
+<link href="chapter2_Stats_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter2_Stats_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="chapter2_Stats_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="chapter2_Stats_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="chapter2_Stats_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="chapter-2.-exploratory-data-analysis-probability-models-and-basic-inference" class="level1">
+<h1><strong>Chapter 2. Exploratory Data Analysis, Probability Models and Basic Inference</strong></h1>
+<section id="section-1.-exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="section-1.-exploratory-data-analysis">Section 1. Exploratory Data Analysis</h2>
+<p>Exploratory Data Analysis (EDA) is a term proposed by the statistician John Tukey in the 1970’s. The aim of EDA is to explore the data first in order to understand the data structure by using graphical and quantitative tools.</p>
+<p>Among the quantitative tools are the calculation of center tendency measures (mean, median and mode) and variability measures (variance, standard deviation, range, coefficient of variation, inter-quantile range).</p>
+<p>Among the graphical tools are the graphics to propose potential probability models for the data set and detection of potential outliers (histograms and boxplots). An additional aim of EDA is to detect missing data. The researcher or data manager needs to take a decision on which methodology to apply to deal with missing data.</p>
+<p>If the variable of interest is categorical, other graphical tools are more appropriate like the use of Barplots. Barplots will have the variable categories in the x axis, and the raw frequencies or relative frequencies in the y axis.</p>
+<p>In a multivariate case, scatter-plots are very important for visualization of the relationships among the variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>data_hw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/hw_factors.csv"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming data_hw is your data frame</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting relevant columns</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>subset_data <span class="ot">&lt;-</span> data_hw[, <span class="fu">c</span>(<span class="st">"pulses"</span>, <span class="st">"mean_intensity"</span>, <span class="st">"mean_duration"</span>)]</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating scatter plots</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))  <span class="co"># Setting up a 1x3 layout</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot 1: Pulses vs. Mean Intensity</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(subset_data<span class="sc">$</span>pulses, subset_data<span class="sc">$</span>mean_intensity, </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Pulses"</span>, <span class="at">ylab =</span> <span class="st">"Mean Intensity"</span>, <span class="at">main =</span> <span class="st">"Pulses vs. Mean Intensity"</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot 2: Pulses vs. Mean Duration</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(subset_data<span class="sc">$</span>pulses, subset_data<span class="sc">$</span>mean_duration, </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Pulses"</span>, <span class="at">ylab =</span> <span class="st">"Mean Duration"</span>, <span class="at">main =</span> <span class="st">"Pulses vs. Mean Duration"</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot 3: Mean Intensity vs. Mean Duration</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(subset_data<span class="sc">$</span>mean_intensity, subset_data<span class="sc">$</span>mean_duration, </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Mean Intensity"</span>, <span class="at">ylab =</span> <span class="st">"Mean Duration"</span>, <span class="at">main =</span> <span class="st">"Mean Intensity vs. Mean Duration"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Mean Air Temperature for Champaign</strong></p>
+<p>The Mean Air Temperature data set was discussed in Chapter 1.</p>
+<p>We use this data set to perform an exploratory data analysis and perform some inference about the population parameters.</p>
+<section id="descriptive-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="descriptive-statistics">Descriptive Statistics</h3>
+</section>
+</section>
+<section id="probability-models" class="level2">
+<h2 class="anchored" data-anchor-id="probability-models">Probability Models</h2>
+<p>One of the main assumptions when we handle environmental variables is to deal with the issue of uncertainty. From the statistical point of view we will be assuming that many environmental variables are random variables. An immediate goal is to propose a probability model for the study variables.</p>
+<p>The normality assumption is a central assumption in most inference procedures. A first step in our analysis is plotting the data to understand their probability distribution.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create dataframe</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">category=</span><span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"mean=10, sd=2"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">"mean=12, sd=5"</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">each=</span><span class="dv">500</span>)),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">value=</span><span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">500</span>, <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">2</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">rnorm</span>(<span class="dv">500</span>, <span class="at">mean=</span><span class="dv">12</span>, <span class="at">sd=</span><span class="dv">5</span>))))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic density plot with custom color</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>value, <span class="at">color=</span>category)) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># color property for changing color of plot</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_density() function plots the density plot</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_density</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="common-distributions-and-sampling-using-r" class="level3">
+<h3 class="anchored" data-anchor-id="common-distributions-and-sampling-using-r">Common Distributions and Sampling Using R</h3>
+<!-- NEED TEXT HERE -->
+<p>You can generate samples using the <code>r_distribution</code> operation. You can specify the parameters and the number of samples generated.</p>
+<ul>
+<li><strong>Normal Distribution</strong></li>
+</ul>
+<p>The normal distribution, also known as the Gaussian distribution, is a symmetric bell-shaped curve commonly used to model continuous data with mean and standard deviation parameters. A random variable <span class="math inline">\(X\)</span> has a Normal distribution if its probability density function(pdf) is of the form:</p>
+<p><span class="math display">\[f(x) = \frac{1}{\sigma \sqrt{2\pi}}  e^{-\frac{(x-\mu)^2}{2\sigma^2}}\]</span></p>
+<p>where <span class="math inline">\(\mu=E[X]\)</span> and <span class="math inline">\(\sigma^2=Var[X]\)</span> are the mean and variance of the pdf, and the random variable <span class="math inline">\(X\)</span> can take values in the interval <span class="math inline">\((-\infty,\infty)\)</span>.</p>
+<p><span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> are also called the location and dispersion parameters of the Normal distribution.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate density values for a normal distribution</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)  <span class="co"># Specify the range of x values</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)  <span class="co"># Mean = 0, Standard Deviation = 1</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the normal bell curve</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, density, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"black"</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"x"</span>, <span class="at">ylab =</span> <span class="st">"Density"</span>, <span class="at">main =</span> <span class="st">"Normal Distribution Probability Density Function"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p><strong>You can sample from any known distribution using the <code>r+distribution()</code> function in r:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample 250 values from a normal distribution with mean=5 and standard deviation of 2 </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>norm_a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">2</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a histogram without plotting it</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>hist_data <span class="ot">&lt;-</span> <span class="fu">hist</span>(norm_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a histogram</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(norm_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"cyan"</span>, <span class="at">main =</span> <span class="st">"Sampled Data with a Normal Curve"</span>, <span class="at">xlab =</span> <span class="st">"Values"</span>, <span class="at">ylab =</span> <span class="st">"Frequency"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a normalized normal curve</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="fu">mean</span>(norm_a), <span class="at">sd =</span> <span class="fu">sd</span>(norm_a)) <span class="sc">*</span> <span class="fu">diff</span>(hist_data<span class="sc">$</span>breaks)[<span class="dv">1</span>] <span class="sc">*</span> <span class="fu">length</span>(norm_a), </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the width and height of the plot</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">6</span>, <span class="at">repr.plot.height =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The symmetric bell curve can be observed from the histogram, which is symmetric about <span class="math inline">\(\mu\)</span>.</p>
+<p>You can also plot the density curves using ggplot for sampled points.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dataframe of several normal variables with different parameters</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">category =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"sample1"</span>, <span class="st">"sample2"</span>, <span class="st">"sample3"</span>), <span class="at">each =</span> <span class="dv">500</span>)),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">value =</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">500</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">5</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">rnorm</span>(<span class="dv">500</span>, <span class="at">mean =</span> <span class="dv">95</span>, <span class="at">sd =</span> <span class="dv">10</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">rnorm</span>(<span class="dv">500</span>, <span class="at">mean =</span> <span class="dv">105</span>, <span class="at">sd =</span> <span class="dv">20</span>))))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remember to load the library</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Customize density plot</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">fill =</span> category)) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linewdth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"sample1"</span> <span class="ot">=</span> <span class="st">"orange"</span>, <span class="st">"sample2"</span> <span class="ot">=</span> <span class="st">"green"</span>, <span class="st">"sample3"</span> <span class="ot">=</span> <span class="st">"cyan"</span>)) <span class="sc">+</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Value"</span>, <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">title =</span> <span class="st">"Density Plot by Category"</span>) <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_density(alpha = 0.5, color = "black", linewdth = 0.5): Ignoring
+unknown parameters: `linewdth`</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/example_normal-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p><strong>Poisson Distribution</strong></p>
+<p>The Poisson distribution describes the number of events occurring in a fixed interval of time or space, often used for counting rare events with a known average rate. Note that a poisson variable can only take positive integer values.</p>
+<p><span class="math display">\[P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}\]</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/poisson_curve-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>You can sample from Poisson distribution, too</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pois_a <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> <span class="dv">250</span>, <span class="at">lambda =</span> <span class="dv">5</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pois_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"cyan"</span>, <span class="at">main =</span> <span class="st">"Density Plot of Sampled Poisson Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Exponential Distribution</strong></li>
+</ul>
+<p>The exponential distribution models the time between events in a Poisson process, describing the probability of waiting a certain amount of time until an event occurs. It’s often used for survival analysis and reliability studies.</p>
+<p><span class="math display">\[f(x; \lambda) = \lambda e^{-\lambda x}, \quad x \geq 0\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>exp_a <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n =</span> <span class="dv">250</span>, <span class="at">rate =</span> <span class="fl">0.5</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(exp_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"cyan"</span>, <span class="at">main =</span> <span class="st">"Density Plot of Sampled Exponential Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Beta Distribution</strong></li>
+</ul>
+<p>The beta distribution is versatile and used to model data between 0 and 1, often representing proportions, probabilities, or proportions of successes in a sequence of independent Bernoulli trials.</p>
+<p><span class="math display">\[f(x;\alpha,\beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \cdot \Gamma(\beta)} x^{\alpha - 1} (1 - x)^{\beta - 1}\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>beta_a <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">250</span>, <span class="at">shape1 =</span> <span class="dv">2</span>, <span class="at">shape2 =</span> <span class="dv">5</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(beta_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"cyan"</span>, <span class="at">main =</span> <span class="st">"Density Plot of Sampled Beta Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Gamma Distribution</strong></li>
+</ul>
+<p>The gamma distribution is flexible and applicable to various contexts, including modeling time to events, income data, and more, characterized by shape and scale parameters.</p>
+<p><span class="math display">\[f(x;\alpha,\beta) = \frac{\beta^\alpha x^{\alpha - 1} e^{-\beta x}}{\Gamma(\alpha)}\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>gamma_a <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="dv">250</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">rate =</span> <span class="dv">2</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gamma_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"cyan"</span>, <span class="at">main =</span> <span class="st">"Density Plot of Sampled Gamma Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="the-normal-model" class="level3">
+<h3 class="anchored" data-anchor-id="the-normal-model">The Normal Model</h3>
+<p>Recall that a random variable <span class="math inline">\(X\)</span> has a Normal distribution if its probability density function(pdf) is of the form:</p>
+<p><span class="math display">\[f(x|\mu,\sigma^2)= \frac{1}{\sqrt{2\pi}} \exp(-(x-\mu)^2/2\sigma^2)\]</span></p>
+<p>where <span class="math inline">\(\mu=E[X]\)</span> and <span class="math inline">\(\sigma^2=Var[X]\)</span> are the mean and variance of the pdf, and the random variable <span class="math inline">\(X\)</span> can take values in the interval <span class="math inline">\((-\infty,\infty)\)</span>.</p>
+<ul>
+<li><p>For many applications we assume that a sample from an environmental continuous random variable <span class="math inline">\(x_1,x_2,\ldots,x_n\)</span> has a Normal distribution if its empirical cumulative distribution function does not differ too much from the theoretical Cumulative Normal Distribution function <span class="math inline">\(F(x)=P(X\leq x)\)</span>.</p></li>
+<li><p>Usually environmental variables are positive variables and are skewed (distribution is non-symmetric). Working with a transformed variable of the original variable <span class="math inline">\(X\)</span>, as for example, <span class="math inline">\(Y=\log(X)\)</span> can solve the lack of normality, and <span class="math inline">\(Y\)</span> will have a range in the interval <span class="math inline">\((-\infty, \infty)\)</span>. If <span class="math inline">\(Y\)</span> is normally distributed, the variable <span class="math inline">\(X\)</span> will be log-normally distributed.</p></li>
+</ul>
+<section id="histograms-qq-plots-and-pp-plots" class="level4">
+<h4 class="anchored" data-anchor-id="histograms-qq-plots-and-pp-plots">Histograms, QQ-plots and PP-plots</h4>
+<p>Histograms, QQ-plots, and PP-plots are graphical tools commonly employed in statistical analysis to understand and visualize the distribution of data. A histogram provides a visual representation of the frequency or density of values within different intervals, offering insights into the shape and spread of the data. QQ-plots (Quantile-Quantile plots) serve to assess how well a dataset aligns with a theoretical distribution by comparing quantiles of the observed data with those of the expected distribution. Meanwhile, PP-plots (Probability-Probability plots) focus on comparing cumulative distribution functions, aiding in the identification of deviations from expected patterns. Together, these tools offer a practical means to explore, interpret, and validate the statistical properties of datasets.</p>
+<section id="histograms" class="level5">
+<h5 class="anchored" data-anchor-id="histograms">Histograms</h5>
+<p>A histogram is a graphical representation of the frequency distribution of the sample. Values in the y axis can be raw frequencies or relative frequencies. Below, we show the temperature in March.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load weather data</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>data_cmi <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/CMI_TRH.csv"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Do this to convert string to date format</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>data_cmi<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(data_cmi<span class="sc">$</span>date, <span class="at">format =</span> <span class="st">"%m/%d/%Y"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset the data for month 3</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>data_cmi_month3 <span class="ot">&lt;-</span> <span class="fu">subset</span>(data_cmi, <span class="fu">format</span>(date, <span class="st">"%m"</span>) <span class="sc">==</span> <span class="st">"03"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a histogram for average air temperature</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data_cmi_month3<span class="sc">$</span>avg_air_temp_c,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"AVG Air Temperature in March"</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="dv">20</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Value"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Frequency"</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"lightgreen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up a 3x4 grid for 12 plots</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through each month</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (m <span class="cf">in</span> <span class="fu">unique</span>(data_cmi<span class="sc">$</span>month)) {</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset data for the current month</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  month_data <span class="ot">&lt;-</span> <span class="fu">subset</span>(data_cmi, month <span class="sc">==</span> m)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a histogram</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(month_data<span class="sc">$</span>avg_air_temp_c, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Histogram for Month="</span>, m), <span class="at">breaks=</span><span class="dv">20</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"Average Air Temperature [C]"</span>, <span class="at">col =</span> <span class="st">"lightgreen"</span>, <span class="at">probability =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a bell curve</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">curve</span>(<span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="fu">mean</span>(month_data<span class="sc">$</span>avg_air_temp_c), <span class="at">sd =</span> <span class="fu">sd</span>(month_data<span class="sc">$</span>avg_air_temp_c)),</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reset par settings</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">2</span>) <span class="sc">+</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see that the temperatures in a month usually follow a normal distribution</p>
+</section>
+<section id="qq-plots" class="level5">
+<h5 class="anchored" data-anchor-id="qq-plots">QQ-plots</h5>
+<p>A QQ-plot compares the quantiles of a data distribution with the quantiles of a standardized theoretical distribution from a specified family of distributions, e.g., the standard normal distribution. In this case the y-axis is the quantiles of the data distribution, and the x-axis is the quantiles of the standard normal distribution.</p>
+<p>Assume a sample is generated from a certain distribution. Data is sorted in increasing order <span class="math inline">\(y^{(1)}, y^{(2)},\ldots, y^{(n)}\)</span>, and a plotting position is calculated for each value as:</p>
+<p><span class="math display">\[\hat{P}(Y\leq y^{(i)})=\frac{i-0.5}{n}\]</span></p>
+<p>The plotting position represents the proportion of observations below a specific data value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulations from a normal distribution</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>yp <span class="ot">&lt;-</span> ((<span class="dv">1</span><span class="sc">:</span>n) <span class="sc">-</span> <span class="fl">0.5</span>)<span class="sc">/</span>n</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#quantiles of a standard normal</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>zq <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(yp, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(zq, <span class="fu">sort</span>(y), <span class="at">xlab=</span><span class="st">"Standard Normal Quantile"</span>, <span class="at">ylab=</span><span class="st">"Data"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">mean</span>(y), <span class="fu">sd</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/plot2-1.png" class="img-fluid figure-img" width="576"></p>
+<figcaption>qq-plot</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The above calculation is equivalent to:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(y)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/plot3-1.png" class="img-fluid figure-img" width="288"></p>
+<figcaption>qq-plot</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>As seen from the QQ plot, the data points closely follow the diagonal line, which suggests that the distribution of the data approximates a normal distribution. This alignment indicates that the quantiles of our dataset match well with the quantiles of a normal distribution。</p>
+</section>
+<section id="pp-plots" class="level5">
+<h5 class="anchored" data-anchor-id="pp-plots">PP-plots</h5>
+<p>A PP-plot compares the empirical cumulative distribution function of a data set with a specified theoretical cumulative distribution function <span class="math inline">\(F(.)\)</span></p>
+<p>In this case the values of theoretical distribution function <span class="math inline">\(F(y^{(i)})\)</span> are plotted against the plotting positions of the ordered data.</p>
+<p>The construction of a QQ-plot does not require the specification of the location and the scale parameters of the distribution, while the PP-plots requires this specification to evaluate the cdf at the ordered data values.</p>
+</section>
+</section>
+</section>
+<section id="the-central-limit-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="the-central-limit-theorem">The Central Limit Theorem</h3>
+<section id="sampling-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="sampling-distribution">Sampling Distribution</h4>
+<ul>
+<li><p>A statistic is a function of a sample, and since the sample values are the outcomes of a random variable, the statistic is also a random variable, for example: the sample mean (<span class="math inline">\(\bar{x}=\frac{\sum_{i=1^n}}{x_i{n}}\)</span>).</p></li>
+<li><p>Other statistics as the sample median of a sample are a function of the sample and they are considered random variables. We can talk about the sampling distribution of the sample median or any other statistic.</p></li>
+<li><p>According to the Central Limit Theorem, the sampling distribution of the sample mean is a Normal distribution <span class="math inline">\(N(\mu, \sigma^2/n)\)</span>.</p></li>
+<li><p>Sampling distributions are important for statistical inference since they are used in hypothesis testing and for building confidence intervals.</p></li>
+</ul>
+<p>The normal distribution is so important in many applications due to the Central Limit Theorem.</p>
+<p>This theorem establishes that if you have a sample <span class="math inline">\(x_1, x_2, \ldots, x_n\)</span> from a population, not necessarily normally distributed, the sum of values or sample mean (sum corrected by the sample size) is going to have a Normal distribution with mean equal to <span class="math inline">\(\mu\)</span> and variance = <span class="math inline">\(\sigma^2/n\)</span>, where <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> are the mean and variance of from the population distribution.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/clt-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From figure X, you can see the sampling distribution approximately forms a normal distribution.</p>
+<p><strong>Distribution of Mean Heat Wave Duration</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/clt_duration-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="statistical-inference" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-inference">Statistical Inference</h2>
+<p>Statistical inference is ?</p>
+<section id="introduction-to-hypothesis-testing" class="level3">
+<h3 class="anchored" data-anchor-id="introduction-to-hypothesis-testing">Introduction to Hypothesis Testing</h3>
+<p>Hypothesis testing is a statistical inference approach that uses sample data to draw conclusions about either a population parameter or probability distribution. The null hypothesis (<span class="math inline">\(H_0\)</span>), and the corresponding alternative hypothesis (<span class="math inline">\(H_a\)</span>), representing the opposite assertion, are formed initially. From the sample data, the procedure determines if there’s evidence to reject <span class="math inline">\(H_0\)</span>. If <span class="math inline">\(H_0\)</span> is rejected, the statistical inference favors <span class="math inline">\(H_a\)</span>.</p>
+<p><strong>Motivating Example</strong></p>
+<p>Suppose we have a coin and we want to test if it is a fair coin. We toss it 10 times, and we only have 2 tails and the rest are heads. Now we can use the concept of hypothesis testing for our purpose.</p>
+<p>The null hypothesis would be that the coin is a fair coin, which means <span class="math inline">\(P(H) = P(T) = 0.5\)</span>. Therefore, the alternative hypothesis is that the coin is not a fair coin. Under the null hypothesis, which is that the coin is fair, the probability of having 2 tails and 8 tails from 10 tosses is</p>
+<p><span class="math display">\[P = {10 \choose 2 } = 0.5^2 0.5^8 = 0.0439\]</span></p>
+<p>The probability under the null hypothesis is very low. If we give a threshold, which specifies how low is “too low” for the probability that the sample occurs, we can determine if we choose to accept the null hypothesis or reject it. If our threshold is <span class="math inline">\(0.05\)</span>, then we will reject the null hypothesis, which means we refuse to believe that the coin is a fair coin. The reasoning is that if the coin is fair, then it would be almost impossible to see samples like this.</p>
+<p>The key concepts in hypothesis testing can be categorized as follows:</p>
+<section id="standard-errors" class="level4">
+<h4 class="anchored" data-anchor-id="standard-errors">Standard errors</h4>
+<p>The term standard error is used when we refer to the standard deviation of the sampling distribution of a statistic.</p>
+<p>**Standard error of the sample mean:</p>
+<p>The standard error of the sample mean is the standard deviation of the sample mean denoted as: <span class="math inline">\(\sigma_{\bar{x=\sigma/\sqrt{n}}}\)</span></p>
+</section>
+<section id="type-i-and-ii-errors" class="level4">
+<h4 class="anchored" data-anchor-id="type-i-and-ii-errors">Type I and II errors</h4>
+<p>We normally assume that the Null Hypothesis is correct before making the test, and fix a small type I error which is the Probability of Rejecting the Null hypothesis assuming that <span class="math inline">\(H_0\)</span> is correct:</p>
+<ul>
+<li><p>Type I error (false positive): $ P(Rejecting; H_0| H_0; is; True)=$</p></li>
+<li><p>Type II error (false negative): <span class="math inline">\(P(Not\;Rejecting\; H_0| H_0\; is\; False)=\beta\)</span></p></li>
+<li><p>We normally control <span class="math inline">\(\alpha\)</span>, which is the level of significance of the test</p></li>
+</ul>
+</section>
+<section id="p-value" class="level4">
+<h4 class="anchored" data-anchor-id="p-value">P-value</h4>
+<p>The P-value is the probability of finding a test statistic <span class="math inline">\(T\)</span> as extreme or more extreme that the observed value assuming that the null hypothesis is correct. If that probability is lower than a significance level <span class="math inline">\(\alpha\)</span> we say that the data does not support the Null hypothesis assumption.</p>
+<p>Given a significance level <span class="math inline">\(\alpha\)</span> we reject the null hypothesis if:</p>
+<ul>
+<li>P-value: <span class="math inline">\(P(|t| \geq |T||H_0) &lt; \alpha\)</span> (two-tail test)</li>
+<li>P-value: <span class="math inline">\(P(t \geq T|H_0) &lt;\alpha\)</span> (right-tail test)</li>
+<li>P-Value: <span class="math inline">\(P(t \leq T|H_0) &lt;\alpha\)</span> (left-tail test)</li>
+</ul>
+<p>where <span class="math inline">\(t \sim \mbox{t-student} (n-1)\)</span></p>
+<p>For all tests a p-value is calculated. If the p value is less than the chosen significance level (<span class="math inline">\(\alpha\)</span>), then the null hypothesis is rejected and there is evidence that the data tested are not coming from normally distributed population. On the other hand, if the p value is greater than the chosen significance level, then the null hypothesis (that the data came from a normally distributed population) can not be rejected.</p>
+</section>
+<section id="confidence-interval" class="level4">
+<h4 class="anchored" data-anchor-id="confidence-interval">Confidence Interval</h4>
+<p>The previous equation can lead to a wrong interpretation of the confidence interval, since it might appear like the probability of the parameter <span class="math inline">\(\mu_1-\mu_2\)</span> lying between the lower and upper limit indicated above is 95%. <strong>That interpretation is incorrect, because according to the frequentist framework, the parameter</strong> <span class="math inline">\(\mu_1-\mu_2\)</span> is not a random variable since it is a population parameter.</p>
+<p>The limits of the Confidence Interval are random numbers because they depend on the sample and you will have different values if you have a different samples. The correct interpretation uses the idea of repeated sampling: If we have 100 hundred independent samples from a population and calculate a CI for each sample, 95 of the 100 CIs would contain the true population statistic <span class="math inline">\(\mu_1 - \mu_2\)</span>.</p>
+<p><strong>Example of Two-tailed One-sample Z-test</strong></p>
+<p>In this example we show the 2-tailed one-sample z test as an illustration of hypothesis testing. The one-sample z test is usually used to test if the sample mean is significantly different from the population mean. Z-test usually requires that the sample size is greater than 30, and the population standard deviation <span class="math inline">\(\sigma\)</span> is known.</p>
+<p>We are testing if the sample mean is significantly different from 50. So our null hypothesis is that the sample mean is not different from 50, and the alternative hypothesis is that the sample mean is different from 50.</p>
+<p>We first generate fake data from a normal distribution with mean=55 and standard deviation of 28:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>fake_data_z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">250</span>, <span class="at">mean=</span><span class="dv">55</span>, <span class="at">sd=</span><span class="dv">28</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># print(fake_data_z)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We then calculate the test statistic, which in this case, is called the Z-score. The expression of the Z-score is:</p>
+<p><span class="math display">\[Z = \frac{(\bar{X}-\mu)}{\sigma / \sqrt{n}}\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>z_score <span class="ot">&lt;-</span> (<span class="fu">mean</span>(fake_data_z) <span class="sc">-</span> <span class="dv">50</span>) <span class="sc">/</span> (<span class="dv">28</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">100</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">'The z_score is'</span>, z_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The z_score is 2.801211</code></pre>
+</div>
+</div>
+<p>We then use the decision rule to determine if we should reject the null hypothesis. The p-value is calculated as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>p_z <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">abs</span>(z_score)))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">'The p-value is '</span>, p_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The p-value is  0.005091127</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/rejection_area-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/rejection_area-2.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter2_Stats_files/figure-html/rejection_area-3.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The p-value is very small and less than 0.05, so we reject the null hypothesis and claim that the sample mean is significantly different from 50. The result of the hypothesis test also matches our initial construction (we sampled from a normal distribution with mean = 55).</p>
+<p><img src="chapter2_Stats_files/figure-html/p-value_illustration-1.png" class="img-fluid" width="672"><img src="chapter2_Stats_files/figure-html/p-value_illustration-2.png" class="img-fluid" width="672"></p>
+<p>This is the caption for this plot</p>
+</section>
+</section>
+<section id="testing-for-normality" class="level3">
+<h3 class="anchored" data-anchor-id="testing-for-normality">Testing for Normality</h3>
+<p>When using a hypothesis testing approach we use a function of the sample data (test statistic) to make a decision about an assumption on a population distribution or a population parameter.</p>
+<p>In this case the assumption (null hypothesis <span class="math inline">\(H_0\)</span>) assumes that the data is a sample from a Normally distributed population, while the alternative hypothesis (<span class="math inline">\(H_a\)</span>) assumes the opposite statement.</p>
+<p>This is:</p>
+<p><span class="math display">\[
+  \begin{align*}
+  H_0: &amp; \quad \text{Data is a sample from a Normal Distribution} \\
+  H_a: &amp; \quad \text{Data is not a sample from a Normal Distribution}
+  \end{align*}
+\]</span></p>
+<section id="goodness-for-fit-tests-for-the-normal-distribution" class="level5">
+<h5 class="anchored" data-anchor-id="goodness-for-fit-tests-for-the-normal-distribution">Goodness for Fit tests for the Normal Distribution</h5>
+<ul>
+<li>Shapiro-Wilks: The statistic <span class="math inline">\(W_n\)</span> is the ratio of the best estimator of the variance (based on the square of a linear combination of the order statistics) to the corrected sum of squares estimator of the variance. Values of <span class="math inline">\(W_n\)</span> are between 0 and 1.</li>
+</ul>
+<p><span class="math display">\[W_n=\frac{(\sum_{i=1}^n a_i x^{(i)})^2}{\sum_{i=1}^n (x_i -\bar{x})^2}\]</span></p>
+<p>Small values of the statistics lead to a rejection of the null hypothesis.</p>
+</section>
+<section id="tests-based-on-the-empirical-distribution-function-edf-tests" class="level5">
+<h5 class="anchored" data-anchor-id="tests-based-on-the-empirical-distribution-function-edf-tests">Tests based on the Empirical Distribution Function (EDF Tests):</h5>
+<p>These tests measure the discrepancy between <span class="math inline">\(F(t)\)</span> and <span class="math inline">\(\hat{F(t)\)</span>.</p>
+<ul>
+<li>Kolmogorov-Smirnoff (<span class="math inline">\(D\)</span>)</li>
+<li>Anderson Darling (<span class="math inline">\(Q\)</span>)</li>
+<li>Cram’er von-Mises (<span class="math inline">\(W^2\)</span>)</li>
+</ul>
+<p>All these statistics measure the departures of the ECDF from the theoretical CDF. Large values of these statistics would lead to the rejection of the Null hypothesis.</p>
+</section>
+</section>
+<section id="location-tests" class="level3">
+<h3 class="anchored" data-anchor-id="location-tests">Location Tests</h3>
+<section id="one-population-location-tests" class="level5">
+<h5 class="anchored" data-anchor-id="one-population-location-tests">One-Population location tests</h5>
+<p>In all cases an independent and identically distributed (iid) sample of a population is available and we want to test a particular assumption about the location parameter <span class="math inline">\(\mu_0\)</span></p>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 37%">
+<col style="width: 39%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Test</strong></th>
+<th><strong>Population Assumption</strong></th>
+<th><strong>Location parameter</strong> <span class="math inline">\(\mu_0\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Student’s <em>t</em></strong></td>
+<td><em>iid</em>, N(<span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma^2\)</span>)</td>
+<td>mean (same as median)</td>
+</tr>
+<tr class="even">
+<td><strong>Signed Rank</strong></td>
+<td><em>iid</em>, symmetric distribution</td>
+<td>median</td>
+</tr>
+<tr class="odd">
+<td><strong>Sign</strong></td>
+<td><em>iid</em></td>
+<td>median</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="hypothesis-testing-on-a-population-mean-mu" class="level5">
+<h5 class="anchored" data-anchor-id="hypothesis-testing-on-a-population-mean-mu">Hypothesis Testing on a Population Mean <span class="math inline">\(\mu\)</span></h5>
+<p>We assume that we have independent samples from a normal population with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. We want to test the hypothesis <span class="math inline">\(H_0: \mu = \mu_0\)</span>.</p>
+<p>The alternative hypothesis can be:</p>
+<ul>
+<li><span class="math inline">\(H_a: \mu \neq \mu\_0\)</span> (Two-tailed test)</li>
+<li><span class="math inline">\(H_a: \mu &gt; \mu\_0\)</span> (Right-tailed test)</li>
+<li><span class="math inline">\(H_a: \mu &lt; \mu\_0\)</span> (Left-tailed test)</li>
+</ul>
+<p>If the standard deviation <span class="math inline">\(\sigma\)</span> is unknown we use the t-statistic:</p>
+<p><span class="math display">\[T= \frac{\bar{x} - \mu_0}{s/\sqrt{n}}\]</span> where <span class="math inline">\(\bar{x}\)</span> is the sample mean and <span class="math inline">\(s\)</span> the the sample standard deviation.</p>
+<p>Under the normality and independence assumptions <span class="math inline">\(T\sim \mbox{t-student}\)</span> distribution with <span class="math inline">\(n-1\)</span> degrees of freedom.</p>
+<p><strong>Example of One-sample T test in r</strong></p>
+<p>Suppose we want to test if a list of weights normally distributed has a mean of 150 pounds</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate samples for testing</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>weights_1 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">150</span>, <span class="at">sd =</span> <span class="dv">20</span>))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># print out the samples</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(weights_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 116 176 139 131 169 165 157 146 145 157</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform one-sample t-test</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>t_test_1 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(weights_1, <span class="at">mu =</span> <span class="dv">150</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results of the t-test</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t_test_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  weights_1
+t = 0.017209, df = 9, p-value = 0.9866
+alternative hypothesis: true mean is not equal to 150
+95 percent confidence interval:
+ 136.955 163.245
+sample estimates:
+mean of x 
+    150.1 </code></pre>
+</div>
+</div>
+<p>You can observe that the test gives a p-value of 0.33, which allows us to accept the null hypothesis and claim that the mean is 150.</p>
+<p>However, if we generate the samples with mean=120, the t test will give us a p-value that rejects the null hypothesis</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate samples for testing</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>weights_2 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">120</span>, <span class="at">sd =</span> <span class="dv">20</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print out the samples</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(weights_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 112 109 149  99 100  99 108 131 114 106</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform one-sample t-test</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>t_test_2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(weights_2, <span class="at">mu =</span> <span class="dv">150</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results of the t-test</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t_test_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  weights_2
+t = -7.4236, df = 9, p-value = 4.002e-05
+alternative hypothesis: true mean is not equal to 150
+95 percent confidence interval:
+ 101.3338 124.0662
+sample estimates:
+mean of x 
+    112.7 </code></pre>
+</div>
+</div>
+</section>
+<section id="two-population-location-tests" class="level5">
+<h5 class="anchored" data-anchor-id="two-population-location-tests">Two-population location tests</h5>
+<p>The main interest is on comparing the location parameters from two population distributions <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span>.</p>
+<p>A common hypothesis is <span class="math inline">\(H_0: \mu_1 = \mu_2\)</span>.</p>
+<p>The alternative hypothesis can be:</p>
+<ul>
+<li><span class="math inline">\(H_a: \mu_1 \neq \mu_2\)</span> (Two-tail tests)</li>
+<li><span class="math inline">\(H_a: \mu_1 &gt; \mu_2\)</span> (Right-tail test)</li>
+<li><span class="math inline">\(H_a: \mu_1 &lt; \mu_2\)</span> (Left-tail test)</li>
+</ul>
+<p>Assuming that the we have two iid samples from populations 1 and 2 with unknown variances <span class="math inline">\(\sigma_1^2\)</span> and <span class="math inline">\(\sigma_2^2\)</span>; and sample means <span class="math inline">\(\bar{x}_1\)</span> and <span class="math inline">\(\bar{x}_2\)</span> and sample variances <span class="math inline">\(s_1^2\)</span> and <span class="math inline">\(s_2^2\)</span>, the following test statistics can be used:</p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 23%">
+<col style="width: 45%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Variances</strong></th>
+<th><strong>Population Assumption</strong></th>
+<th><strong>test-statistic under</strong> <span class="math inline">\(H_0: \mu_1 = \mu_2\)</span></th>
+<th><strong>statistic’s Distribution</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Equal</strong></td>
+<td><span class="math inline">\(N(\mu_1, \sigma^2)\)</span> and <span class="math inline">\(N(\mu_2, \sigma^2)\)</span></td>
+<td><span class="math inline">\(T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{s \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}\)</span></td>
+<td>t-Student with <span class="math inline">\(n_1 + n_2 - 2\)</span> df</td>
+</tr>
+<tr class="even">
+<td><strong>Different</strong></td>
+<td><span class="math inline">\(N(\mu_1, \sigma_1^2)\)</span> and <span class="math inline">\(N(\mu_2, \sigma_2^2)\)</span></td>
+<td><span class="math inline">\(T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}\)</span></td>
+<td>t-Student (Satterthwaite approx for df)</td>
+</tr>
+<tr class="odd">
+<td><strong>Equal</strong></td>
+<td>Distributions have equal shape, different location</td>
+<td>Wilcoxon’s Rank-Sum test</td>
+<td>Exact for small <span class="math inline">\(n\)</span>, Normal approx. for large <span class="math inline">\(n\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>For a given level of significance <span class="math inline">\(\alpha\)</span> since the t-Student is a symmetric distribution one can say that: <span class="math display">\[P((|T|\leq t_{df; \alpha/2})=1-\alpha\]</span></p>
+<p>By inverting this probability equation we get an expression for the <span class="math inline">\((1-\alpha)\)</span> 100% Confidence Interval:</p>
+<p><span class="math display">\[\bar{x}_1-\bar{x}_2 - s\sqrt{\frac{1}{n_1} +\frac{1}{n_2}}\times t_{df;\alpha/2}\leq \mu_1 - \mu_2 \leq \bar{x}_1-\bar{x}_2 + s\sqrt{\frac{1}{n_1} +\frac{1}{n_2}}\times t_{df;\alpha/2}\]</span></p>
+<p><span class="math inline">\(s\)</span> is a pooled sample variance estimate assuming <span class="math inline">\(\sigma_1^2\)</span> and <span class="math inline">\(\sigma_2^2\)</span> are equal:</p>
+<p><span class="math display">\[s=\sqrt{\frac{s_1^2 (n_1-1) + s_2^2 (n_2-1)}{n_1 +n_2 -2}}\]</span></p>
+<p><strong>Example of 2-sample T Test</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a two-sample t-test</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(weights_1, weights_2, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  weights_1 and weights_2
+t = 4.8686, df = 17.632, p-value = 0.0001306
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 21.23684 53.56316
+sample estimates:
+mean of x mean of y 
+    150.1     112.7 </code></pre>
+</div>
+</div>
+<p>You can see that the 2-sample test shows a p-value of 0.015, which means we should reject the null hypothesis and claim the mean weights for the 2 groups are different.</p>
+</section>
+</section>
+<section id="measures-of-linear-association" class="level3">
+<h3 class="anchored" data-anchor-id="measures-of-linear-association">Measures of Linear Association</h3>
+<p>In climate data analysis, we frequently need to test the independence between two variables.</p>
+<section id="pearsons-correlation-test-for-independence" class="level4">
+<h4 class="anchored" data-anchor-id="pearsons-correlation-test-for-independence">Pearson’s Correlation Test for Independence</h4>
+<p>Correlation is a simple and straight-forward indicator of the dependence between two variables. The magnitude of the correlation is proportional to the strength of dependence between the two variables. Borrowing this idea, we could set up the correlation test for independence. Recall the expression for the sample estimate of correlation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is:</p>
+<p><span class="math display">\[\hat{\sigma}^2 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2}\sqrt{\sum_{i=1}^n (Y_i - \bar{Y})^2}}\]</span></p>
+<p>The test statistic for the correlation test is:</p>
+<p><span class="math display">\[t = \frac{\hat{\sigma} \sqrt{n - 2}}{\sqrt{1 - \hat{\sigma}^2}}\]</span></p>
+<p>By theory, <span class="math inline">\(t\)</span> would follow a t-distribution with <span class="math inline">\(n-2\)</span> degree of freedom. To test for independence, we would want to use the t-test decision rule to determine if <span class="math inline">\(\hat{\sigma}^2 = 0\)</span>. This requires us to perform a 2-sided t-test, which means we should reject the null hypothesis of independence if</p>
+<p><span class="math display">\[|T|\leq t_{df; \alpha/2}\]</span></p>
+</section>
+<section id="chi-sq-test-for-independence" class="level4">
+<h4 class="anchored" data-anchor-id="chi-sq-test-for-independence">Chi-sq Test for Independence</h4>
+<p>The chi-square test for independence is a statistical method used to determine if there is a significant association between two categorical variables. It assesses whether the observed distribution of frequencies in a contingency table differs from what would be expected if the variables were independent. In other words, it helps us understand if changes in one variable are related to changes in another. The test is based on the chi-square statistic, which compares the observed and expected frequencies. If the calculated chi-square value is sufficiently large, it suggests a significant association between the variables. This test is widely employed in fields such as sociology, biology, and market research to explore relationships between categorical variables and make informed inferences about populations based on sample data.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>       Truck Sedan
+Male      24    51
+Female    13    42</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the chi-square test for independence</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(fake_data)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the test results</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Chi-Square Test for Independence Results:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chi-Square Test for Independence Results:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test with Yates' continuity correction
+
+data:  fake_data
+X-squared = 0.71804, df = 1, p-value = 0.3968</code></pre>
+</div>
+</div>
+<p>We can see that because of the high p-value we don’t reject the null hypothesis and we should claim that there is no significant association between gender and types of cars they drive.</p>
+</section>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
