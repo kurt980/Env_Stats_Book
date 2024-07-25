@@ -2,8 +2,6 @@
 
 ## Section 1. Why Environmental Statistics?
 
-Test
-
 Statistics is a fundamental science in many applications. Normally we observe or collect data from an experiment, a phenomenon, an ecosystem, a population, and we use statistic for collecting, describing, visualizing, modelling and predicting important variables associated with the study problem.
 
 The development of environmental statistics as a specific branch or section within statistics has dramatically grown in the past 25 years. The need for applications of a wide range of methods adapted to solve the complexities of environmental data collection, modeling and prediction has been recognized by many institutions worldwide. Many national and international statistical societies as the American Statistical Association (ASA), the International Statistical Institute (ISI), the Royal Statistical Society (RSS), the International Society of Bayesian Analysis (ISBA) and Statistical Society of Australia (SSA) have a devoted section to environmental statistics.
