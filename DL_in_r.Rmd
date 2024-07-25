@@ -9,9 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(readr)
+library(tidyverse)
+library(zoo)
+```
+
 ## Load the drought data and join them together
 
-```{r}
+```{r, message=F, warning=F}
 # Set the working directory to the folder containing the CSV files
 directory_path <- "C:/Users/KurtJi/OneDrive - University of Illinois - Urbana/Desktop/Geostatistics202306/data/drought_data/"
 file_names <- list.files(path = directory_path, pattern = "^[A-Z]+\\.csv$", full.names = TRUE)
@@ -20,31 +26,19 @@ file_names <- list.files(path = directory_path, pattern = "^[A-Z]+\\.csv$", full
 data_list <- lapply(file_names, read_csv)
 # Assume all dataframes have a common column named 'date'
 combined_data <- reduce(data_list, full_join, by = "Time")
-
 ```
 
 ```{r}
-library(zoo)
-# Import your dataset
-data_path <- "../data/merge_spei_2.csv"
-
-# Load your data, assuming it's in a CSV file
-data_spei <- read.csv(data_path)
-
 # Convert the Time column to a Date object
-data_spei$Time <- as.Date(as.yearmon(data_spei$Time, "%Y %b"))
-
-# Create lagged NAO features
-data_spei$NAO_lag1 <- c(NA, head(data_spei$NAO, -1))
-data_spei$NAO_lag2 <- c(NA, NA, head(data_spei$NAO, -2))
+combined_data$Time <- as.Date(as.yearmon(combined_data$Time, "%Y %b"))
 
 # Remove rows with NAs caused by lagging
-data_spei <- na.omit(data_spei)
+combined_data <- na.omit(combined_data)
 ```
 
 ```{r}
 # Plot NAO and SPEI against Time
-ggplot(data = data_spei, aes(x = Time)) +
+ggplot(data = combined_data, aes(x = Time)) +
   geom_line(aes(y = NAO, colour = "NAO")) +  # Plot NAO
   geom_line(aes(y = SPEI, colour = "SPEI")) +  # Plot SPEI
   labs(title = "Time Series of NAO and SPEI",
@@ -54,12 +48,32 @@ ggplot(data = data_spei, aes(x = Time)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate date labels for better readability
 ```
+### Standardize data
+```{r}
+
+```
+
+### Create Lags for variables
+```{r}
+# Create lagged features for NAO, AMO, ONI, and PDO
+combined_data <- combined_data %>%
+  mutate(
+    NAO_lag1 = lag(NAO, 1),
+    NAO_lag2 = lag(NAO, 2),
+    AMO_lag1 = lag(AMO, 1),
+    AMO_lag2 = lag(AMO, 2),
+    ONI_lag1 = lag(ONI, 1),
+    ONI_lag2 = lag(ONI, 2),
+    PDO_lag1 = lag(PDO, 1),
+    PDO_lag2 = lag(PDO, 2)
+  )
+```
 
 ### Do a split
 
 ```{r}
-# Assuming data_spei is already loaded and preprocessed
-n <- nrow(data_spei)
+# Assuming combined_data is already loaded and preprocessed
+n <- nrow(combined_data)
 
 # Calculate indices for splitting
 train_size <- floor(0.7 * n)
@@ -71,13 +85,34 @@ val_indices <- (train_size + 1):(train_size + val_size)
 test_indices <- (train_size + val_size + 1):n
 
 # Create the datasets
-train_data <- data_spei[train_indices, ]
-val_data <- data_spei[val_indices, ]
-test_data <- data_spei[test_indices, ]
+train_data <- combined_data[train_indices, ]
+val_data <- combined_data[val_indices, ]
+test_data <- combined_data[test_indices, ]
 
 print(sprintf("Total records: %d", n))
 print(sprintf("Training records: %d, Validation records: %d, Test records: %d", 
               nrow(train_data), nrow(val_data), nrow(test_data)))
+```
+
+### Standardize it
+
+```{r}
+# Assuming combined_data is already prepared and contains multiple variables including 'Time'
+# First, we'll remove the 'Time' column from standardization if it's a Date object
+
+# Select numeric columns only (excluding Date if necessary)
+numeric_data <- combined_data %>% select_if(is.numeric)
+
+# Apply standardization
+standardized_data <- scale(numeric_data)
+
+# Convert back to a data frame and add the 'Time' column back if it was excluded
+standardized_data <- as.data.frame(standardized_data)
+standardized_data$Time <- combined_data$Time
+
+# Verify the structure and see the first few rows
+glimpse(standardized_data)
+head(standardized_data)
 ```
 
 ## H2O Package
@@ -92,7 +127,7 @@ library(h2o)
 h2o.init()
 
 # Convert your R dataframe to an H2O object
-h2o_data <- as.h2o(data_spei)
+h2o_data <- as.h2o(combined_data)
 ```
 
 ### Split train/test

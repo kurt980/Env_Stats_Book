@@ -3,3 +3,36 @@
 ## Section 1.
 
 ## Section ?. Regression Trees and Random Forests
+
+
+## Section ?. Deep Learning in R
+
+Deep learning is a specialized subset of machine learning that employs neural networks with multiple layers (hence "deep") to model complex patterns in data. This advanced form of artificial intelligence is particularly adept at tasks involving large amounts of data and intricate computations, such as image and speech recognition, natural language processing, and autonomous driving. Deep learning models, including convolutional neural networks (CNNs) and recurrent neural networks (RNNs), automate the extraction of high-level features from raw data, enabling them to make sophisticated predictions and decisions. Their ability to learn from experience and improve over time makes them powerful tools for tackling challenging AI problems that require generalization over vast datasets.
+
+### Neural Networks
+
+Neural networks are a subset of machine learning models that are designed to simulate the way the human brain analyzes and processes information. They are the backbone of deep learning technologies. Capable of modeling complex patterns and prediction problems, neural networks have been instrumental in driving advancements in various fields such as image and speech recognition, natural language processing, and autonomous vehicles.
+
+At its core, a neural network consists of layers of interconnected nodes or "neurons," each linked by "synapses." These networks are composed of an input layer, one or more hidden layers, and an output layer. The input layer receives various forms of raw data, which the neural network uses to make predictions or decisions without any need for manual feature extraction. The hidden layers perform the majority of the computational work through neurons that process inputs from previous layers to generate outputs for subsequent layers. The final output layer produces the end results, such as classification labels or numerical values.
+
+Each neuron in a neural network processes input data using a weighted sum of inputs, which is then passed through a non-linear function known as an activation function. Common activation functions include sigmoid, tanh, and ReLU (Rectified Linear Unit), each bringing different properties that influence the network's learning behavior. For instance, ReLU is particularly effective in avoiding the vanishing gradient problem, making it suitable for deep networks.
+
+Training a neural network involves adjusting the weights of the connections based on the error of the output compared to the expected result. This process, known as backpropagation, uses algorithms such as gradient descent to minimize the error by iteratively adjusting the weights to improve the model predictions.
+
+The power of neural networks lies in their ability to learn and model non-linear and complex relationships. This makes them extremely versatile and capable of outperforming other algorithms when it comes to complex problems such as voice recognition or image classification. Deep learning models, which include deep neural networks, convolutional neural networks (CNNs), and recurrent neural networks (RNNs), extend this concept by increasing the depth and complexity of the architectures to capture even more abstract patterns in the data.
+
+However, neural networks require substantial data and computational power to train effectively, and they can be prone to overfitting, especially in cases where the amount of data is limited relative to the complexity of the model. Regularization techniques such as dropout, early stopping, or L2 regularization are often used to mitigate this risk and enhance the model's ability to generalize to new, unseen data.
+
+#### Neural Networks Overview
+
+#### Recurrent Neural Networks
+
+
+### Keras for Deep Learning
+
+#### Standardization of Data
+
+Neural networks models are highly sensitive to the scale of input data. Those models typically use gradient-based optimization techniques to find the minimum of the loss function, and if the features have varying scales, it can cause disproportionate gradient updates. This can lead to slower convergence during training or even cause the training process to diverge. In addition, many neural networks use activation functions like sigmoid, tanh, or ReLU, which are sensitive to the magnitude of their inputs. Large input values can cause functions like sigmoid and tanh to saturate at their tails, where the gradient is near zero. This saturation can lead to vanishing gradients, where the gradient becomes too small for effective learning during backpropagation. Then, without standardization, features with larger scales can dominate the learning process by overshadowing the contributions of features with smaller scales. Standardizing ensures that each feature contributes equally to model learning.
+
+An important note for standardizing data: Do not standardize the data altogether. Do them after the train/test split instead. This is because when you use information from outside the training dataset to train the model, you would have "data leakage". If the standardization parameters (mean and standard deviation) are derived from the entire dataset, then information from the test set has inadvertently been used to scale the training set. Data leakage is considered cheating in training models, and performance-wise, it can lead to overly optimistic performance estimates during training and poor generalization to new data.
+
