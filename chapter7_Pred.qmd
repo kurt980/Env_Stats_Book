@@ -55,7 +55,7 @@ n <- nrow(drought_data)
 train_size <- floor(0.7 * n)
 
 train_indices <- 1:train_size
-test_indices <- (train_size + val_size + 1):n
+test_indices <- (train_size + 1):n
 
 train_data <- drought_data[train_indices, ]
 test_data <- drought_data[test_indices, ]
@@ -80,6 +80,8 @@ An important note for standardizing data: Do not standardize the data altogether
 ## Section 2. Neural Networks
 
 INSERT CONTENT FROM OVERLEAF
+
+![Illustration of a neural network](neural_network.drawio.png)
 
 **SHOULD WE INCLUDE CONCEPTS ABOUT EPOCHS, BATCH SIZE, DROPOUT, VALIDATION, ETC?**
 
@@ -161,9 +163,15 @@ INSERT CONTENT FROM OVERLEAF
 
 INSERT CONTENT FROM OVERLEAF
 
+![Illustration of a recurrent neural network](RNN.drawio.png)
+
+![Details of recurrent neural network](RNN_1.drawio.png)
+
 ### Long-Short-Term memory RNN and Drought prediction
 
 INSERT CONTENT FROM OVERLEAF
+
+![Details of LSTM network](LSTM_1.drawio.png)
 
 #### An LSTM model that predicts 1 unit into the future
 
@@ -245,6 +253,7 @@ test = h2o.splitFrame(h2o_data, ratios = c(0.7,0.15), seed =1)[[3]]
 ```
 
 Specify model structure
+
 ```{r}
 dl_model <- h2o.deeplearning(
   x = c("NAO", "NAO_lag1", "NAO_lag2"), # Using NAO and its lags as predictors
@@ -283,10 +292,10 @@ ggplot(actuals_vs_preds, aes(x = Time)) +
   theme_minimal()
 ```
 
-
 #### deepNet
 
 deepNet is...
+
 ```{r}
 library(deepnet)
 ```
@@ -301,6 +310,7 @@ dbn_model <- dbn.dnn.train(train_x, train_y, hidden = c(25, 15),
 ```
 
 We can check the prediction accuracy from this model
+
 ```{r}
 predictions <- nn.predict(dbn_model, test_x)
 
@@ -308,12 +318,12 @@ rmse <- sqrt(mean((predictions - test_y)^2))
 print(paste("Root Mean Squared Error (RMSE):", rmse))
 ```
 
-
 #### neuralNet
 
 neuralNet is...
 
 You can use `~` to specify the formula, but here we need to re-define the data so that it has both the predictors and the truth
+
 ```{r}
 library(neuralnet)
 
@@ -345,7 +355,6 @@ plot(actual_values, type = 'o', col = 'blue', ylim = range(c(actual_values, pred
 points(predicted_values, type = 'o', pch = 15, col = 'red')
 legend("bottomright", legend = c("Actual", "Predicted"), col = c("blue", "red"), pch = c(16, 15))
 ```
-
 
 ## Section 3. Support Vector Machines
 
