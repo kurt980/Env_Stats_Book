@@ -1,34 +1,69 @@
 # **Chapter 7. Predictive Modeling**
 
-## Section 1.
+## Section 1. Drought Prediction
 
-## Section ?. Regression Trees and Random Forests
+INSERT CONTENT FROM OVERLEAF
 
+### Inspecting Drought Data
 
-## Section ?. Deep Learning in R
+The data we will be using is the drought data, we will use it to train models that predict the $SPI$ and $SPEI$ indices.
 
-Deep learning is a specialized subset of machine learning that employs neural networks with multiple layers (hence "deep") to model complex patterns in data. This advanced form of artificial intelligence is particularly adept at tasks involving large amounts of data and intricate computations, such as image and speech recognition, natural language processing, and autonomous driving. Deep learning models, including convolutional neural networks (CNNs) and recurrent neural networks (RNNs), automate the extraction of high-level features from raw data, enabling them to make sophisticated predictions and decisions. Their ability to learn from experience and improve over time makes them powerful tools for tackling challenging AI problems that require generalization over vast datasets.
+```{r, echo=F, eval=T, message=F, warning=F}
+## This chunk, code is hidden, only output is shown
+# set directories
+directory_path <- "C:/Users/KurtJi/OneDrive - University of Illinois - Urbana/Desktop/Geostatistics202306/data/drought_data/"
+```
 
-### Neural Networks
+Read all data files in the directory and combine them to a single dataframe
 
-Neural networks are a subset of machine learning models that are designed to simulate the way the human brain analyzes and processes information. They are the backbone of deep learning technologies. Capable of modeling complex patterns and prediction problems, neural networks have been instrumental in driving advancements in various fields such as image and speech recognition, natural language processing, and autonomous vehicles.
+```{r}
+# load necessary libraries
+library(readr)
+library(tidyverse)
+library(zoo)
 
-At its core, a neural network consists of layers of interconnected nodes or "neurons," each linked by "synapses." These networks are composed of an input layer, one or more hidden layers, and an output layer. The input layer receives various forms of raw data, which the neural network uses to make predictions or decisions without any need for manual feature extraction. The hidden layers perform the majority of the computational work through neurons that process inputs from previous layers to generate outputs for subsequent layers. The final output layer produces the end results, such as classification labels or numerical values.
+file_names <- list.files(path = directory_path, pattern = "^[A-Z]+\\.csv$", full.names = TRUE)
+data_list <- lapply(file_names, read_csv) # read each file and create a list of dataframes
+drought_data <- reduce(data_list, full_join, by = "Time")
+```
 
-Each neuron in a neural network processes input data using a weighted sum of inputs, which is then passed through a non-linear function known as an activation function. Common activation functions include sigmoid, tanh, and ReLU (Rectified Linear Unit), each bringing different properties that influence the network's learning behavior. For instance, ReLU is particularly effective in avoiding the vanishing gradient problem, making it suitable for deep networks.
+Process the data, including transforming the "Time" column into a Date object because we are dealing with a time-series data
 
-Training a neural network involves adjusting the weights of the connections based on the error of the output compared to the expected result. This process, known as backpropagation, uses algorithms such as gradient descent to minimize the error by iteratively adjusting the weights to improve the model predictions.
+```{r}
+drought_data$Time <- as.Date(as.yearmon(drought_data$Time, "%Y %b")) # convert the Time column to a Date object
+drought_data <- na.omit(drought_data) # remove rows with NAs
 
-The power of neural networks lies in their ability to learn and model non-linear and complex relationships. This makes them extremely versatile and capable of outperforming other algorithms when it comes to complex problems such as voice recognition or image classification. Deep learning models, which include deep neural networks, convolutional neural networks (CNNs), and recurrent neural networks (RNNs), extend this concept by increasing the depth and complexity of the architectures to capture even more abstract patterns in the data.
+# plot SPI and SPEI against Time
+ggplot(data = drought_data, aes(x = Time)) +
+  geom_line(aes(y = SPI, colour = "SPI"), colour = "#1B5E20") +  # lighter Blue for SPI
+  geom_line(aes(y = SPEI, colour = "SPEI"), colour = "#81D4FA") +  # darker Blue for SPEI
+  labs(title = "Time Series of SPI and SPEI",
+       x = "Time",
+       y = "Index Value",
+       colour = "Legend") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),  # rotate date labels for better readability
+        legend.title = element_blank(),  # remove the legend title
+        legend.position = "bottom",  # adjust legend position if necessary
+        legend.text = element_text(size = 12))  # adjust text size for better legibility
+```
 
-However, neural networks require substantial data and computational power to train effectively, and they can be prone to overfitting, especially in cases where the amount of data is limited relative to the complexity of the model. Regularization techniques such as dropout, early stopping, or L2 regularization are often used to mitigate this risk and enhance the model's ability to generalize to new, unseen data.
+Train/Test Split
 
-#### Neural Networks Overview
+```{r}
+n <- nrow(drought_data)
+train_size <- floor(0.7 * n)
 
-#### Recurrent Neural Networks
+train_indices <- 1:train_size
+test_indices <- (train_size + 1):n
 
+train_data <- drought_data[train_indices, ]
+test_data <- drought_data[test_indices, ]
 
-### Keras for Deep Learning
+print(sprintf("Total records: %d", n))
+print(sprintf("Training records: %d, Test records: %d", 
+              nrow(train_data), nrow(test_data)))
+```
 
 #### Standardization of Data
 
@@ -36,3 +71,581 @@ Neural networks models are highly sensitive to the scale of input data. Those mo
 
 An important note for standardizing data: Do not standardize the data altogether. Do them after the train/test split instead. This is because when you use information from outside the training dataset to train the model, you would have "data leakage". If the standardization parameters (mean and standard deviation) are derived from the entire dataset, then information from the test set has inadvertently been used to scale the training set. Data leakage is considered cheating in training models, and performance-wise, it can lead to overly optimistic performance estimates during training and poor generalization to new data.
 
+```{r}
+
+```
+
+#### Lags in Time Series Analysis
+
+## Section 2. Neural Networks
+
+INSERT CONTENT FROM OVERLEAF
+
+![Illustration of a neural network](neural_network.drawio.png)
+
+**SHOULD WE INCLUDE CONCEPTS ABOUT EPOCHS, BATCH SIZE, DROPOUT, VALIDATION, ETC?**
+
+#### Illustration of A Feed-Forward Neural Network
+
+Keras in R is a high-level neural networks API that enables easy and fast prototyping of deep learning models. It operates on top of TensorFlow and is available in Python, too.
+
+Building a neural network model in keras is straightforward as you just need to define all components using the `%>%` symbol. We are building a simple neural network with 2 linear layers, a dropout layer and a relu activation layer. We will let it take 3 variables for input: AMO, NAO and ONI
+
+```{r}
+library(keras)
+
+feedforward_nn <- keras_model_sequential() %>%
+  layer_dense(units = 64, input_shape = c(3), activation = 'relu') %>%  # first hidden layer with more units and ReLU activation
+  layer_dense(units = 32, activation = 'relu') %>%  # additional hidden layer
+  layer_dropout(rate = 0.5) %>%  # dropout layer to prevent overfitting
+  layer_dense(units = 1, activation = 'linear')  # output layer with linear activation
+
+summary(feedforward_nn) # show summary of the model
+```
+
+After we define and initialize the model, we need to compile
+
+```{r}
+feedforward_nn %>% compile(
+  loss = 'mean_squared_error',
+  optimizer = optimizer_rmsprop(),
+  metrics = c('mean_absolute_error')
+)
+```
+
+We will use NAO as the predictor to predict SPEI, the `fit()` operator will start the training process of the model. The number of training epochs is 100, and the batch size is 32. Batch size determins how many data samples the model sees before making a weight update. This parameter is to offer a balance between training speed and network stability. The validation split of 0.2 means that 20% of the training data is used for validation.
+
+```{r, fold=TRUE}
+train_x <- as.matrix(cbind(train_data$AMO, train_data$NAO, train_data$ONI))
+train_y <- as.matrix(train_data$SPEI)
+
+train_x <- scale(train_x)
+train_y <- scale(train_y)
+
+history <- feedforward_nn %>% fit(
+  train_x,
+  train_y,
+  epochs = 100,
+  batch_size = 32,
+  validation_split = 0.2
+)
+
+```
+
+Here we will fetch the training history and plot the change in training and validation loss
+
+```{r}
+plot(history)
+```
+
+We can see that the model has trained for 100 epochs. Now we can make predictions and check its accuracy on the testing data.
+
+```{r}
+test_x <- as.matrix(cbind(test_data$AMO, test_data$NAO, test_data$ONI))
+test_y <- as.matrix(test_data$SPEI)
+
+test_x <- scale(test_x)
+test_y <- scale(test_y)
+
+predictions <- predict(feedforward_nn, test_x)
+# calculate the Mean Squared Error
+mse <- mean((predictions - test_y) ^ 2)
+print(mse)
+```
+
+In our basic model, we predict the SPEI index using the values of AMO, NAO, and ONI at each timestamp. However, this approach does not account for the time-dependency of the data, meaning it does not utilize information from previous timestamps. In the next section, we will explore more advanced neural networks that are specifically designed to handle sequential data by incorporating temporal dependencies.
+
+### Deep LEARNING
+
+INSERT CONTENT FROM OVERLEAF
+
+### Recurrent Neural Networks
+
+INSERT CONTENT FROM OVERLEAF
+
+![Illustration of a recurrent neural network](RNN.drawio.png)
+
+![Details of recurrent neural network](RNN_1.drawio.png)
+
+### Long-Short-Term memory RNN and Drought prediction
+
+INSERT CONTENT FROM OVERLEAF
+
+![Details of LSTM network](LSTM_1.drawio.png)
+
+#### An LSTM model that predicts 1 unit into the future
+
+A simple example of a sequential model would be to use a set amount of past data to predict the nearest future data point. We will build an LSTM model that takes the SPEI values from 30 past data points and predicts the SPEI value for the next data point.
+
+First, we need to organize our data into 'past data' and 'future data'. The function below iteratively partitions the SPEI index in the training data into many past-future pairs.
+
+```{r}
+# create a function to make the transformation
+create_dataset <- function(data, steps=1) {
+  X = list()
+  Y = list()
+  for (i in 1:(length(data) - steps)) {
+    end_ix <- i + steps - 1
+    X[[i]] <- data[i:end_ix]
+    Y[[i]] <- data[end_ix + 1]
+  }
+  return(list(X = array(unlist(X), dim = c(length(X), steps, 1)), Y = array(unlist(Y), dim = c(length(Y)))))
+}
+
+# we are using 10 past data points to predict the next step
+steps <- 30
+train_transformed <- create_dataset(train_y, steps)
+```
+
+Now we can define the structure of our LSTM model. It begins with an LSTM layer featuring 50 units to capture temporal dependencies. Next, a Dense layer with a single unit predicts a future value. This configuration is basic yet robust enough to learn from sequences and make predictions based on historical data.
+
+```{r}
+# define the lstm model structure
+lstm <- keras_model_sequential() %>%
+  layer_lstm(units = 50, input_shape = c(steps, 1), return_sequences = FALSE) %>%  # lstm layer to process time series data
+  layer_dense(units = 1)  # output layer to predict the next data point
+
+# compile the model with mean squared error as the loss function and use an optimizer
+lstm %>% compile(
+  loss = 'mean_squared_error',
+  optimizer = 'adam',
+  metrics = c('mean_absolute_error')
+)
+
+# summary of the model to see the architecture and parameters
+summary(lstm)
+```
+
+The LSTM model undergoes 100 training epochs with a batch size of 32. 20% of the training data is reserved for validation purposes.
+
+```{r}
+train_X <- train_transformed$X
+train_Y <- train_transformed$Y
+
+history <- lstm %>% fit(
+  train_X,                          # training features
+  train_Y,                          # target output
+  epochs = 100,                     # number of epochs to train for
+  batch_size = 32,                  # number of samples per gradient update
+  validation_split = 0.2,           # percentage of data to use for validation
+  shuffle = TRUE                    # shuffle training data before each epoch
+)
+
+plot(history)
+```
+
+### Additional Deep Learning Packages in R
+
+#### H2O Package
+
+H2O is a...
+
+```{r}
+library(h2o)
+h2o.init()
+
+h2o_data <- as.h2o(drought_data)
+
+# you can do a train/test split in the h20 framework
+train = h2o.splitFrame(h2o_data, ratios = c(0.7,0.15), seed =1)[[1]] 
+valid = h2o.splitFrame(h2o_data, ratios = c(0.7,0.15), seed =1)[[2]] 
+test = h2o.splitFrame(h2o_data, ratios = c(0.7,0.15), seed =1)[[3]] 
+```
+
+Specify model structure
+
+```{r}
+dl_model <- h2o.deeplearning(
+  x = c("NAO", "NAO_lag1", "NAO_lag2"), # Using NAO and its lags as predictors
+  y = "SPEI",                           # Target variable
+  training_frame = train,
+  validation_frame = valid,
+  activation = "Rectifier",
+  hidden = c(200, 100, 50),             # Two hidden layers with 50 neurons each
+  epochs = 100
+)
+```
+
+```{r}
+# Make predictions on the test set
+predictions <- h2o.predict(dl_model, newdata = test)
+print(predictions)
+```
+
+```{r}
+train
+```
+
+```{r}
+actuals_vs_preds <- as.data.frame(test[,"SPEI"])
+actuals_vs_preds$Predicted_SPEI <- as.vector(predictions)
+```
+
+```{r}
+ggplot(actuals_vs_preds, aes(x = Time)) +
+  geom_line(aes(y = SPEI, colour = "Actual"), linewidth = 1) +
+  geom_line(aes(y = Predicted_SPEI, colour = "Predicted"), linewidth = 1) +
+  labs(title = "Actual vs Predicted SPEI",
+       x = "Time",
+       y = "SPEI Index",
+       colour = "Legend") +
+  theme_minimal()
+```
+
+#### deepNet
+
+deepNet is...
+
+```{r}
+library(deepnet)
+```
+
+**dbn is for weight initialization by a deep belief network**
+
+```{r}
+set.seed(123)  # For reproducibility
+dbn_model <- dbn.dnn.train(train_x, train_y, hidden = c(25, 15), 
+                       learningrate = 0.05, momentum = 0.1, 
+                       output = "linear", numepochs = 100)
+```
+
+We can check the prediction accuracy from this model
+
+```{r}
+predictions <- nn.predict(dbn_model, test_x)
+
+rmse <- sqrt(mean((predictions - test_y)^2))
+print(paste("Root Mean Squared Error (RMSE):", rmse))
+```
+
+#### neuralNet
+
+neuralNet is...
+
+You can use `~` to specify the formula, but here we need to re-define the data so that it has both the predictors and the truth
+
+```{r}
+library(neuralnet)
+
+set.seed(123)
+nn <- neuralnet(SPEI ~ AMO + NAP + ONI, 
+                data = train_data, 
+                hidden = c(4,2), 
+                linear.output = TRUE,
+                threshold = 0.01)
+```
+
+```{r}
+plot(nn,rep = "best")
+```
+
+```{r}
+pred <- predict(model, test_data)
+
+# Actual vs Predicted
+predicted_values <- nn_results$net.result
+actual_values <- test_data$SPEI
+
+# Calculate RMSE
+rmse <- sqrt(mean((predicted_values - actual_values)^2))
+print(paste("Root Mean Squared Error (RMSE):", rmse))
+
+# Visual comparison
+plot(actual_values, type = 'o', col = 'blue', ylim = range(c(actual_values, predicted_values)), pch = 16, xlab = "Index", ylab = "SPEI")
+points(predicted_values, type = 'o', pch = 15, col = 'red')
+legend("bottomright", legend = c("Actual", "Predicted"), col = c("blue", "red"), pch = c(16, 15))
+```
+
+## Section 3. Support Vector Machines
+
+### Hyperplane, Margin, and Support Vector
+
+#### Start with hyperplane:
+
+**Hyperplane and Margin**
+
+**Hyperplane**: In an n-dimensional space, a hyperplane is a flat affine subspace of dimension n-1. For a two-class classification problem, a hyperplane can be described mathematically by the equation:
+
+$$
+\mathbf{w} \cdot \mathbf{x} + b = 0
+$$
+
+Where: - $\mathbf{w}$ is the weight vector perpendicular to the hyperplane. - $\mathbf{x}$ is the feature vector. - $b$ is the bias term, adjusting the distance of the hyperplane from the origin.
+
+**Linear Separable Case**
+
+The linearly separable case is the simplest case for SVM. It means that it's possible to find a hyperplane that perfectly separates the classes such that:
+
+$$
+y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1, \text{ for all } i
+$$
+
+where $y_i$ are the labels associated with each data point $\mathbf{x}_i$, taking values +1 or -1 depending on the class.
+
+**Margin**: The margin is defined as the distance between the closest points of the data classes and the hyperplane. For a point $\mathbf{x}_i$ on the correct side of the hyperplane, this distance is given by:
+
+$$
+\text{Distance} = \frac{|\mathbf{w} \cdot \mathbf{x}_i + b|}{\|\mathbf{w}\|}
+$$
+
+The objective of SVM is to maximize this margin to enhance the model's generalization ability.
+
+**Support Vector**: Support vectors are the data points that lie closest to the decision surface (hyperplane). They are used to determine the hyperplane. These points satisfy:
+
+$$
+\mathbf{w} \cdot \mathbf{x}_i + b = \pm 1
+$$
+
+where $+1$ and $-1$ correspond to the two different classes. The support vectors are exactly on the boundary of the margin.
+
+```{r, echo=False}
+# Load necessary libraries
+library(e1071)
+library(ggplot2)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate sample data
+group1 <- data.frame(x = rnorm(50, mean = 2), y = rnorm(50, mean = 2), class = factor(1))
+group2 <- data.frame(x = rnorm(50, mean = -2), y = rnorm(50, mean = -2), class = factor(2))
+data <- rbind(group1, group2)
+
+# Train the SVM model
+svm_model <- svm(class ~ x + y, data = data, type = 'C-classification', kernel = 'linear')
+
+# Extract model coefficients
+w <- t(svm_model$coefs) %*% svm_model$SV
+b <- -svm_model$rho
+
+# Define the decision boundary function
+decision_boundary <- function(x) {
+  -(w[1] * x + b) / w[2]
+}
+
+# Prepare data frame for ggplot
+boundary_data <- data.frame(x = seq(min(data$x), max(data$x), length.out = 100))
+boundary_data$y <- decision_boundary(boundary_data$x)
+
+# Plotting
+plot <- ggplot(data, aes(x = x, y = y, color = class)) +
+  geom_point(alpha = 0.5, size = 3) +
+  geom_line(data = boundary_data, aes(x = x, y = y), color = "black") +
+  labs(title = "SVM Classification with Hyperplane",
+       x = "X-axis",
+       y = "Y-axis") +
+  scale_color_manual(values = c("blue", "red"))
+
+print(plot)
+```
+
+**Maximization Problem**
+
+Now that we know what a simple linear separable case is for SVM, we can define the problem that SVM eventually solves. Essentially, just like most machine learning algorithms, SVM solves an optimization problem, in this case, to maximize the margin between the hyperplane and the support vectors. The optimization problem in SVM can be formulated as:
+
+$$
+\begin{aligned}
+& \text{Minimize: } \frac{1}{2} \|\mathbf{w}\|^2 \\
+& \text{Subject to: } y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1 \text{ for all } i
+\end{aligned}
+$$
+
+The objective function $\frac{1}{2} \|\mathbf{w}\|^2$ minimizes the norm of the weight vector, which is equivalent to maximizing the margin (since the margin is inversely proportional to $\|\mathbf{w}\|$). This is a quadratic programming problem. In practice, SVM uses Lagrange multipliers to transform this into a problem that involves only the dot products of samples.
+
+#### Non-separable case and soft margin
+
+In non-separable cases, the formulation is adjusted by introducing slack variables $\xi_i$ to allow misclassification of difficult or noisy examples:
+
+$$
+\begin{aligned}
+& \min_{\mathbf{w}, b, \xi} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i \\
+& \text{subject to} \quad y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1 - \xi_i, \quad \text{for all } i = 1, \ldots, n \\
+& \xi_i \geq 0, \quad \text{for all } i = 1, \ldots, n
+\end{aligned}
+$$
+
+Here, $C$ is a penalty parameter that controls the trade-off between achieving a low error on the training data and maintaining a large margin.
+
+-   **Dual Formulation**
+
+To simplify solving this optimization problem, SVM formulations often convert this "primal" problem into its "dual" form. The dual problem focuses on maximizing a Lagrangian based on conditions derived from the primal problem:
+
+$$
+\begin{aligned}
+& \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j \langle \mathbf{x}_i, \mathbf{x}_j \rangle \right) \\
+& \text{subject to:} \\
+& \sum_{i=1}^n \alpha_i y_i = 0, \\
+& 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
+\end{aligned}
+$$
+
+#### Non-linear SVM, Kernel Trick
+
+The kernel trick maps data into a higher-dimensional space without actually performing the transformation computationally. This allows the SVM algorithm to operate in a high-dimensional (possibly infinite-dimensional) feature space where the data might become linearly separable, without the need to explicitly calculate the coordinates in this space.
+
+In SVM, the separation is achieved by constructing a hyperplane that maximizes the margin between the two classes. For non-linear data, this hyperplane might not exist in the original feature space. By applying a kernel function, you can implicitly calculate the dot products between all pairs of data points as if they were in the higher-dimensional space, thus finding a hyperplane in this new space.
+
+The kernel function replaces the dot product used in the linear SVM model. The dual form of the SVM optimization problem becomes:
+
+**Dual Problem with Kernel**:
+
+$$
+\begin{aligned}
+& \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j K(\mathbf{x}_i, \mathbf{x}_j) \right) \\
+& \text{subject to} \\
+& \sum_{i=1}^n \alpha_i y_i = 0, \\
+& 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
+\end{aligned}
+$$
+
+**Where**: - $K(\mathbf{x}_i, \mathbf{x}_j)$ is the kernel function. - $\alpha_i$ are the Lagrange multipliers.
+
+The kernel function $K(\mathbf{x}_i, \mathbf{x}_j)$ computes the dot product of vectors $\mathbf{x}_i$ and $\mathbf{x}_j$ in a higher-dimensional space. This function transforms the feature space to a higher dimension where the data is presumably more separable.
+
+Some common kernel functions are:
+
+1.  **Linear Kernel**:
+    -   $K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i \cdot \mathbf{x}_j$
+    -   This is essentially the dot product of the vectors in the original space, corresponding to the no-kernel scenario.
+2.  **Polynomial Kernel**:
+    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = (\gamma \mathbf{x}\_i \cdot \mathbf{x}\_j + r)^d$
+    -   Where $\gamma$, $d$, and $r$ are kernel parameters. This kernel looks at not only the given features but also their combinations up to the $d$-th degree.
+3.  **Radial Basis Function (RBF) or Gaussian Kernel**:
+    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = \exp(-\gamma \|\mathbf{x}\_i - \mathbf{x}\_j\|^2)$
+    -   Here, $\gamma$ is a parameter that defines the spread of the kernel. It maps the data into an infinite-dimensional space, providing a powerful way to handle complex non-linear relationships.
+4.  **Sigmoid Kernel**:
+    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = \tanh(\gamma \mathbf{x}\_i \cdot \mathbf{x}\_j + r)$
+
+#### SVM Classifier (Binary and Multi-label)
+
+Now we use R to build a simple SVM classifier, with a linear kernel
+
+```{r}
+library(e1071)
+```
+
+We will use the `iris` dataset for example
+
+```{r}
+data(iris)
+set.seed(123)
+```
+
+We first do a train/test split using slicing
+
+```{r}
+iris_shuffled <- iris[sample(nrow(iris)), ]
+
+split_index <- round(nrow(iris) * 0.7)
+train_data <- iris_shuffled[1:split_index, ]
+test_data <- iris_shuffled[(split_index + 1):nrow(iris), ]
+```
+
+Now we can initialize the model and start training it.
+
+```{r}
+svm_model <- svm(Species ~ ., data = train_data, type = 'C-classification', kernel = 'linear')
+
+test_predictions <- predict(svm_model, test_data)
+```
+
+```{r}
+confusion_matrix <- table(Predicted = test_predictions, Actual = test_data$Species)
+print(confusion_matrix)
+```
+
+```{r}
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Test Accuracy: ", accuracy))
+```
+
+#### Relationship with Logistic Regression
+
+### Support Vector Regression
+
+The data we will be using is the drought data, we will use it to train models that predict the $SPI$ and $SPEI$ indices.
+
+```{r, echo=F, eval=T, message=F, warning=F}
+## This chunk, code is hidden, only output is shown
+# set directories
+directory_path <- "C:/Users/KurtJi/OneDrive - University of Illinois - Urbana/Desktop/Geostatistics202306/data/drought_data/"
+# load necessary libraries
+library(readr)
+library(tidyverse)
+library(zoo)
+
+file_names <- list.files(path = directory_path, pattern = "^[A-Z]+\\.csv$", full.names = TRUE)
+data_list <- lapply(file_names, read_csv) # read each file and create a list of dataframes
+drought_data <- reduce(data_list, full_join, by = "Time")
+
+drought_data$Time <- as.Date(as.yearmon(drought_data$Time, "%Y %b")) # convert the Time column to a Date object
+drought_data <- na.omit(drought_data) # remove rows with NAs
+
+n <- nrow(drought_data)
+train_size <- floor(0.7 * n)
+
+train_indices <- 1:train_size
+test_indices <- (train_size + 1):n
+
+train_data <- drought_data[train_indices, ]
+test_data <- drought_data[test_indices, ]
+
+print(sprintf("Total records: %d", n))
+print(sprintf("Training records: %d, Test records: %d", 
+              nrow(train_data), nrow(test_data)))
+```
+
+```{r}
+library(e1071)
+
+train_x <- as.matrix(cbind(train_data$AMO, train_data$NAO, train_data$ONI, train_data$PDO))
+train_y <- as.matrix(train_data$SPEI)
+```
+
+```{r}
+svm_model <- svm(train_x, train_y, type = "eps-regression")
+
+summary(svm_model)
+```
+
+Now we look at how accurate our SVM regressor is using the test data.
+
+```{r}
+test_x <- as.matrix(cbind(test_data$AMO, test_data$NAO, test_data$ONI, test_data$PDO))
+predictions <- predict(svm_model, test_x)
+
+actuals <- as.matrix(test_data$SPEI)
+mse <- mean((predictions - actuals)^2)
+
+print(paste("Mean Squared Error on Test Set:", mse))
+```
+The SVM performs poorly, but comparable with the LSTM model.
+
+
+#### Tuning of Support Vector Machines
+
+Tuning a Support Vector Machine (SVM) involves adjusting its hyper-parameters to optimize performance for a specific dataset. The most common tunable parameter is the **Cost Parameter** $C$. Recall from our earlier formulation,
+$$
+    \begin{aligned}
+    & \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j \langle \mathbf{x}_i, \mathbf{x}_j \rangle \right) \\
+    & \text{subject to:} \\
+    & \sum_{i=1}^n \alpha_i y_i = 0, \\
+    & 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
+    \end{aligned}
+$$
+$C$ controls the trade-off between achieving a low training error and a large margin. A higher $C$ values prioritize achieving a lower error on the training set by fitting the training data more tightly, but it may lead to overfitting. Lower values of $C$ increase the margin and thus the generalization ability, but at the risk of underfitting.
+
+
+If we are dealing with non-linear problems and are using Kernels, we usually will have different **Kernel Parameters** for tuning. Aside from the cost parameter $C$, each kernel may have additional parameters, such as:
+    -   **Gamma** ($\gamma$) in the RBF kernel: Controls the influence of individual training samples on the decision boundary. Higher $\gamma$ values lead to narrower, more complex decision boundaries.
+    -   **Degree (d)** in the polynomial kernel: Determines the complexity of the decision boundaries by specifying the degree of the polynomial.
+The choice of kernel and its parameters significantly affect SVM's performance. For instance, the polynomial and RBF kernels can fit more complex patterns than the linear kernel. Similar to tuning $C$, grid search with cross-validation is an effective way to find the best kernel type and parameters. The performance can vary widely across different datasets, so empirical testing is crucial.
+
+
+```{r}
+
+```
+
+## Section 4. Multivariate Adaptive Regression Splines
+
+## Section 5. Regression Trees and Random Forests
