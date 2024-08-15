@@ -364,7 +364,7 @@ legend("bottomright", legend = c("Actual", "Predicted"), col = c("blue", "red"),
 
 **Hyperplane and Margin**
 
--   **Hyperplane**: In an n-dimensional space, a hyperplane is a flat affine subspace of dimension n-1. For a two-class classification problem, a hyperplane can be described mathematically by the equation:
+**Hyperplane**: In an n-dimensional space, a hyperplane is a flat affine subspace of dimension n-1. For a two-class classification problem, a hyperplane can be described mathematically by the equation:
 
 $$
 \mathbf{w} \cdot \mathbf{x} + b = 0
@@ -372,7 +372,17 @@ $$
 
 Where: - $\mathbf{w}$ is the weight vector perpendicular to the hyperplane. - $\mathbf{x}$ is the feature vector. - $b$ is the bias term, adjusting the distance of the hyperplane from the origin.
 
--   **Margin**: The margin is defined as the distance between the closest points of the data classes and the hyperplane. For a point $\mathbf{x}_i$ on the correct side of the hyperplane, this distance is given by:
+**Linear Separable Case**
+
+The linearly separable case is the simplest case for SVM. It means that it's possible to find a hyperplane that perfectly separates the classes such that:
+
+$$
+y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1, \text{ for all } i
+$$
+
+where $y_i$ are the labels associated with each data point $\mathbf{x}_i$, taking values +1 or -1 depending on the class.
+
+**Margin**: The margin is defined as the distance between the closest points of the data classes and the hyperplane. For a point $\mathbf{x}_i$ on the correct side of the hyperplane, this distance is given by:
 
 $$
 \text{Distance} = \frac{|\mathbf{w} \cdot \mathbf{x}_i + b|}{\|\mathbf{w}\|}
@@ -380,23 +390,13 @@ $$
 
 The objective of SVM is to maximize this margin to enhance the model's generalization ability.
 
--   **Support Vector**: These are the data points that lie closest to the decision surface (hyperplane) and are critical in defining the position and orientation of the hyperplane. These points satisfy:
+**Support Vector**: Support vectors are the data points that lie closest to the decision surface (hyperplane). They are used to determine the hyperplane. These points satisfy:
 
 $$
 \mathbf{w} \cdot \mathbf{x}_i + b = \pm 1
 $$
 
 where $+1$ and $-1$ correspond to the two different classes. The support vectors are exactly on the boundary of the margin.
-
--   **Linear Separable Case**
-
-In a linearly separable case, it's possible to find a hyperplane that perfectly separates the classes such that:
-
-$$
-y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1, \text{ for all } i
-$$
-
-where $y_i$ are the labels associated with each data point $\mathbf{x}_i$, taking values +1 or -1 depending on the class.
 
 ```{r, echo=False}
 # Load necessary libraries
@@ -439,9 +439,9 @@ plot <- ggplot(data, aes(x = x, y = y, color = class)) +
 print(plot)
 ```
 
--   **Maximization Problem**
+**Maximization Problem**
 
-The optimization problem in SVM can be formulated as:
+Now that we know what a simple linear separable case is for SVM, we can define the problem that SVM eventually solves. Essentially, just like most machine learning algorithms, SVM solves an optimization problem, in this case, to maximize the margin between the hyperplane and the support vectors. The optimization problem in SVM can be formulated as:
 
 $$
 \begin{aligned}
@@ -450,20 +450,7 @@ $$
 \end{aligned}
 $$
 
-The objective function $\frac{1}{2} \|\mathbf{w}\|^2$ minimizes the norm of the weight vector, which is equivalent to maximizing the margin (since the margin is inversely proportional to $\|\mathbf{w}\|$). This is a quadratic programming problem. In practice, SVM uses Lagrange multipliers to transform this into a problem that involves only the dot products of samples, facilitating the use of the kernel trick.
-
--   **Dual Formulation**
-
-To simplify solving this optimization problem, especially when using the kernel trick, SVM formulations often convert this "primal" problem into its "dual" form. The dual problem focuses on maximizing a Lagrangian based on conditions derived from the primal problem:
-
-$$
-\begin{aligned}
-& \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j \langle \mathbf{x}_i, \mathbf{x}_j \rangle \right) \\
-& \text{subject to:} \\
-& \sum_{i=1}^n \alpha_i y_i = 0, \\
-& 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
-\end{aligned}
-$$
+The objective function $\frac{1}{2} \|\mathbf{w}\|^2$ minimizes the norm of the weight vector, which is equivalent to maximizing the margin (since the margin is inversely proportional to $\|\mathbf{w}\|$). This is a quadratic programming problem. In practice, SVM uses Lagrange multipliers to transform this into a problem that involves only the dot products of samples.
 
 #### Non-separable case and soft margin
 
@@ -479,9 +466,22 @@ $$
 
 Here, $C$ is a penalty parameter that controls the trade-off between achieving a low error on the training data and maintaining a large margin.
 
+-   **Dual Formulation**
+
+To simplify solving this optimization problem, SVM formulations often convert this "primal" problem into its "dual" form. The dual problem focuses on maximizing a Lagrangian based on conditions derived from the primal problem:
+
+$$
+\begin{aligned}
+& \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j \langle \mathbf{x}_i, \mathbf{x}_j \rangle \right) \\
+& \text{subject to:} \\
+& \sum_{i=1}^n \alpha_i y_i = 0, \\
+& 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
+\end{aligned}
+$$
+
 #### Non-linear SVM, Kernel Trick
 
-The kernel trick involves mapping data into a higher-dimensional space without actually performing the transformation computationally. This allows the SVM algorithm to operate in a high-dimensional (possibly infinite-dimensional) feature space where the data might become linearly separable, without the need to explicitly calculate the coordinates in this space.
+The kernel trick maps data into a higher-dimensional space without actually performing the transformation computationally. This allows the SVM algorithm to operate in a high-dimensional (possibly infinite-dimensional) feature space where the data might become linearly separable, without the need to explicitly calculate the coordinates in this space.
 
 In SVM, the separation is achieved by constructing a hyperplane that maximizes the margin between the two classes. For non-linear data, this hyperplane might not exist in the original feature space. By applying a kernel function, you can implicitly calculate the dot products between all pairs of data points as if they were in the higher-dimensional space, thus finding a hyperplane in this new space.
 
@@ -562,6 +562,89 @@ print(paste("Test Accuracy: ", accuracy))
 #### Relationship with Logistic Regression
 
 ### Support Vector Regression
+
+The data we will be using is the drought data, we will use it to train models that predict the $SPI$ and $SPEI$ indices.
+
+```{r, echo=F, eval=T, message=F, warning=F}
+## This chunk, code is hidden, only output is shown
+# set directories
+directory_path <- "C:/Users/KurtJi/OneDrive - University of Illinois - Urbana/Desktop/Geostatistics202306/data/drought_data/"
+# load necessary libraries
+library(readr)
+library(tidyverse)
+library(zoo)
+
+file_names <- list.files(path = directory_path, pattern = "^[A-Z]+\\.csv$", full.names = TRUE)
+data_list <- lapply(file_names, read_csv) # read each file and create a list of dataframes
+drought_data <- reduce(data_list, full_join, by = "Time")
+
+drought_data$Time <- as.Date(as.yearmon(drought_data$Time, "%Y %b")) # convert the Time column to a Date object
+drought_data <- na.omit(drought_data) # remove rows with NAs
+
+n <- nrow(drought_data)
+train_size <- floor(0.7 * n)
+
+train_indices <- 1:train_size
+test_indices <- (train_size + 1):n
+
+train_data <- drought_data[train_indices, ]
+test_data <- drought_data[test_indices, ]
+
+print(sprintf("Total records: %d", n))
+print(sprintf("Training records: %d, Test records: %d", 
+              nrow(train_data), nrow(test_data)))
+```
+
+```{r}
+library(e1071)
+
+train_x <- as.matrix(cbind(train_data$AMO, train_data$NAO, train_data$ONI, train_data$PDO))
+train_y <- as.matrix(train_data$SPEI)
+```
+
+```{r}
+svm_model <- svm(train_x, train_y, type = "eps-regression")
+
+summary(svm_model)
+```
+
+Now we look at how accurate our SVM regressor is using the test data.
+
+```{r}
+test_x <- as.matrix(cbind(test_data$AMO, test_data$NAO, test_data$ONI, test_data$PDO))
+predictions <- predict(svm_model, test_x)
+
+actuals <- as.matrix(test_data$SPEI)
+mse <- mean((predictions - actuals)^2)
+
+print(paste("Mean Squared Error on Test Set:", mse))
+```
+The SVM performs poorly, but comparable with the LSTM model.
+
+
+#### Tuning of Support Vector Machines
+
+Tuning a Support Vector Machine (SVM) involves adjusting its hyper-parameters to optimize performance for a specific dataset. The most common tunable parameter is the **Cost Parameter** $C$. Recall from our earlier formulation,
+$$
+    \begin{aligned}
+    & \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j \langle \mathbf{x}_i, \mathbf{x}_j \rangle \right) \\
+    & \text{subject to:} \\
+    & \sum_{i=1}^n \alpha_i y_i = 0, \\
+    & 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
+    \end{aligned}
+$$
+$C$ controls the trade-off between achieving a low training error and a large margin. A higher $C$ values prioritize achieving a lower error on the training set by fitting the training data more tightly, but it may lead to overfitting. Lower values of $C$ increase the margin and thus the generalization ability, but at the risk of underfitting.
+
+
+If we are dealing with non-linear problems and are using Kernels, we usually will have different **Kernel Parameters** for tuning. Aside from the cost parameter $C$, each kernel may have additional parameters, such as:
+    -   **Gamma** ($\gamma$) in the RBF kernel: Controls the influence of individual training samples on the decision boundary. Higher $\gamma$ values lead to narrower, more complex decision boundaries.
+    -   **Degree (d)** in the polynomial kernel: Determines the complexity of the decision boundaries by specifying the degree of the polynomial.
+The choice of kernel and its parameters significantly affect SVM's performance. For instance, the polynomial and RBF kernels can fit more complex patterns than the linear kernel. Similar to tuning $C$, grid search with cross-validation is an effective way to find the best kernel type and parameters. The performance can vary widely across different datasets, so empirical testing is crucial.
+
+
+```{r}
+
+```
 
 ## Section 4. Multivariate Adaptive Regression Splines
 
