@@ -360,6 +360,8 @@ legend("bottomright", legend = c("Actual", "Predicted"), col = c("blue", "red"),
 
 ### Hyperplane, Margin, and Support Vector
 
+Intro
+
 #### Start with hyperplane:
 
 **Hyperplane and Margin**
@@ -619,28 +621,21 @@ mse <- mean((predictions - actuals)^2)
 
 print(paste("Mean Squared Error on Test Set:", mse))
 ```
-The SVM performs poorly, but comparable with the LSTM model.
 
+The SVM performs poorly, but comparable with the LSTM model.
 
 #### Tuning of Support Vector Machines
 
-Tuning a Support Vector Machine (SVM) involves adjusting its hyper-parameters to optimize performance for a specific dataset. The most common tunable parameter is the **Cost Parameter** $C$. Recall from our earlier formulation,
-$$
+Tuning a Support Vector Machine (SVM) involves adjusting its hyper-parameters to optimize performance for a specific dataset. The most common tunable parameter is the **Cost Parameter** $C$. Recall from our earlier formulation, $$
     \begin{aligned}
     & \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j \langle \mathbf{x}_i, \mathbf{x}_j \rangle \right) \\
     & \text{subject to:} \\
     & \sum_{i=1}^n \alpha_i y_i = 0, \\
     & 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
     \end{aligned}
-$$
-$C$ controls the trade-off between achieving a low training error and a large margin. A higher $C$ values prioritize achieving a lower error on the training set by fitting the training data more tightly, but it may lead to overfitting. Lower values of $C$ increase the margin and thus the generalization ability, but at the risk of underfitting.
+$$ $C$ controls the trade-off between achieving a low training error and a large margin. A higher $C$ values prioritize achieving a lower error on the training set by fitting the training data more tightly, but it may lead to overfitting. Lower values of $C$ increase the margin and thus the generalization ability, but at the risk of underfitting.
 
-
-If we are dealing with non-linear problems and are using Kernels, we usually will have different **Kernel Parameters** for tuning. Aside from the cost parameter $C$, each kernel may have additional parameters, such as:
-    -   **Gamma** ($\gamma$) in the RBF kernel: Controls the influence of individual training samples on the decision boundary. Higher $\gamma$ values lead to narrower, more complex decision boundaries.
-    -   **Degree (d)** in the polynomial kernel: Determines the complexity of the decision boundaries by specifying the degree of the polynomial.
-The choice of kernel and its parameters significantly affect SVM's performance. For instance, the polynomial and RBF kernels can fit more complex patterns than the linear kernel. Similar to tuning $C$, grid search with cross-validation is an effective way to find the best kernel type and parameters. The performance can vary widely across different datasets, so empirical testing is crucial.
-
+If we are dealing with non-linear problems and are using Kernels, we usually will have different **Kernel Parameters** for tuning. Aside from the cost parameter $C$, each kernel may have additional parameters, such as: - **Gamma** ($\gamma$) in the RBF kernel: Controls the influence of individual training samples on the decision boundary. Higher $\gamma$ values lead to narrower, more complex decision boundaries. - **Degree (d)** in the polynomial kernel: Determines the complexity of the decision boundaries by specifying the degree of the polynomial. The choice of kernel and its parameters significantly affect SVM's performance. For instance, the polynomial and RBF kernels can fit more complex patterns than the linear kernel. Similar to tuning $C$, grid search with cross-validation is an effective way to find the best kernel type and parameters. The performance can vary widely across different datasets, so empirical testing is crucial.
 
 ```{r}
 
