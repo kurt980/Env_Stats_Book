@@ -12,6 +12,8 @@ This line is for testing Git
 
 This is for Lely's test
 
+Kurt's changes
+
 adjust color here: [https://quarto.org/docs/authoring/markdown-basics.html#divs-and-spans](URL)
 
 This is a sentence with [red]{style="color: red;"} text.
