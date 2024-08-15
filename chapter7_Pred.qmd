@@ -360,6 +360,8 @@ legend("bottomright", legend = c("Actual", "Predicted"), col = c("blue", "red"),
 
 ### Hyperplane, Margin, and Support Vector
 
+Intro
+
 #### Start with hyperplane:
 
 **Hyperplane and Margin**
