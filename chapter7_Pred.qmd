@@ -358,6 +358,211 @@ legend("bottomright", legend = c("Actual", "Predicted"), col = c("blue", "red"),
 
 ## Section 3. Support Vector Machines
 
+### Hyperplane, Margin, and Support Vector
+
+#### Start with hyperplane:
+
+**Hyperplane and Margin**
+
+-   **Hyperplane**: In an n-dimensional space, a hyperplane is a flat affine subspace of dimension n-1. For a two-class classification problem, a hyperplane can be described mathematically by the equation:
+
+$$
+\mathbf{w} \cdot \mathbf{x} + b = 0
+$$
+
+Where: - $\mathbf{w}$ is the weight vector perpendicular to the hyperplane. - $\mathbf{x}$ is the feature vector. - $b$ is the bias term, adjusting the distance of the hyperplane from the origin.
+
+-   **Margin**: The margin is defined as the distance between the closest points of the data classes and the hyperplane. For a point $\mathbf{x}_i$ on the correct side of the hyperplane, this distance is given by:
+
+$$
+\text{Distance} = \frac{|\mathbf{w} \cdot \mathbf{x}_i + b|}{\|\mathbf{w}\|}
+$$
+
+The objective of SVM is to maximize this margin to enhance the model's generalization ability.
+
+-   **Support Vector**: These are the data points that lie closest to the decision surface (hyperplane) and are critical in defining the position and orientation of the hyperplane. These points satisfy:
+
+$$
+\mathbf{w} \cdot \mathbf{x}_i + b = \pm 1
+$$
+
+where $+1$ and $-1$ correspond to the two different classes. The support vectors are exactly on the boundary of the margin.
+
+-   **Linear Separable Case**
+
+In a linearly separable case, it's possible to find a hyperplane that perfectly separates the classes such that:
+
+$$
+y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1, \text{ for all } i
+$$
+
+where $y_i$ are the labels associated with each data point $\mathbf{x}_i$, taking values +1 or -1 depending on the class.
+
+```{r, echo=False}
+# Load necessary libraries
+library(e1071)
+library(ggplot2)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate sample data
+group1 <- data.frame(x = rnorm(50, mean = 2), y = rnorm(50, mean = 2), class = factor(1))
+group2 <- data.frame(x = rnorm(50, mean = -2), y = rnorm(50, mean = -2), class = factor(2))
+data <- rbind(group1, group2)
+
+# Train the SVM model
+svm_model <- svm(class ~ x + y, data = data, type = 'C-classification', kernel = 'linear')
+
+# Extract model coefficients
+w <- t(svm_model$coefs) %*% svm_model$SV
+b <- -svm_model$rho
+
+# Define the decision boundary function
+decision_boundary <- function(x) {
+  -(w[1] * x + b) / w[2]
+}
+
+# Prepare data frame for ggplot
+boundary_data <- data.frame(x = seq(min(data$x), max(data$x), length.out = 100))
+boundary_data$y <- decision_boundary(boundary_data$x)
+
+# Plotting
+plot <- ggplot(data, aes(x = x, y = y, color = class)) +
+  geom_point(alpha = 0.5, size = 3) +
+  geom_line(data = boundary_data, aes(x = x, y = y), color = "black") +
+  labs(title = "SVM Classification with Hyperplane",
+       x = "X-axis",
+       y = "Y-axis") +
+  scale_color_manual(values = c("blue", "red"))
+
+print(plot)
+```
+
+-   **Maximization Problem**
+
+The optimization problem in SVM can be formulated as:
+
+$$
+\begin{aligned}
+& \text{Minimize: } \frac{1}{2} \|\mathbf{w}\|^2 \\
+& \text{Subject to: } y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1 \text{ for all } i
+\end{aligned}
+$$
+
+The objective function $\frac{1}{2} \|\mathbf{w}\|^2$ minimizes the norm of the weight vector, which is equivalent to maximizing the margin (since the margin is inversely proportional to $\|\mathbf{w}\|$). This is a quadratic programming problem. In practice, SVM uses Lagrange multipliers to transform this into a problem that involves only the dot products of samples, facilitating the use of the kernel trick.
+
+-   **Dual Formulation**
+
+To simplify solving this optimization problem, especially when using the kernel trick, SVM formulations often convert this "primal" problem into its "dual" form. The dual problem focuses on maximizing a Lagrangian based on conditions derived from the primal problem:
+
+$$
+\begin{aligned}
+& \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j \langle \mathbf{x}_i, \mathbf{x}_j \rangle \right) \\
+& \text{subject to:} \\
+& \sum_{i=1}^n \alpha_i y_i = 0, \\
+& 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
+\end{aligned}
+$$
+
+#### Non-separable case and soft margin
+
+In non-separable cases, the formulation is adjusted by introducing slack variables $\xi_i$ to allow misclassification of difficult or noisy examples:
+
+$$
+\begin{aligned}
+& \min_{\mathbf{w}, b, \xi} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i \\
+& \text{subject to} \quad y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1 - \xi_i, \quad \text{for all } i = 1, \ldots, n \\
+& \xi_i \geq 0, \quad \text{for all } i = 1, \ldots, n
+\end{aligned}
+$$
+
+Here, $C$ is a penalty parameter that controls the trade-off between achieving a low error on the training data and maintaining a large margin.
+
+#### Non-linear SVM, Kernel Trick
+
+The kernel trick involves mapping data into a higher-dimensional space without actually performing the transformation computationally. This allows the SVM algorithm to operate in a high-dimensional (possibly infinite-dimensional) feature space where the data might become linearly separable, without the need to explicitly calculate the coordinates in this space.
+
+In SVM, the separation is achieved by constructing a hyperplane that maximizes the margin between the two classes. For non-linear data, this hyperplane might not exist in the original feature space. By applying a kernel function, you can implicitly calculate the dot products between all pairs of data points as if they were in the higher-dimensional space, thus finding a hyperplane in this new space.
+
+The kernel function replaces the dot product used in the linear SVM model. The dual form of the SVM optimization problem becomes:
+
+**Dual Problem with Kernel**:
+
+$$
+\begin{aligned}
+& \max_{\alpha} \left( \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j=1}^n y_i y_j \alpha_i \alpha_j K(\mathbf{x}_i, \mathbf{x}_j) \right) \\
+& \text{subject to} \\
+& \sum_{i=1}^n \alpha_i y_i = 0, \\
+& 0 \leq \alpha_i \leq C, \quad \text{for all } i = 1, \ldots, n
+\end{aligned}
+$$
+
+**Where**: - $K(\mathbf{x}_i, \mathbf{x}_j)$ is the kernel function. - $\alpha_i$ are the Lagrange multipliers.
+
+The kernel function $K(\mathbf{x}_i, \mathbf{x}_j)$ computes the dot product of vectors $\mathbf{x}_i$ and $\mathbf{x}_j$ in a higher-dimensional space. This function transforms the feature space to a higher dimension where the data is presumably more separable.
+
+Some common kernel functions are:
+
+1.  **Linear Kernel**:
+    -   $K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i \cdot \mathbf{x}_j$
+    -   This is essentially the dot product of the vectors in the original space, corresponding to the no-kernel scenario.
+2.  **Polynomial Kernel**:
+    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = (\gamma \mathbf{x}\_i \cdot \mathbf{x}\_j + r)^d$
+    -   Where $\gamma$, $d$, and $r$ are kernel parameters. This kernel looks at not only the given features but also their combinations up to the $d$-th degree.
+3.  **Radial Basis Function (RBF) or Gaussian Kernel**:
+    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = \exp(-\gamma \|\mathbf{x}\_i - \mathbf{x}\_j\|^2)$
+    -   Here, $\gamma$ is a parameter that defines the spread of the kernel. It maps the data into an infinite-dimensional space, providing a powerful way to handle complex non-linear relationships.
+4.  **Sigmoid Kernel**:
+    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = \tanh(\gamma \mathbf{x}\_i \cdot \mathbf{x}\_j + r)$
+
+#### SVM Classifier (Binary and Multi-label)
+
+Now we use R to build a simple SVM classifier, with a linear kernel
+
+```{r}
+library(e1071)
+```
+
+We will use the `iris` dataset for example
+
+```{r}
+data(iris)
+set.seed(123)
+```
+
+We first do a train/test split using slicing
+
+```{r}
+iris_shuffled <- iris[sample(nrow(iris)), ]
+
+split_index <- round(nrow(iris) * 0.7)
+train_data <- iris_shuffled[1:split_index, ]
+test_data <- iris_shuffled[(split_index + 1):nrow(iris), ]
+```
+
+Now we can initialize the model and start training it.
+
+```{r}
+svm_model <- svm(Species ~ ., data = train_data, type = 'C-classification', kernel = 'linear')
+
+test_predictions <- predict(svm_model, test_data)
+```
+
+```{r}
+confusion_matrix <- table(Predicted = test_predictions, Actual = test_data$Species)
+print(confusion_matrix)
+```
+
+```{r}
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Test Accuracy: ", accuracy))
+```
+
+#### Relationship with Logistic Regression
+
+### Support Vector Regression
+
 ## Section 4. Multivariate Adaptive Regression Splines
 
 ## Section 5. Regression Trees and Random Forests
