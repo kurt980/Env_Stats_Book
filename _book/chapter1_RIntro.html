@@ -933,18 +933,18 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>), <span class="at">ncol =</span> <span class="dv">5</span>) <span class="co"># 100 random variables organzied into 5 columns</span></span>
 <span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             [,1]       [,2]       [,3]       [,4]       [,5]
-[1,]  0.007701291 -0.5855846 -0.4125513 -0.3912562  0.2350899
-[2,] -1.184516456 -1.3062570  1.3107093 -0.2754277  0.4436280
-[3,]  1.043397364  0.4311652 -0.1099994  0.7358443 -1.7684136
-[4,]  1.708374571  0.7712784  0.5829408  0.3491371  1.2175324
-[5,]  0.269621474  0.6140698  0.4457267  1.5530912  0.6137124</code></pre>
+<pre><code>           [,1]       [,2]        [,3]        [,4]       [,5]
+[1,] -1.4702944 -0.4891176 -0.36667864 -1.10869289  1.3975137
+[2,]  1.0919954  1.2675653 -1.18156110 -0.03386622 -0.4125605
+[3,]  1.0402024 -0.2479421 -0.06898609  1.52270762 -1.0785389
+[4,] -2.1574749 -0.6494945  0.62065266  0.54024680  1.1010651
+[5,]  0.8998703 -0.7738114 -0.07263234 -0.26168875  0.6549136</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(df, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="at">mean=</span><span class="fu">mean</span>(x), <span class="at">sd=</span><span class="fu">sd</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          [,1]        [,2]      [,3]      [,4]      [,5]
-mean 0.3689156 -0.01506563 0.3633652 0.3942778 0.1483098
-sd   1.0957375  0.89525659 0.6668167 0.7948464 1.1322995</code></pre>
+<pre><code>           [,1]       [,2]       [,3]      [,4]      [,5]
+mean -0.1191403 -0.1785601 -0.2138411 0.1317413 0.3324786
+sd    1.5676203  0.8319618  0.6513724 0.9775677 1.0458302</code></pre>
 </div>
 </div></li>
 <li><p>lapply</p>

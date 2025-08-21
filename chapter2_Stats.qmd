@@ -516,13 +516,13 @@ $$
 
 -   Shapiro-Wilks: The statistic $W_n$ is the ratio of the best estimator of the variance (based on the square of a linear combination of the order statistics) to the corrected sum of squares estimator of the variance. Values of $W_n$ are between 0 and 1.
 
-$$W_n=\frac{(\sum_{i=1}^n a_i x^{(i)})^2}{\sum_{i=1}^n (x_i -\bar{x})^2}$$
+$$W_n=\frac{(\sum_{i=1}^n a_i x_{(i)})^2}{\sum_{i=1}^n (x_i -\bar{x})^2}$$
 
 Small values of the statistics lead to a rejection of the null hypothesis.
 
 ##### Tests based on the Empirical Distribution Function (EDF Tests):
 
-These tests measure the discrepancy between $F(t)$ and $\hat{F(t)$.
+These tests measure the discrepancy between $F(t)$ and $\hat{F}(t)$.
 
 -   Kolmogorov-Smirnoff ($D$)
 -   Anderson Darling ($Q$)
@@ -536,11 +536,11 @@ All these statistics measure the departures of the ECDF from the theoretical CDF
 
 In all cases an independent and identically distributed (iid) sample of a population is available and we want to test a particular assumption about the location parameter $\mu_0$
 
-| **Test**          | **Population Assumption**     | **Location parameter** $\mu_0$ |
-|-------------------|-------------------------------|--------------------------------|
-| **Student's *t*** | *iid*, N($\mu$, $\sigma^2$)   | mean (same as median)          |
-| **Signed Rank**   | *iid*, symmetric distribution | median                         |
-| **Sign**          | *iid*                         | median                         |
+| **Test** | **Population Assumption** | **Location parameter** $\mu_0$ |
+|------------------|---------------------------|---------------------------|
+| **Student's *t*** | *iid*, N($\mu$, $\sigma^2$) | mean (same as median) |
+| **Signed Rank** | *iid*, symmetric distribution | median |
+| **Sign** | *iid* | median |
 
 ##### Hypothesis Testing on a Population Mean $\mu$
 
@@ -605,11 +605,11 @@ The alternative hypothesis can be:
 
 Assuming that the we have two iid samples from populations 1 and 2 with unknown variances $\sigma_1^2$ and $\sigma_2^2$; and sample means $\bar{x}_1$ and $\bar{x}_2$ and sample variances $s_1^2$ and $s_2^2$, the following test statistics can be used:
 
-| **Variances** | **Population Assumption**                          | **test-statistic under** $H_0: \mu_1 = \mu_2$                                                      | **statistic's Distribution**                      |
-|---------------|----------------------------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| **Equal**     | $N(\mu_1, \sigma^2)$ and $N(\mu_2, \sigma^2)$      | $T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{s \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$       | t-Student with $n_1 + n_2 - 2$ df                 |
-| **Different** | $N(\mu_1, \sigma_1^2)$ and $N(\mu_2, \sigma_2^2)$  | $T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$ | t-Student (Satterthwaite approx for df)           |
-| **Equal**     | Distributions have equal shape, different location | Wilcoxon's Rank-Sum test                                                                           | Exact for small $n$, Normal approx. for large $n$ |
+| **Variances** | **Population Assumption** | **test-statistic under** $H_0: \mu_1 = \mu_2$ | **statistic's Distribution** |
+|-----------------|-----------------|-----------------------|-----------------|
+| **Equal** | $N(\mu_1, \sigma^2)$ and $N(\mu_2, \sigma^2)$ | $T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{s \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$ | t-Student with $n_1 + n_2 - 2$ df |
+| **Different** | $N(\mu_1, \sigma_1^2)$ and $N(\mu_2, \sigma_2^2)$ | $T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$ | t-Student (Satterthwaite approx for df) |
+| **Equal** | Distributions have equal shape, different location | Wilcoxon's Rank-Sum test | Exact for small $n$, Normal approx. for large $n$ |
 
 For a given level of significance $\alpha$ since the t-Student is a symmetric distribution one can say that: $$P((|T|\leq t_{df; \alpha/2})=1-\alpha$$
 
