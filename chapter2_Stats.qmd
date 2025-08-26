@@ -2,7 +2,7 @@
 
 ## Section 1. Exploratory Data Analysis
 
-Exploratory Data Analysis (EDA) is a term proposed by the statistician John Tukey in the 1970's. The aim of EDA is to explore the data first in order to understand the data structure by using graphical and quantitative tools.
+Exploratory Data Analysis (EDA) is a term proposed by the statistician John Tukey in the 1970's. The aim of EDA is to explore the data first in order to understand the data structure and potential models by using graphical and quantitative tools.
 
 Among the quantitative tools are the calculation of center tendency measures (mean, median and mode) and variability measures (variance, standard deviation, range, coefficient of variation, inter-quantile range).
 
@@ -10,7 +10,7 @@ Among the graphical tools are the graphics to propose potential probability mode
 
 If the variable of interest is categorical, other graphical tools are more appropriate like the use of Barplots. Barplots will have the variable categories in the x axis, and the raw frequencies or relative frequencies in the y axis.
 
-In a multivariate case, scatter-plots are very important for visualization of the relationships among the variables.
+In a multivariate case, scatter-plots are very important for visualization of the relationships among the variables. Scatter-plots would help us to detect non-linearities among the variables.
 
 ```{r}
 library(ggplot2)
@@ -53,6 +53,8 @@ One of the main assumptions when we handle environmental variables is to deal wi
 
 The normality assumption is a central assumption in most inference procedures. A first step in our analysis is plotting the data to understand their probability distribution.
 
+The following example simulates two data sets from a normal distribution and plots the density function:
+
 ```{r}
 library(ggplot2)
 # set seed
@@ -78,7 +80,7 @@ One of the main goals in the analysis of environmental data is the proposal of a
 
 The specification of a statistical model implies the proposal of a probability distribution for the variable of interest. Common probability models can be used for simulation, once the unknown parameters are estimated.
 
-You can generate samples from different probability mpdel in R using the `r_distribution` operation. You can specify the parameters and the number of samples to be generated.
+You can generate samples from different probability models in R using the `r_distribution` operation. You can specify the distribution parameters and the number of samples to be generated.
 
 -   **Normal Distribution**
 
@@ -143,18 +145,18 @@ plot(x, density, type = "l", lwd = 2, col = "black",
 
 -   **Poisson Distribution**
 
-    The Poisson distribution describes the number of events occurring in a fixed interval of time or space, often used for counting rare events with a known average rate. Note that a poisson variable can only take positive integer values.
+    The Poisson distribution describes the number of events occurring in a fixed interval of time or space, or a given area. It is often used for counting rare events with a known average rate $\lambda$. Note that a poisson random variable can only take positive integer values.
 
-    $$P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}$$
+    $$P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}\;\;, k=0,1,2,\ldots$$
 
     ```{r poisson_curve, fig.width=6, fig.height=4, echo=F}
     # Generate density values for a poisson distribution
     x <- seq(0, 20)  # Specify the range of x values
-    density <- dpois(x, lambda = 5)  # lambda = 0.8
+    density <- dpois(x, lambda = 5)  # lambda = 5
 
-    # Plot the normal bell curve
-    plot(x, density, type = "l", lwd = 2, col = "black", 
-         xlab = "x", ylab = "Density", main = "Poisson Distribution Probability Density Function")
+    # Plot the Poisson density
+    plot(x, density, type = "h", lwd = 2, col = "black", 
+         xlab = "x", ylab = "Density", main = "Poisson Probability Density Function")
     ```
 
     **You can sample from Poisson distribution, too**
@@ -188,7 +190,7 @@ plot(x, density, type = "l", lwd = 2, col = "black",
 
     -   **Gamma Distribution**
 
-    The gamma distribution is flexible and applicable to various contexts, including modeling time to events, income data, and more, characterized by shape and scale parameters.
+    The gamma distribution is flexible and applicable to various contexts, including modeling time to events, environmental data, and more. It is characterized by the shape ($\alpha$) and scale ($\beta$) parameters and it is defined for non-negative random variables.
 
     $$f(x;\alpha,\beta) = \frac{\beta^\alpha x^{\alpha - 1} e^{-\beta x}}{\Gamma(\alpha)}$$
 
@@ -211,11 +213,11 @@ where $\mu=E[X]$ and $\sigma^2=Var[X]$ are the mean and variance of the pdf, and
 
 #### Histograms, QQ-plots and PP-plots
 
-Histograms, QQ-plots, and PP-plots are graphical tools commonly employed in statistical analysis to understand and visualize the distribution of data. A histogram provides a visual representation of the frequency or density of values within different intervals, offering insights into the shape and spread of the data. QQ-plots (Quantile-Quantile plots) serve to assess how well a dataset aligns with a theoretical distribution by comparing quantiles of the observed data with those of the expected distribution. Meanwhile, PP-plots (Probability-Probability plots) focus on comparing cumulative distribution functions, aiding in the identification of deviations from expected patterns. Together, these tools offer a practical means to explore, interpret, and validate the statistical properties of datasets.
+Histograms, QQ-plots, and PP-plots are graphical tools commonly employed in statistical analysis to understand and visualize the distribution of data. A histogram provides a visual representation of the frequency or density of values within different intervals, offering insights into the shape and spread of the data. QQ-plots (Quantile-Quantile plots) serve to assess how well a data set aligns with a theoretical distribution by comparing quantiles of the observed data with those of the expected distribution. Meanwhile, PP-plots (Probability-Probability plots) focus on comparing cumulative distribution functions, aiding in the identification of deviations from expected patterns. Together, these tools offer practical means to explore, interpret, and validate the statistical properties of data sets.
 
 ##### Histograms
 
-A histogram is a graphical representation of the frequency distribution of the sample. Values in the y axis can be raw frequencies or relative frequencies. Below, we show the temperature in March.
+Recall that a histogram is a graphical representation of the frequency distribution of the sample. Values in the y axis can be raw frequencies or relative frequencies. Below, we show the histogram for the air temperature in March for Champaign and for all months.
 
 ```{r, cache=F, fig.width=6, fig.height=4}
 # Load weather data
@@ -241,7 +243,7 @@ for (m in unique(data_cmi$month)) {
   # Subset data for the current month
   month_data <- subset(data_cmi, month == m)
   # Create a histogram
-  hist(month_data$avg_air_temp_c, main = paste("Histogram for Month=", m), breaks=20,
+  hist(month_data$avg_air_temp_c, main = paste("Month ", m), breaks=20,
        xlab = "Average Air Temperature [C]", col = "lightgreen", probability = TRUE)
   # Add a bell curve
   curve(dnorm(x, mean = mean(month_data$avg_air_temp_c), sd = sd(month_data$avg_air_temp_c)),
@@ -251,7 +253,7 @@ for (m in unique(data_cmi$month)) {
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2) + 0.1)
 ```
 
-We can see that the temperatures in a month usually follow a normal distribution
+We can see that the average air temperatures in a month approximately follow a normal distribution. However a better visaul tool for checking normality is the quantile-quantile plot (QQ-plot).
 
 ##### QQ-plots
 
@@ -261,7 +263,7 @@ Assume a sample is generated from a certain distribution. Data is sorted in incr
 
 $$\hat{P}(Y\leq y^{(i)})=\frac{i-0.5}{n}$$
 
-The plotting position represents the proportion of observations below a specific data value.
+The plotting position represents the proportion of observations below a specific data value after a continuity correction.
 
 ```{r, 2-1qq,cache=FALSE, fig.width=6, fig.height=4}
 # Simulations from a normal distribution
@@ -314,7 +316,7 @@ This theorem establishes that if you have a sample $x_1, x_2, \ldots, x_n$ from 
 # Illustration of the central limit theorem
 # Set the number of dice and number of trials
 num_dice <- 10
-num_trials <- 100
+num_trials <- 1000
 # Simulate rolling the dice and recording means
 dice_rolls <- matrix(sample(1:6, num_dice * num_trials, replace = TRUE), ncol = num_dice)
 dice_means <- rowMeans(dice_rolls)
@@ -674,4 +676,4 @@ print(result)
 
 We can see that because of the high p-value we don't reject the null hypothesis and we should claim that there is no significant association between gender and types of cars they drive.
 
-## Summary
+## Chapter 2 Summary
