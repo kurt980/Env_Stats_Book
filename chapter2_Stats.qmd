@@ -74,13 +74,15 @@ ggplot(df, aes(x=value, color=category)) +
 
 ### Common Distributions and Sampling Using R
 
-<!-- NEED TEXT HERE -->
+One of the main goals in the analysis of environmental data is the proposal of an appropriate statistical model for our data. This statistical model is usually specified by a set of unknown parameters which need to be estimated from the observations. Another important step in the analysis is to determine whether the proposed statistical model is correct.
 
-You can generate samples using the `r_distribution` operation. You can specify the parameters and the number of samples generated.
+The specification of a statistical model implies the proposal of a probability distribution for the variable of interest. Common probability models can be used for simulation, once the unknown parameters are estimated.
+
+You can generate samples from different probability mpdel in R using the `r_distribution` operation. You can specify the parameters and the number of samples to be generated.
 
 -   **Normal Distribution**
 
-The normal distribution, also known as the Gaussian distribution, is a symmetric bell-shaped curve commonly used to model continuous data with mean and standard deviation parameters. A random variable $X$ has a Normal distribution if its probability density function(pdf) is of the form:
+The normal distribution, also known as the Gaussian distribution, is a symmetric bell-shaped curve commonly used to model continuous data with mean ($\mu$) and standard deviation ($\sigma$) parameters. A random variable $X$ has a Normal distribution if its probability density function (pdf) is of the form:
 
 $$f(x) = \frac{1}{\sigma \sqrt{2\pi}}  e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
 
@@ -123,7 +125,7 @@ plot(x, density, type = "l", lwd = 2, col = "black",
     You can also plot the density curves using ggplot for sampled points.
 
     ```{r example_normal, fig.width=6, fig.height=4, echo=T}
-    # Create a dataframe of several normal variables with different parameters
+    # Create a data frame of several normal variables with different parameters
     df <- data.frame(category = factor(rep(c("sample1", "sample2", "sample3"), each = 500)),
                      value = round(c(rnorm(500, mean = 100, sd = 5),
                                      rnorm(500, mean = 95, sd = 10),
@@ -332,7 +334,7 @@ hist(data_hw$mean_intensity, breaks=20, main = "Distribution of Mean Duration fo
 
 ## Statistical Inference
 
-Statistical inference is ?
+Statistical inference includes all methodologies from probability theory to estimate unknown quantities of a population from a sample observed. These quantities are usually parameters from a probability model that is assumed to have generated the sample. We can use point estimation, interval estimation or hypothesis testing to estimate the unknown parameters of a population. We will describe hypothesis testing in some detail.
 
 ### Introduction to Hypothesis Testing
 
