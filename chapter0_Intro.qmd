@@ -1,6 +1,6 @@
-# **Chapter 0: Introduction**
+# **Introduction**
 
-## Section 1. Why Environmental Statistics?
+## Why Environmental Statistics?
 
 Statistics is a fundamental science in many applications. Normally we observe or collect data from an experiment, a phenomenon, an ecosystem, a population, and we use statistic for collecting, describing, visualizing, modelling and predicting important variables associated with the study problem.
 
@@ -8,7 +8,7 @@ The development of environmental statistics as a specific branch or section with
 
 The application of Statistics to analyze environmental issues requires using a variety of tools and methodologies raging from Multivariate Analysis, Time Series analysis to Spatial Statistics. Each application requires specific tools, and data exploration and visualization are necessary first steps to understand potential assumptions on probabilistic models to fit collected data.
 
-## Section 2. Most pressing Environmental problems of our times
+## Most pressing Environmental problems of our times
 
 Environmental Statistics has a wide range of applications and offers a variety of tools to solve some of the most important environmental problems of our times:
 

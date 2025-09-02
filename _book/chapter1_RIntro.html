@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Chapter 1: Introduction to R – Environmental Statistics Book</title>
+<title>2&nbsp; Chapter 1: Introduction to R – Environmental Statistics Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./chapter2_Stats.html" rel="next">
 <link href="./chapter0_Intro.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -115,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter1_RIntro.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Chapter 1: Introduction to R</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter1_RIntro.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Introduction to R (Draft)</strong></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -148,32 +148,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./chapter0_Intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Chapter 0: Introduction</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title"><strong>Introduction (Draft)</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter1_RIntro.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Chapter 1: Introduction to R</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Introduction to R (Draft)</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
+  <a href="./chapter2_Stats.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Chapter 2 (Draft). Exploratory Data Analysis, Probability Models and Basic Inference</strong></span></span></a>
   </div>
 </li>
     </ul>
@@ -186,45 +174,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#section-1.-getting-started-with-r" id="toc-section-1.-getting-started-with-r" class="nav-link active" data-scroll-target="#section-1.-getting-started-with-r"><span class="header-section-number">3.1</span> Section 1. Getting Started With R</a>
+  <li><a href="#section-1.-getting-started-with-r" id="toc-section-1.-getting-started-with-r" class="nav-link active" data-scroll-target="#section-1.-getting-started-with-r"><span class="header-section-number">2.1</span> Section 1. Getting Started With R</a>
   <ul class="collapse">
-  <li><a href="#environment-setup" id="toc-environment-setup" class="nav-link" data-scroll-target="#environment-setup"><span class="header-section-number">3.1.1</span> Environment Setup</a></li>
-  <li><a href="#introduction-to-packages" id="toc-introduction-to-packages" class="nav-link" data-scroll-target="#introduction-to-packages"><span class="header-section-number">3.1.2</span> Introduction to Packages</a></li>
-  <li><a href="#variables" id="toc-variables" class="nav-link" data-scroll-target="#variables"><span class="header-section-number">3.1.3</span> Variables</a></li>
-  <li><a href="#numbers-and-vectors" id="toc-numbers-and-vectors" class="nav-link" data-scroll-target="#numbers-and-vectors"><span class="header-section-number">3.1.4</span> Numbers and Vectors</a></li>
-  <li><a href="#strings-and-boolean" id="toc-strings-and-boolean" class="nav-link" data-scroll-target="#strings-and-boolean"><span class="header-section-number">3.1.5</span> Strings and Boolean</a></li>
-  <li><a href="#working-with-dates" id="toc-working-with-dates" class="nav-link" data-scroll-target="#working-with-dates"><span class="header-section-number">3.1.6</span> Working with Dates</a></li>
+  <li><a href="#environment-setup" id="toc-environment-setup" class="nav-link" data-scroll-target="#environment-setup"><span class="header-section-number">2.1.1</span> Environment Setup</a></li>
+  <li><a href="#introduction-to-packages" id="toc-introduction-to-packages" class="nav-link" data-scroll-target="#introduction-to-packages"><span class="header-section-number">2.1.2</span> Introduction to Packages</a></li>
+  <li><a href="#variables" id="toc-variables" class="nav-link" data-scroll-target="#variables"><span class="header-section-number">2.1.3</span> Variables</a></li>
+  <li><a href="#numbers-and-vectors" id="toc-numbers-and-vectors" class="nav-link" data-scroll-target="#numbers-and-vectors"><span class="header-section-number">2.1.4</span> Numbers and Vectors</a></li>
+  <li><a href="#strings-and-boolean" id="toc-strings-and-boolean" class="nav-link" data-scroll-target="#strings-and-boolean"><span class="header-section-number">2.1.5</span> Strings and Boolean</a></li>
+  <li><a href="#working-with-dates" id="toc-working-with-dates" class="nav-link" data-scroll-target="#working-with-dates"><span class="header-section-number">2.1.6</span> Working with Dates</a></li>
   </ul></li>
-  <li><a href="#section-2.-fundamentals" id="toc-section-2.-fundamentals" class="nav-link" data-scroll-target="#section-2.-fundamentals"><span class="header-section-number">3.2</span> Section 2. Fundamentals</a>
+  <li><a href="#section-2.-fundamentals" id="toc-section-2.-fundamentals" class="nav-link" data-scroll-target="#section-2.-fundamentals"><span class="header-section-number">2.2</span> Section 2. Fundamentals</a>
   <ul class="collapse">
-  <li><a href="#math-and-logical-operators" id="toc-math-and-logical-operators" class="nav-link" data-scroll-target="#math-and-logical-operators"><span class="header-section-number">3.2.1</span> Math and Logical Operators</a></li>
-  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="header-section-number">3.2.2</span> Functions</a></li>
-  <li><a href="#ifelse-statements" id="toc-ifelse-statements" class="nav-link" data-scroll-target="#ifelse-statements"><span class="header-section-number">3.2.3</span> If/Else Statements</a></li>
-  <li><a href="#loops" id="toc-loops" class="nav-link" data-scroll-target="#loops"><span class="header-section-number">3.2.4</span> Loops</a></li>
+  <li><a href="#math-and-logical-operators" id="toc-math-and-logical-operators" class="nav-link" data-scroll-target="#math-and-logical-operators"><span class="header-section-number">2.2.1</span> Math and Logical Operators</a></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="header-section-number">2.2.2</span> Functions</a></li>
+  <li><a href="#ifelse-statements" id="toc-ifelse-statements" class="nav-link" data-scroll-target="#ifelse-statements"><span class="header-section-number">2.2.3</span> If/Else Statements</a></li>
+  <li><a href="#loops" id="toc-loops" class="nav-link" data-scroll-target="#loops"><span class="header-section-number">2.2.4</span> Loops</a></li>
   </ul></li>
-  <li><a href="#section-3.-data-fundamentals" id="toc-section-3.-data-fundamentals" class="nav-link" data-scroll-target="#section-3.-data-fundamentals"><span class="header-section-number">3.3</span> Section 3. Data Fundamentals</a>
+  <li><a href="#section-3.-data-fundamentals" id="toc-section-3.-data-fundamentals" class="nav-link" data-scroll-target="#section-3.-data-fundamentals"><span class="header-section-number">2.3</span> Section 3. Data Fundamentals</a>
   <ul class="collapse">
-  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists"><span class="header-section-number">3.3.1</span> Lists</a></li>
-  <li><a href="#matrices-and-arrays" id="toc-matrices-and-arrays" class="nav-link" data-scroll-target="#matrices-and-arrays"><span class="header-section-number">3.3.2</span> Matrices and Arrays</a></li>
-  <li><a href="#manipulating-matrices-and-arrays" id="toc-manipulating-matrices-and-arrays" class="nav-link" data-scroll-target="#manipulating-matrices-and-arrays"><span class="header-section-number">3.3.3</span> Manipulating Matrices and Arrays</a></li>
-  <li><a href="#dataframes" id="toc-dataframes" class="nav-link" data-scroll-target="#dataframes"><span class="header-section-number">3.3.4</span> Dataframes</a></li>
+  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists"><span class="header-section-number">2.3.1</span> Lists</a></li>
+  <li><a href="#matrices-and-arrays" id="toc-matrices-and-arrays" class="nav-link" data-scroll-target="#matrices-and-arrays"><span class="header-section-number">2.3.2</span> Matrices and Arrays</a></li>
+  <li><a href="#manipulating-matrices-and-arrays" id="toc-manipulating-matrices-and-arrays" class="nav-link" data-scroll-target="#manipulating-matrices-and-arrays"><span class="header-section-number">2.3.3</span> Manipulating Matrices and Arrays</a></li>
+  <li><a href="#dataframes" id="toc-dataframes" class="nav-link" data-scroll-target="#dataframes"><span class="header-section-number">2.3.4</span> Dataframes</a></li>
   </ul></li>
-  <li><a href="#section-4.-readloadoutput-data" id="toc-section-4.-readloadoutput-data" class="nav-link" data-scroll-target="#section-4.-readloadoutput-data"><span class="header-section-number">3.4</span> Section 4. Read/Load/Output Data</a>
+  <li><a href="#section-4.-readloadoutput-data" id="toc-section-4.-readloadoutput-data" class="nav-link" data-scroll-target="#section-4.-readloadoutput-data"><span class="header-section-number">2.4</span> Section 4. Read/Load/Output Data</a>
   <ul class="collapse">
-  <li><a href="#read-data" id="toc-read-data" class="nav-link" data-scroll-target="#read-data"><span class="header-section-number">3.4.1</span> Read Data</a></li>
-  <li><a href="#write-data" id="toc-write-data" class="nav-link" data-scroll-target="#write-data"><span class="header-section-number">3.4.2</span> Write Data</a></li>
-  <li><a href="#readr" id="toc-readr" class="nav-link" data-scroll-target="#readr"><span class="header-section-number">3.4.3</span> Readr</a></li>
+  <li><a href="#read-data" id="toc-read-data" class="nav-link" data-scroll-target="#read-data"><span class="header-section-number">2.4.1</span> Read Data</a></li>
+  <li><a href="#write-data" id="toc-write-data" class="nav-link" data-scroll-target="#write-data"><span class="header-section-number">2.4.2</span> Write Data</a></li>
+  <li><a href="#readr" id="toc-readr" class="nav-link" data-scroll-target="#readr"><span class="header-section-number">2.4.3</span> Readr</a></li>
   </ul></li>
-  <li><a href="#section-5.-working-with-dataframes" id="toc-section-5.-working-with-dataframes" class="nav-link" data-scroll-target="#section-5.-working-with-dataframes"><span class="header-section-number">3.5</span> Section 5. Working with Dataframes</a>
+  <li><a href="#section-5.-working-with-dataframes" id="toc-section-5.-working-with-dataframes" class="nav-link" data-scroll-target="#section-5.-working-with-dataframes"><span class="header-section-number">2.5</span> Section 5. Working with Dataframes</a>
   <ul class="collapse">
-  <li><a href="#manipulate-data" id="toc-manipulate-data" class="nav-link" data-scroll-target="#manipulate-data"><span class="header-section-number">3.5.1</span> Manipulate Data</a></li>
-  <li><a href="#apply-functions" id="toc-apply-functions" class="nav-link" data-scroll-target="#apply-functions"><span class="header-section-number">3.5.2</span> Apply functions</a></li>
-  <li><a href="#dplyr" id="toc-dplyr" class="nav-link" data-scroll-target="#dplyr"><span class="header-section-number">3.5.3</span> Dplyr</a></li>
+  <li><a href="#manipulate-data" id="toc-manipulate-data" class="nav-link" data-scroll-target="#manipulate-data"><span class="header-section-number">2.5.1</span> Manipulate Data</a></li>
+  <li><a href="#apply-functions" id="toc-apply-functions" class="nav-link" data-scroll-target="#apply-functions"><span class="header-section-number">2.5.2</span> Apply functions</a></li>
+  <li><a href="#dplyr" id="toc-dplyr" class="nav-link" data-scroll-target="#dplyr"><span class="header-section-number">2.5.3</span> Dplyr</a></li>
   </ul></li>
-  <li><a href="#section-6.-plots-and-graphics" id="toc-section-6.-plots-and-graphics" class="nav-link" data-scroll-target="#section-6.-plots-and-graphics"><span class="header-section-number">3.6</span> Section 6. Plots and Graphics</a>
+  <li><a href="#section-6.-plots-and-graphics" id="toc-section-6.-plots-and-graphics" class="nav-link" data-scroll-target="#section-6.-plots-and-graphics"><span class="header-section-number">2.6</span> Section 6. Plots and Graphics</a>
   <ul class="collapse">
-  <li><a href="#basic-plots" id="toc-basic-plots" class="nav-link" data-scroll-target="#basic-plots"><span class="header-section-number">3.6.1</span> Basic Plots</a></li>
-  <li><a href="#ggplot2" id="toc-ggplot2" class="nav-link" data-scroll-target="#ggplot2"><span class="header-section-number">3.6.2</span> ggplot2</a></li>
+  <li><a href="#basic-plots" id="toc-basic-plots" class="nav-link" data-scroll-target="#basic-plots"><span class="header-section-number">2.6.1</span> Basic Plots</a></li>
+  <li><a href="#ggplot2" id="toc-ggplot2" class="nav-link" data-scroll-target="#ggplot2"><span class="header-section-number">2.6.2</span> ggplot2</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -234,7 +222,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Chapter 1: Introduction to R</strong></span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Chapter 1: Introduction to R</strong></span></h1>
 </div>
 
 
@@ -251,8 +239,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="section-1.-getting-started-with-r" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="section-1.-getting-started-with-r"><span class="header-section-number">3.1</span> Section 1. Getting Started With R</h2>
+<section id="section-1.-getting-started-with-r" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="section-1.-getting-started-with-r"><span class="header-section-number">2.1</span> Section 1. Getting Started With R</h2>
 <p>R is an integrated suite of software facilities for data manipulation, calculation and graphical display. Among other things it has</p>
 <ul>
 <li><p>an effective data handling and storage facility,</p></li>
@@ -262,8 +250,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>loops, user defined recursive functions and input and output facilities. (Indeed most of the system supplied functions are themselves written in the S language.)</p></li>
 </ul>
 <p>The term “environment” is intended to characterize it as a fully planned and coherent system, rather than an incremental accretion of very specific and inflexible tools, as is frequently the case with other data analysis software. R is very much a vehicle for newly developing methods of interactive data analysis. It has developed rapidly, and has been extended by a large collection of packages. However, most programs written in R are essentially ephemeral, written for a single piece of data analysis.</p>
-<section id="environment-setup" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="environment-setup"><span class="header-section-number">3.1.1</span> Environment Setup</h3>
+<section id="environment-setup" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="environment-setup"><span class="header-section-number">2.1.1</span> Environment Setup</h3>
 <p>Before you start, you want to do these 3 things first:</p>
 <ul>
 <li><p><strong>Install R</strong> R is a programming language</p></li>
@@ -289,8 +277,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div></li>
 </ul>
 </section>
-<section id="introduction-to-packages" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="introduction-to-packages"><span class="header-section-number">3.1.2</span> Introduction to Packages</h3>
+<section id="introduction-to-packages" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="introduction-to-packages"><span class="header-section-number">2.1.2</span> Introduction to Packages</h3>
 <p>In R, “packages” are collections of functions, data, and documentation designed to extend the functionality of the base R system. These packages serve as valuable tools that provide specialized capabilities, making complex tasks easier to accomplish and expanding the scope of data analysis and statistical modeling. Each package is designed to address specific data analysis needs, making it easier for users to perform tasks from different disciplines.</p>
 <p>Using packages in R is a seamless process. Once a package is installed, you can load it into your R session using the <code>library()</code> function. This makes all the functions and data sets within the package available for use. The packages and collections covered in this book are listed below. Most of them are integrated into the <code>tidyverse</code> collection.</p>
 <ul>
@@ -303,8 +291,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>readr</strong> <code>readr</code> is a fast and efficient package for reading and importing data into R. By providing easy-to-use functions to read various file formats, readr simplifies the data reading process and ensures accurate representation of data, enabling smoother data analysis workflows.</p></li>
 </ul>
 </section>
-<section id="variables" class="level3" data-number="3.1.3">
-<h3 data-number="3.1.3" class="anchored" data-anchor-id="variables"><span class="header-section-number">3.1.3</span> Variables</h3>
+<section id="variables" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="variables"><span class="header-section-number">2.1.3</span> Variables</h3>
 <p>You can create variables like in all other programming languages using “-{” or “=”</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">21</span> </span>
@@ -319,8 +307,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="numbers-and-vectors" class="level3" data-number="3.1.4">
-<h3 data-number="3.1.4" class="anchored" data-anchor-id="numbers-and-vectors"><span class="header-section-number">3.1.4</span> Numbers and Vectors</h3>
+<section id="numbers-and-vectors" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="numbers-and-vectors"><span class="header-section-number">2.1.4</span> Numbers and Vectors</h3>
 <p>You can also assign numeric values or vectors to your variables</p>
 <ul>
 <li><p><strong>Numbers can be in many forms</strong></p>
@@ -353,8 +341,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div></li>
 </ul>
 </section>
-<section id="strings-and-boolean" class="level3" data-number="3.1.5">
-<h3 data-number="3.1.5" class="anchored" data-anchor-id="strings-and-boolean"><span class="header-section-number">3.1.5</span> Strings and Boolean</h3>
+<section id="strings-and-boolean" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="strings-and-boolean"><span class="header-section-number">2.1.5</span> Strings and Boolean</h3>
 <p>Other types of variables include strings and booleans</p>
 <ul>
 <li><p><strong>String</strong></p>
@@ -383,8 +371,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div></li>
 </ul>
 </section>
-<section id="working-with-dates" class="level3" data-number="3.1.6">
-<h3 data-number="3.1.6" class="anchored" data-anchor-id="working-with-dates"><span class="header-section-number">3.1.6</span> Working with Dates</h3>
+<section id="working-with-dates" class="level3" data-number="2.1.6">
+<h3 data-number="2.1.6" class="anchored" data-anchor-id="working-with-dates"><span class="header-section-number">2.1.6</span> Working with Dates</h3>
 <p>Working with dates is supported by R. Date is a specific type of object implemented in R and supplemented by other packages such as lubridate</p>
 <ul>
 <li><strong>Date formatting</strong></li>
@@ -441,11 +429,11 @@ Attaching package: 'lubridate'</code></pre>
 </div>
 </section>
 </section>
-<section id="section-2.-fundamentals" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="section-2.-fundamentals"><span class="header-section-number">3.2</span> Section 2. Fundamentals</h2>
+<section id="section-2.-fundamentals" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="section-2.-fundamentals"><span class="header-section-number">2.2</span> Section 2. Fundamentals</h2>
 <p>To perform meaningful tasks, you need to use operators, functions and loops smartly</p>
-<section id="math-and-logical-operators" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="math-and-logical-operators"><span class="header-section-number">3.2.1</span> Math and Logical Operators</h3>
+<section id="math-and-logical-operators" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="math-and-logical-operators"><span class="header-section-number">2.2.1</span> Math and Logical Operators</h3>
 <ul>
 <li><p>Fundamental operators</p>
 <div class="cell">
@@ -494,8 +482,8 @@ Attaching package: 'lubridate'</code></pre>
 </div></li>
 </ul>
 </section>
-<section id="functions" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="functions"><span class="header-section-number">3.2.2</span> Functions</h3>
+<section id="functions" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="functions"><span class="header-section-number">2.2.2</span> Functions</h3>
 <p>Functions in R are blocks of organized code designed to perform specific tasks, allowing you to efficiently reuse and modularize your code.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a function that calculates the correlation between 2 vectors of the same length</span></span>
@@ -521,8 +509,8 @@ Attaching package: 'lubridate'</code></pre>
 </div>
 </div>
 </section>
-<section id="ifelse-statements" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="ifelse-statements"><span class="header-section-number">3.2.3</span> If/Else Statements</h3>
+<section id="ifelse-statements" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="ifelse-statements"><span class="header-section-number">2.2.3</span> If/Else Statements</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Determine if a number is even or odd</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>num <span class="ot">&lt;-</span> <span class="dv">7</span></span>
@@ -541,8 +529,8 @@ Attaching package: 'lubridate'</code></pre>
 </div>
 </div>
 </section>
-<section id="loops" class="level3" data-number="3.2.4">
-<h3 data-number="3.2.4" class="anchored" data-anchor-id="loops"><span class="header-section-number">3.2.4</span> Loops</h3>
+<section id="loops" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="loops"><span class="header-section-number">2.2.4</span> Loops</h3>
 <p>Loops in R, such as for and while, enable iterative execution of code for efficient repetitive tasks.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use a for loop to print the first 10 elements of the Fibonacci sequence</span></span>
@@ -579,10 +567,10 @@ Attaching package: 'lubridate'</code></pre>
 </div>
 </section>
 </section>
-<section id="section-3.-data-fundamentals" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="section-3.-data-fundamentals"><span class="header-section-number">3.3</span> Section 3. Data Fundamentals</h2>
-<section id="lists" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="lists"><span class="header-section-number">3.3.1</span> Lists</h3>
+<section id="section-3.-data-fundamentals" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="section-3.-data-fundamentals"><span class="header-section-number">2.3</span> Section 3. Data Fundamentals</h2>
+<section id="lists" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="lists"><span class="header-section-number">2.3.1</span> Lists</h3>
 <p>We can store data in a list:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of strings</span></span>
@@ -619,8 +607,8 @@ Attaching package: 'lubridate'</code></pre>
 </div>
 </div>
 </section>
-<section id="matrices-and-arrays" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="matrices-and-arrays"><span class="header-section-number">3.3.2</span> Matrices and Arrays</h3>
+<section id="matrices-and-arrays" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="matrices-and-arrays"><span class="header-section-number">2.3.2</span> Matrices and Arrays</h3>
 <ul>
 <li><p>Matrix</p>
 <p>Matrix is 2-D</p>
@@ -661,8 +649,8 @@ Attaching package: 'lubridate'</code></pre>
 </div></li>
 </ul>
 </section>
-<section id="manipulating-matrices-and-arrays" class="level3" data-number="3.3.3">
-<h3 data-number="3.3.3" class="anchored" data-anchor-id="manipulating-matrices-and-arrays"><span class="header-section-number">3.3.3</span> Manipulating Matrices and Arrays</h3>
+<section id="manipulating-matrices-and-arrays" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="manipulating-matrices-and-arrays"><span class="header-section-number">2.3.3</span> Manipulating Matrices and Arrays</h3>
 <p>You can access, edit, do operations and even combine matrices and arrays using the parsing technique</p>
 <ul>
 <li><p>Access elements</p>
@@ -750,8 +738,8 @@ Attaching package: 'lubridate'</code></pre>
 </div></li>
 </ul>
 </section>
-<section id="dataframes" class="level3" data-number="3.3.4">
-<h3 data-number="3.3.4" class="anchored" data-anchor-id="dataframes"><span class="header-section-number">3.3.4</span> Dataframes</h3>
+<section id="dataframes" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="dataframes"><span class="header-section-number">2.3.4</span> Dataframes</h3>
 <p>Dataframe is a powerful object that allows you to perform all kinds of operations on your data</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a dataframe</span></span>
@@ -777,11 +765,11 @@ Attaching package: 'lubridate'</code></pre>
 </div>
 </section>
 </section>
-<section id="section-4.-readloadoutput-data" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="section-4.-readloadoutput-data"><span class="header-section-number">3.4</span> Section 4. Read/Load/Output Data</h2>
+<section id="section-4.-readloadoutput-data" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="section-4.-readloadoutput-data"><span class="header-section-number">2.4</span> Section 4. Read/Load/Output Data</h2>
 <p>Read data from local files, load data from online source, write data into local files.</p>
-<section id="read-data" class="level3" data-number="3.4.1">
-<h3 data-number="3.4.1" class="anchored" data-anchor-id="read-data"><span class="header-section-number">3.4.1</span> Read Data</h3>
+<section id="read-data" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="read-data"><span class="header-section-number">2.4.1</span> Read Data</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load text file</span></span>
 <span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/CMI_TRH.csv"</span>)</span>
@@ -803,14 +791,14 @@ Attaching package: 'lubridate'</code></pre>
 </div>
 </div>
 </section>
-<section id="write-data" class="level3" data-number="3.4.2">
-<h3 data-number="3.4.2" class="anchored" data-anchor-id="write-data"><span class="header-section-number">3.4.2</span> Write Data</h3>
+<section id="write-data" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="write-data"><span class="header-section-number">2.4.2</span> Write Data</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(data, file = "filename.csv", row.names = FALSE)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="readr" class="level3" data-number="3.4.3">
-<h3 data-number="3.4.3" class="anchored" data-anchor-id="readr"><span class="header-section-number">3.4.3</span> Readr</h3>
+<section id="readr" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="readr"><span class="header-section-number">2.4.3</span> Readr</h3>
 <p>The <code>read</code> package is designed to read rectangular data (like ‘csv’, ‘tsv’, and ‘fwf’). You can use the <code>readr</code> package to perform more advanced file operations in r</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("readr")</span></span>
@@ -847,11 +835,11 @@ Attaching package: 'lubridate'</code></pre>
 <p>Now the “date” column in your dataset has the date type</p>
 </section>
 </section>
-<section id="section-5.-working-with-dataframes" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="section-5.-working-with-dataframes"><span class="header-section-number">3.5</span> Section 5. Working with Dataframes</h2>
+<section id="section-5.-working-with-dataframes" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="section-5.-working-with-dataframes"><span class="header-section-number">2.5</span> Section 5. Working with Dataframes</h2>
 <p>Dataframe is powerful with geostatistical data analysis.</p>
-<section id="manipulate-data" class="level3" data-number="3.5.1">
-<h3 data-number="3.5.1" class="anchored" data-anchor-id="manipulate-data"><span class="header-section-number">3.5.1</span> Manipulate Data</h3>
+<section id="manipulate-data" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="manipulate-data"><span class="header-section-number">2.5.1</span> Manipulate Data</h3>
 <ul>
 <li><p>Parsing data</p>
 <p>You can parse data by location to get different portions of the data.</p>
@@ -922,8 +910,8 @@ Attaching package: 'lubridate'</code></pre>
 </div></li>
 </ul>
 </section>
-<section id="apply-functions" class="level3" data-number="3.5.2">
-<h3 data-number="3.5.2" class="anchored" data-anchor-id="apply-functions"><span class="header-section-number">3.5.2</span> Apply functions</h3>
+<section id="apply-functions" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="apply-functions"><span class="header-section-number">2.5.2</span> Apply functions</h3>
 <p>The apply function family in R provides powerful tools for efficiently working with arrays, lists, and data frames by applying custom functions across dimensions, simplifying complex operations and data transformations.</p>
 <ul>
 <li><p>apply</p>
@@ -933,18 +921,18 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>), <span class="at">ncol =</span> <span class="dv">5</span>) <span class="co"># 100 random variables organzied into 5 columns</span></span>
 <span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           [,1]       [,2]        [,3]       [,4]         [,5]
-[1,]  0.4483201 0.19666564  0.02761434  1.2008737  0.113252167
-[2,]  0.2533063 0.87595315 -0.36260142  0.8390320 -0.950530376
-[3,] -0.7239044 0.62992741 -0.79225284  0.9000176  1.321835635
-[4,]  0.8049016 1.02028550  0.25099521  1.2300753 -0.005083097
-[5,]  0.9070382 0.06421616 -0.84211730 -0.2969087  1.544058288</code></pre>
+<pre><code>            [,1]       [,2]       [,3]       [,4]       [,5]
+[1,] -1.46805121 0.67195700 -1.5942971 -0.4004720  2.0940986
+[2,] -0.04653427 1.72552360 -1.1981038 -0.3884176 -0.8876958
+[3,] -0.67660912 0.95746626 -0.3435508 -0.4221173  0.1583523
+[4,] -0.08140510 0.08358009  0.4164851 -1.2191485  0.5196764
+[5,] -0.18041686 0.60024591  1.3228986  0.3881548  0.3595357</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(df, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="at">mean=</span><span class="fu">mean</span>(x), <span class="at">sd=</span><span class="fu">sd</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          [,1]      [,2]       [,3]      [,4]      [,5]
-mean 0.3379324 0.5574096 -0.3436724 0.7746180 0.4047065
-sd   0.6497665 0.4166410  0.4851581 0.6239349 1.0282009</code></pre>
+<pre><code>           [,1]      [,2]       [,3]       [,4]      [,5]
+mean -0.4906033 0.8077546 -0.2793136 -0.4084001 0.4487935
+sd    0.6022580 0.6022132  1.1862444  0.5684327 1.0712820</code></pre>
 </div>
 </div></li>
 <li><p>lapply</p>
@@ -1003,8 +991,8 @@ sd   0.6497665 0.4166410  0.4851581 0.6239349 1.0282009</code></pre>
 </div></li>
 </ul>
 </section>
-<section id="dplyr" class="level3" data-number="3.5.3">
-<h3 data-number="3.5.3" class="anchored" data-anchor-id="dplyr"><span class="header-section-number">3.5.3</span> Dplyr</h3>
+<section id="dplyr" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="dplyr"><span class="header-section-number">2.5.3</span> Dplyr</h3>
 <p><code>dplyr</code> is a powerful package within the <code>tidyverse</code> that provides a set of intuitive and efficient functions for data manipulation, transformation, and summarization in R.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load dplyr library</span></span>
@@ -1024,8 +1012,8 @@ Attaching package: 'dplyr'</code></pre>
     intersect, setdiff, setequal, union</code></pre>
 </div>
 </div>
-<section id="study-data" class="level4" data-number="3.5.3.1">
-<h4 data-number="3.5.3.1" class="anchored" data-anchor-id="study-data"><span class="header-section-number">3.5.3.1</span> Study Data</h4>
+<section id="study-data" class="level4" data-number="2.5.3.1">
+<h4 data-number="2.5.3.1" class="anchored" data-anchor-id="study-data"><span class="header-section-number">2.5.3.1</span> Study Data</h4>
 <ul>
 <li><p><strong>Descriptive Statistics</strong></p>
 <p>You can get descriptive statistics for a dataframe using dplyr and the ‘pipe’ operator easily.</p>
@@ -1125,10 +1113,10 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 </section>
 </section>
-<section id="section-6.-plots-and-graphics" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="section-6.-plots-and-graphics"><span class="header-section-number">3.6</span> Section 6. Plots and Graphics</h2>
-<section id="basic-plots" class="level3" data-number="3.6.1">
-<h3 data-number="3.6.1" class="anchored" data-anchor-id="basic-plots"><span class="header-section-number">3.6.1</span> Basic Plots</h3>
+<section id="section-6.-plots-and-graphics" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="section-6.-plots-and-graphics"><span class="header-section-number">2.6</span> Section 6. Plots and Graphics</h2>
+<section id="basic-plots" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="basic-plots"><span class="header-section-number">2.6.1</span> Basic Plots</h3>
 <p>The built-in <code>plot</code> function in R allows you to create scatter plots, line charts and other common graphics for statistical analysis.</p>
 <ul>
 <li><p><strong>scatter plot</strong></p>
@@ -1232,8 +1220,8 @@ The following object is masked from 'package:tidyr':
 </div></li>
 </ul>
 </section>
-<section id="ggplot2" class="level3" data-number="3.6.2">
-<h3 data-number="3.6.2" class="anchored" data-anchor-id="ggplot2"><span class="header-section-number">3.6.2</span> ggplot2</h3>
+<section id="ggplot2" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="ggplot2"><span class="header-section-number">2.6.2</span> ggplot2</h3>
 <p><code>ggplot2</code> is another package that allows you to create elegant and customized plots with a concise and intuitive syntax. The <code>ggplot2</code> package uses a streamlined style of grammar with multiple “layers”, allowing you to compose your own plot in a more elegant and intuitive way.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages('ggplot2')</span></span>
@@ -1774,13 +1762,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./chapter0_Intro.html" class="pagination-link" aria-label="**Chapter 0: Introduction**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Chapter 0: Introduction</strong></span></span>
+      <a href="./chapter0_Intro.html" class="pagination-link" aria-label="**Introduction (Draft)**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title"><strong>Introduction (Draft)</strong></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link" aria-label="Summary">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./chapter2_Stats.html" class="pagination-link" aria-label="**Chapter 2 (Draft). Exploratory Data Analysis, Probability Models and Basic Inference**">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Chapter 2 (Draft). Exploratory Data Analysis, Probability Models and Basic Inference</strong></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

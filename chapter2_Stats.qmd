@@ -1,8 +1,8 @@
 # **Chapter 2. Exploratory Data Analysis, Probability Models and Basic Inference**
 
-## Section 1. Exploratory Data Analysis
+## Exploratory Data Analysis
 
-Exploratory Data Analysis (EDA) is a term proposed by the statistician John Tukey in the 1970's. The aim of EDA is to explore the data first in order to understand the data structure and potential models by using graphical and quantitative tools.
+Exploratory Data Analysis (EDA) is a term proposed by the statistician John Tukey in the 1970's. The aim of EDA is to explore the data first, in order to understand the data structure and potential models by using graphical and quantitative tools.
 
 Among the quantitative tools are the calculation of center tendency measures (mean, median and mode) and variability measures (variance, standard deviation, range, coefficient of variation, inter-quantile range).
 
@@ -44,8 +44,6 @@ plot(subset_data$mean_intensity, subset_data$mean_duration,
 The Mean Air Temperature data set was discussed in Chapter 1.
 
 We use this data set to perform an exploratory data analysis and perform some inference about the population parameters.
-
-### Descriptive Statistics
 
 ## Probability Models
 
@@ -124,7 +122,7 @@ plot(x, density, type = "l", lwd = 2, col = "black",
 
     The symmetric bell curve can be observed from the histogram, which is symmetric about $\mu$.
 
-    You can also plot the density curves using ggplot for sampled points.
+    You can also plot the density curves using ggplot for sampled points using the function `geom_density`:
 
     ```{r example_normal, fig.width=6, fig.height=4, echo=T}
     # Create a data frame of several normal variables with different parameters
@@ -159,7 +157,7 @@ plot(x, density, type = "l", lwd = 2, col = "black",
          xlab = "x", ylab = "Density", main = "Poisson Probability Density Function")
     ```
 
-    **You can sample from Poisson distribution, too**
+    **You can sample from Poisson distribution using the function `rpois`:**
 
     ```{r, cache=F, fig.width=6, fig.height=4}
     pois_a <- rpois(n = 250, lambda = 5)
@@ -190,7 +188,7 @@ plot(x, density, type = "l", lwd = 2, col = "black",
 
     -   **Gamma Distribution**
 
-    The gamma distribution is flexible and applicable to various contexts, including modeling time to events, environmental data, and more. It is characterized by the shape ($\alpha$) and scale ($\beta$) parameters and it is defined for non-negative random variables.
+    The gamma distribution is flexible and suitable for different variables, including modeling time to events, environmental data, and more. It is characterized by the shape ($\alpha$) and scale ($\beta$) parameters and it is defined for non-negative random variables.
 
     $$f(x;\alpha,\beta) = \frac{\beta^\alpha x^{\alpha - 1} e^{-\beta x}}{\Gamma(\alpha)}$$
 
@@ -203,7 +201,7 @@ plot(x, density, type = "l", lwd = 2, col = "black",
 
 Recall that a random variable $X$ has a Normal distribution if its probability density function(pdf) is of the form:
 
-$$f(x|\mu,\sigma^2)= \frac{1}{\sqrt{2\pi}} \exp(-(x-\mu)^2/2\sigma^2)$$
+$$f(x|\mu,\sigma^2)= \frac{1}{\sqrt{2\pi}\sigma} \exp(-(x-\mu)^2/2\sigma^2)$$
 
 where $\mu=E[X]$ and $\sigma^2=Var[X]$ are the mean and variance of the pdf, and the random variable $X$ can take values in the interval $(-\infty,\infty)$.
 
@@ -253,11 +251,11 @@ for (m in unique(data_cmi$month)) {
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2) + 0.1)
 ```
 
-We can see that the average air temperatures in a month approximately follow a normal distribution. However a better visaul tool for checking normality is the quantile-quantile plot (QQ-plot).
+We can see that the average air temperatures in a month approximately follow a normal distribution. However a better visual tool for checking normality is the quantile-quantile plot (QQ-plot).
 
 ##### QQ-plots
 
-A QQ-plot compares the quantiles of a data distribution with the quantiles of a standardized theoretical distribution from a specified family of distributions, e.g., the standard normal distribution. In this case the y-axis is the quantiles of the data distribution, and the x-axis is the quantiles of the standard normal distribution.
+A QQ-plot compares the quantiles of a data distribution with the quantiles of a theoretical distribution from a specified family of distributions, e.g., the standard normal distribution. In this case the y-axis is the quantiles of the data distribution, and the x-axis is the quantiles of the standard normal distribution.
 
 Assume a sample is generated from a certain distribution. Data is sorted in increasing order $y^{(1)}, y^{(2)},\ldots, y^{(n)}$, and a plotting position is calculated for each value as:
 
@@ -281,7 +279,7 @@ abline(mean(y), sd(y))
 
 The above calculation is equivalent to:
 
-```{r, plot3, fig.pos="t", fig.height=2, fig.width=3, fig.cap="qq-plot", cache=F, echo=T}
+```{r, plot3, fig.pos="t", fig.height=4, fig.width=6, fig.cap="qq-plot", cache=F, echo=T}
 qqnorm(y)
 qqline(y)
 ```
@@ -308,7 +306,7 @@ The construction of a QQ-plot does not require the specification of the location
 
 -   Sampling distributions are important for statistical inference since they are used in hypothesis testing and for building confidence intervals.
 
-The normal distribution is so important in many applications due to the Central Limit Theorem.
+The normal distribution is very important in many applications due to the Central Limit Theorem.
 
 This theorem establishes that if you have a sample $x_1, x_2, \ldots, x_n$ from a population, not necessarily normally distributed, the sum of values or sample mean (sum corrected by the sample size) is going to have a Normal distribution with mean equal to $\mu$ and variance = $\sigma^2/n$, where $\mu$ and $\sigma^2$ are the mean and variance of from the population distribution.
 
@@ -325,9 +323,11 @@ hist(dice_means, breaks = 20, main = "Central Limit Theorem Simulation",
      xlab = "Mean of 10 Dice Rolls", ylab = "Frequency", col = "lightblue")
 ```
 
-From figure X, you can see the sampling distribution approximately forms a normal distribution.
+From figure the figure above, you can confirm the sampling distribution approximately resembles a normal distribution.
 
 **Distribution of Mean Heat Wave Duration**
+
+When plotting the histogram of the variable mean heat wave duration, the resulting figure does not show a symmetrical behavior, but rather a right skewed distribution. We can perform a hypothesis test to check whether the data sample support the normality assumption of the random variable mean heat wave duration. 
 
 ```{r, clt_duration, fig.height=4, fig.width=6, echo=F}
 hist(data_hw$mean_intensity, breaks=20, main = "Distribution of Mean Duration for each Year",
@@ -336,23 +336,23 @@ hist(data_hw$mean_intensity, breaks=20, main = "Distribution of Mean Duration fo
 
 ## Statistical Inference
 
-Statistical inference includes all methodologies from probability theory to estimate unknown quantities of a population from a sample observed. These quantities are usually parameters from a probability model that is assumed to have generated the sample. We can use point estimation, interval estimation or hypothesis testing to estimate the unknown parameters of a population. We will describe hypothesis testing in some detail.
+Statistical inference includes all methodologies from probability theory to estimate unknown quantities of a population from a sample observed. These quantities are usually parameters from a probability model that is assumed to have generated the sample. We can use point estimation, interval estimation or hypothesis testing to get estimates the unknown parameters of a population. We will describe hypothesis testing in some detail.
 
 ### Introduction to Hypothesis Testing
 
-Hypothesis testing is a statistical inference approach that uses sample data to draw conclusions about either a population parameter or probability distribution. The null hypothesis ($H_0$), and the corresponding alternative hypothesis ($H_a$), representing the opposite assertion, are formed initially. From the sample data, the procedure determines if there's evidence to reject $H_0$. If $H_0$ is rejected, the statistical inference favors $H_a$.
+Hypothesis testing is a statistical inference approach that uses sample data to draw conclusions about either a population parameter or probability distribution. The null hypothesis ($H_0$), and the corresponding alternative hypothesis ($H_a$), representing the opposite assertion, are initially proposed. From the sample data, the procedure determines whether there is evidence to reject $H_0$. If $H_0$ is rejected, the statistical inference favors $H_a$.
 
 **Motivating Example**
 
-Suppose we have a coin and we want to test if it is a fair coin. We toss it 10 times, and we only have 2 tails and the rest are heads. Now we can use the concept of hypothesis testing for our purpose.
+Suppose we have a coin and we want to test if it is a fair coin. We toss it 10 times, and we only get two tails and the rest are heads. Now we can use the concept of hypothesis testing to confirm our assumption.
 
-The null hypothesis would be that the coin is a fair coin, which means $P(H) = P(T) = 0.5$. Therefore, the alternative hypothesis is that the coin is not a fair coin. Under the null hypothesis, which is that the coin is fair, the probability of having 2 tails and 8 tails from 10 tosses is
+The null hypothesis would be that the coin is a fair coin, which means $P(H) = P(T) = 0.5$ where $H$ represents a head and $T$ represents a tail. Therefore, the alternative hypothesis is that the coin is not a fair coin, which is equivalent to say that $P(H) \neq P(T) \neq 0.5$. Under the null hypothesis, which is that the coin is fair, the probability of having 2 tails and 8 tails from 10 tosses is
 
 $$P = {10 \choose 2 } = 0.5^2 0.5^8 = 0.0439$$
 
-The probability under the null hypothesis is very low. If we give a threshold, which specifies how low is "too low" for the probability that the sample occurs, we can determine if we choose to accept the null hypothesis or reject it. If our threshold is $0.05$, then we will reject the null hypothesis, which means we refuse to believe that the coin is a fair coin. The reasoning is that if the coin is fair, then it would be almost impossible to see samples like this.
+The probability under the null hypothesis is very low. If we give a threshold, which specifies how low is "too low" for the probability that the sample occurs, we can determine if we choose to accept the null hypothesis or reject it. If our threshold is $0.05$, then we will reject the null hypothesis, which means we refuse to believe that the coin is a fair coin. The reasoning is that if the coin is fair, then it would be very improbable to see samples like this.
 
-The key concepts in hypothesis testing can be categorized as follows:
+The key concepts in hypothesis testing can be summarized as follows:
 
 #### Standard errors
 
@@ -360,7 +360,7 @@ The term standard error is used when we refer to the standard deviation of the s
 
 \*\*Standard error of the sample mean:
 
-The standard error of the sample mean is the standard deviation of the sample mean denoted as: $\sigma_{\bar{x=\sigma/\sqrt{n}}}$
+The standard error of the sample mean is the standard deviation of the sample mean denoted as: $\sigma_{\bar{x}}=\sigma/\sqrt{n}$
 
 #### Type I and II errors
 
@@ -374,23 +374,8 @@ We normally assume that the Null Hypothesis is correct before making the test, a
 
 #### P-value
 
-The P-value is the probability of finding a test statistic $T$ as extreme or more extreme that the observed value assuming that the null hypothesis is correct. If that probability is lower than a significance level $\alpha$ we say that the data does not support the Null hypothesis assumption.
+The P-value is the probability of finding a test statistic $t$ as extreme or more extreme that the observed value $T$ assuming that the null hypothesis is correct. If that probability is lower than a significance level $\alpha$ we say that the data does not support the Null hypothesis assumption.
 
-Given a significance level $\alpha$ we reject the null hypothesis if:
-
--   P-value: $P(|t| \geq |T||H_0) < \alpha$ (two-tail test)
--   P-value: $P(t \geq T|H_0) <\alpha$ (right-tail test)
--   P-Value: $P(t \leq T|H_0) <\alpha$ (left-tail test)
-
-where $t \sim \mbox{t-student} (n-1)$
-
-For all tests a p-value is calculated. If the p value is less than the chosen significance level ($\alpha$), then the null hypothesis is rejected and there is evidence that the data tested are not coming from normally distributed population. On the other hand, if the p value is greater than the chosen significance level, then the null hypothesis (that the data came from a normally distributed population) can not be rejected.
-
-#### Confidence Interval
-
-The previous equation can lead to a wrong interpretation of the confidence interval, since it might appear like the probability of the parameter $\mu_1-\mu_2$ lying between the lower and upper limit indicated above is 95%. **That interpretation is incorrect, because according to the frequentist framework, the parameter** $\mu_1-\mu_2$ is not a random variable since it is a population parameter.
-
-The limits of the Confidence Interval are random numbers because they depend on the sample and you will have different values if you have a different samples. The correct interpretation uses the idea of repeated sampling: If we have 100 hundred independent samples from a population and calculate a CI for each sample, 95 of the 100 CIs would contain the true population statistic $\mu_1 - \mu_2$.
 
 **Example of Two-tailed One-sample Z-test**
 
@@ -534,6 +519,8 @@ These tests measure the discrepancy between $F(t)$ and $\hat{F}(t)$.
 
 All these statistics measure the departures of the ECDF from the theoretical CDF. Large values of these statistics would lead to the rejection of the Null hypothesis.
 
+For all tests a p-value is calculated. Suppose that under the null hypothesis we assume that the collected sample comes from population with Normal distribution. If the p value is less than the chosen significance level ($\alpha$), then the null hypothesis is rejected and there is evidence that the data tested are not coming from normally distributed population. On the other hand, if the p value is greater than the chosen significance level, then the null hypothesis (that the data came from a normally distributed population) can not be rejected.
+
 ### Location Tests
 
 ##### One-Population location tests
@@ -562,7 +549,15 @@ $$T= \frac{\bar{x} - \mu_0}{s/\sqrt{n}}$$ where $\bar{x}$ is the sample mean and
 
 Under the normality and independence assumptions $T\sim \mbox{t-student}$ distribution with $n-1$ degrees of freedom.
 
-**Example of One-sample T test in r**
+Given a significance level $\alpha$ we reject the null hypothesis if:
+
+-   P-value: $P(|t| \geq |T||H_0) < \alpha$ (two-tail test)
+-   P-value: $P(t \geq T|H_0) <\alpha$ (right-tail test)
+-   P-Value: $P(t \leq T|H_0) <\alpha$ (left-tail test)
+
+where $t \sim \mbox{t-student} (n-1)$
+
+**Example of One-sample t-test in R**
 
 Suppose we want to test if a list of weights normally distributed has a mean of 150 pounds
 
@@ -625,32 +620,38 @@ $s$ is a pooled sample variance estimate assuming $\sigma_1^2$ and $\sigma_2^2$ 
 
 $$s=\sqrt{\frac{s_1^2 (n_1-1) + s_2^2 (n_2-1)}{n_1 +n_2 -2}}$$
 
-**Example of 2-sample T Test**
+**Example of a 2-sample t-test**
 
 ```{r, 2_t_test_1, echo = T, message=F}
 # Perform a two-sample t-test
 t.test(weights_1, weights_2, var.equal = FALSE)
 ```
 
-You can see that the 2-sample test shows a p-value of 0.015, which means we should reject the null hypothesis and claim the mean weights for the 2 groups are different.
+You can see that the 2-sample t-test shows a p-value of 0.015, which means we should reject the null hypothesis and claim the mean weights for the 2 groups are different.
+
+#### Confidence Interval
+
+The previous equation can lead to a wrong interpretation of the confidence interval, since it might appear like the probability of the parameter $\mu_1-\mu_2$ lying between the lower and upper limit indicated above is 95%. **That interpretation is incorrect, because according to the frequentist framework, the parameter** $\mu_1-\mu_2$ is not a random variable since it is a population parameter.
+
+The limits of the Confidence Interval are random numbers because they depend on the sample and you will have different values if you have a different samples. The correct interpretation uses the idea of repeated sampling: If we have 100 hundred independent samples from a population and calculate a CI for each sample, 95 of the 100 CIs would contain the true population statistic $\mu_1 - \mu_2$.
+
 
 ### Measures of Linear Association
 
-In climate data analysis, we frequently need to test the independence between two variables.
+In climate data analysis, we frequently need to check whether two continuous variables $X$ and $Y$ are independent. For example, we want to test the hypothesis of whether mean daily ozone concentration during a certain time interval for a given location is independent of the average wind speed measured at the same location or a close by location.
 
-#### Pearson's Correlation Test for Independence
+#### Pearson's Correlation Significance Test
 
-Correlation is a simple and straight-forward indicator of the dependence between two variables. The magnitude of the correlation is proportional to the strength of dependence between the two variables. Borrowing this idea, we could set up the correlation test for independence. Recall the expression for the sample estimate of correlation between $X$ and $Y$ is:
+The Pearson correlation coefficient $\rho$ is a simple and straight-forward indicator of the linear association between two variables. The magnitude of the correlation is proportional to the strength of linear dependence. This dependence can be positive or negative. Recall the expression for the sample estimate of the Pearson correlation coefficient between $X$ and $Y$ is:
 
-$$\hat{\sigma}^2 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2}\sqrt{\sum_{i=1}^n (Y_i - \bar{Y})^2}}$$
+$$\hat{\rho}^2 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2}\sqrt{\sum_{i=1}^n (Y_i - \bar{Y})^2}}$$
+Assuming that the two variables $X$ and $Y$ have a Normal distribution, we can test the hypothesis of no significant linear association between $X$ and $Y$,  that is $H_o: \rho=0$. Assuming that the null hypothesis is correct, the following test statistic follows a t-distribution with $n-2$ degrees of freedom:
 
-The test statistic for the correlation test is:
-
-$$t = \frac{\hat{\sigma} \sqrt{n - 2}}{\sqrt{1 - \hat{\sigma}^2}}$$
-
-By theory, $t$ would follow a t-distribution with $n-2$ degree of freedom. To test for independence, we would want to use the t-test decision rule to determine if $\hat{\sigma}^2 = 0$. This requires us to perform a 2-sided t-test, which means we should reject the null hypothesis of independence if
+$$T = \frac{\hat{\rho} \sqrt{n - 2}}{\sqrt{1 - \hat{\rho}^2}}$$
+We would normally perform a 2-sided t-test, which means we should reject the null hypothesis of linear association if
 
 $$|T|\leq t_{df; \alpha/2}$$
+If two variables are independent the Pearson correlation coefficient $\rho$ is negligible. However, if the correlation coefficient is zero or close to zero, we can not say that the variables are independent, since they might have a different kind of association other than linear. In other words, if two variables are independent, their correlation coefficient is equal to zero; but if the correlation is zero, this does not imply that the two variables are independent.
 
 #### Chi-sq Test for Independence
 
@@ -676,4 +677,4 @@ print(result)
 
 We can see that because of the high p-value we don't reject the null hypothesis and we should claim that there is no significant association between gender and types of cars they drive.
 
-## Chapter 2 Summary
+<!--## Chapter 2 Summary-->

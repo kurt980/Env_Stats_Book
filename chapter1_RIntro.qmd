@@ -1,4 +1,4 @@
-# **Chapter 1: Introduction to R**
+# **Introduction to R**
 
 ## Section 1. Getting Started With R
 
@@ -167,7 +167,7 @@ diff <- date1 - date2
 print(diff)
 ```
 
-## Section 2. Fundamentals
+## R Fundamentals
 
 To perform meaningful tasks, you need to use operators, functions and loops smartly
 
@@ -286,7 +286,7 @@ while (divisor <= sqrt(n)) {
     }
 ```
 
-## Section 3. Data Fundamentals
+## Data Fundamentals
 
 ### Lists
 
@@ -400,7 +400,7 @@ Data_Frame
 print(Data_Frame$Pulse)
 ```
 
-## Section 4. Read/Load/Output Data
+## Read/Load/Output Data
 
 Read data from local files, load data from online source, write data into local files.
 
@@ -459,7 +459,7 @@ library(readr)
 
 Now the "date" column in your dataset has the date type
 
-## Section 5. Working with Dataframes
+## Working with Dataframes
 
 Dataframe is powerful with geostatistical data analysis.
 
@@ -620,7 +620,7 @@ library(dplyr)
     print(grouped_data[1:5, ])
     ```
 
-## Section 6. Plots and Graphics
+## Plots and Graphics
 
 ### Basic Plots
 

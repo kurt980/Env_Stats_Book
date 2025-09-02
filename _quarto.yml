@@ -2,16 +2,17 @@ project:
   type: book
 
 book:
-  title: "Environmental Statistics Book"
+  title: "Environmental Statistics Book (Draft)"
   author: "Lelys Bravo de Guenni and Kurt Ji"
   date: "08/17/2025"
   chapters:
     - index.qmd
-    - intro.qmd
+#   - intro.qmd
     - chapter0_Intro.qmd
     - chapter1_RIntro.qmd
-    - summary.qmd
-    - references.qmd
+    - chapter2_Stats.qmd
+#    - summary.qmd
+#    - references.qmd
 
 bibliography: references.bib
 
