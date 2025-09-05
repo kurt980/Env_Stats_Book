@@ -11,6 +11,7 @@ book:
     - chapter0_Intro.qmd
     - chapter1_RIntro.qmd
     - chapter2_Stats.qmd
+    - chapter3_Non_Para.qmd
 #    - summary.qmd
 #    - references.qmd
 
