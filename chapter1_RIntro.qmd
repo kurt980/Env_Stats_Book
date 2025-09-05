@@ -1,6 +1,6 @@
 # **Introduction to R**
 
-## Section 1. Getting Started With R
+## Getting Started With R
 
 R is an integrated suite of software facilities for data manipulation, calculation and graphical display. Among other things it has
 

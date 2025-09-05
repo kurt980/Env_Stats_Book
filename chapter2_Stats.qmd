@@ -1,4 +1,4 @@
-# **Chapter 2. Exploratory Data Analysis, Probability Models and Basic Inference**
+# **Exploratory Data Analysis, Probability Models and Basic Inference**
 
 ## Exploratory Data Analysis
 
@@ -327,7 +327,7 @@ From figure the figure above, you can confirm the sampling distribution approxim
 
 **Distribution of Mean Heat Wave Duration**
 
-When plotting the histogram of the variable mean heat wave duration, the resulting figure does not show a symmetrical behavior, but rather a right skewed distribution. We can perform a hypothesis test to check whether the data sample support the normality assumption of the random variable mean heat wave duration. 
+When plotting the histogram of the variable mean heat wave duration, the resulting figure does not show a symmetrical behavior, but rather a right skewed distribution. We can perform a hypothesis test to check whether the data sample support the normality assumption of the random variable mean heat wave duration.
 
 ```{r, clt_duration, fig.height=4, fig.width=6, echo=F}
 hist(data_hw$mean_intensity, breaks=20, main = "Distribution of Mean Duration for each Year",
@@ -375,7 +375,6 @@ We normally assume that the Null Hypothesis is correct before making the test, a
 #### P-value
 
 The P-value is the probability of finding a test statistic $t$ as extreme or more extreme that the observed value $T$ assuming that the null hypothesis is correct. If that probability is lower than a significance level $\alpha$ we say that the data does not support the Null hypothesis assumption.
-
 
 **Example of Two-tailed One-sample Z-test**
 
@@ -528,7 +527,7 @@ For all tests a p-value is calculated. Suppose that under the null hypothesis we
 In all cases an independent and identically distributed (iid) sample of a population is available and we want to test a particular assumption about the location parameter $\mu_0$
 
 | **Test** | **Population Assumption** | **Location parameter** $\mu_0$ |
-|------------------|---------------------------|---------------------------|
+|-------------------|---------------------------|---------------------------|
 | **Student's *t*** | *iid*, N($\mu$, $\sigma^2$) | mean (same as median) |
 | **Signed Rank** | *iid*, symmetric distribution | median |
 | **Sign** | *iid* | median |
@@ -605,7 +604,7 @@ The alternative hypothesis can be:
 Assuming that the we have two iid samples from populations 1 and 2 with unknown variances $\sigma_1^2$ and $\sigma_2^2$; and sample means $\bar{x}_1$ and $\bar{x}_2$ and sample variances $s_1^2$ and $s_2^2$, the following test statistics can be used:
 
 | **Variances** | **Population Assumption** | **test-statistic under** $H_0: \mu_1 = \mu_2$ | **statistic's Distribution** |
-|-----------------|-----------------|-----------------------|-----------------|
+|-----------------|-----------------|---------------------|-----------------|
 | **Equal** | $N(\mu_1, \sigma^2)$ and $N(\mu_2, \sigma^2)$ | $T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{s \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$ | t-Student with $n_1 + n_2 - 2$ df |
 | **Different** | $N(\mu_1, \sigma_1^2)$ and $N(\mu_2, \sigma_2^2)$ | $T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$ | t-Student (Satterthwaite approx for df) |
 | **Equal** | Distributions have equal shape, different location | Wilcoxon's Rank-Sum test | Exact for small $n$, Normal approx. for large $n$ |
@@ -635,7 +634,6 @@ The previous equation can lead to a wrong interpretation of the confidence inter
 
 The limits of the Confidence Interval are random numbers because they depend on the sample and you will have different values if you have a different samples. The correct interpretation uses the idea of repeated sampling: If we have 100 hundred independent samples from a population and calculate a CI for each sample, 95 of the 100 CIs would contain the true population statistic $\mu_1 - \mu_2$.
 
-
 ### Measures of Linear Association
 
 In climate data analysis, we frequently need to check whether two continuous variables $X$ and $Y$ are independent. For example, we want to test the hypothesis of whether mean daily ozone concentration during a certain time interval for a given location is independent of the average wind speed measured at the same location or a close by location.
@@ -644,14 +642,11 @@ In climate data analysis, we frequently need to check whether two continuous var
 
 The Pearson correlation coefficient $\rho$ is a simple and straight-forward indicator of the linear association between two variables. The magnitude of the correlation is proportional to the strength of linear dependence. This dependence can be positive or negative. Recall the expression for the sample estimate of the Pearson correlation coefficient between $X$ and $Y$ is:
 
-$$\hat{\rho}^2 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2}\sqrt{\sum_{i=1}^n (Y_i - \bar{Y})^2}}$$
-Assuming that the two variables $X$ and $Y$ have a Normal distribution, we can test the hypothesis of no significant linear association between $X$ and $Y$,  that is $H_o: \rho=0$. Assuming that the null hypothesis is correct, the following test statistic follows a t-distribution with $n-2$ degrees of freedom:
+$$\hat{\rho}^2 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2}\sqrt{\sum_{i=1}^n (Y_i - \bar{Y})^2}}$$ Assuming that the two variables $X$ and $Y$ have a Normal distribution, we can test the hypothesis of no significant linear association between $X$ and $Y$, that is $H_o: \rho=0$. Assuming that the null hypothesis is correct, the following test statistic follows a t-distribution with $n-2$ degrees of freedom:
 
-$$T = \frac{\hat{\rho} \sqrt{n - 2}}{\sqrt{1 - \hat{\rho}^2}}$$
-We would normally perform a 2-sided t-test, which means we should reject the null hypothesis of linear association if
+$$T = \frac{\hat{\rho} \sqrt{n - 2}}{\sqrt{1 - \hat{\rho}^2}}$$ We would normally perform a 2-sided t-test, which means we should reject the null hypothesis of linear association if
 
-$$|T|\leq t_{df; \alpha/2}$$
-If two variables are independent the Pearson correlation coefficient $\rho$ is negligible. However, if the correlation coefficient is zero or close to zero, we can not say that the variables are independent, since they might have a different kind of association other than linear. In other words, if two variables are independent, their correlation coefficient is equal to zero; but if the correlation is zero, this does not imply that the two variables are independent.
+$$|T|\leq t_{df; \alpha/2}$$ If two variables are independent the Pearson correlation coefficient $\rho$ is negligible. However, if the correlation coefficient is zero or close to zero, we can not say that the variables are independent, since they might have a different kind of association other than linear. In other words, if two variables are independent, their correlation coefficient is equal to zero; but if the correlation is zero, this does not imply that the two variables are independent.
 
 #### Chi-sq Test for Independence
 
