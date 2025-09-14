@@ -604,7 +604,7 @@ The alternative hypothesis can be:
 Assuming that the we have two iid samples from populations 1 and 2 with unknown variances $\sigma_1^2$ and $\sigma_2^2$; and sample means $\bar{x}_1$ and $\bar{x}_2$ and sample variances $s_1^2$ and $s_2^2$, the following test statistics can be used:
 
 | **Variances** | **Population Assumption** | **test-statistic under** $H_0: \mu_1 = \mu_2$ | **statistic's Distribution** |
-|-----------------|-----------------|---------------------|-----------------|
+|------------------|------------------|--------------------|------------------|
 | **Equal** | $N(\mu_1, \sigma^2)$ and $N(\mu_2, \sigma^2)$ | $T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{s \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$ | t-Student with $n_1 + n_2 - 2$ df |
 | **Different** | $N(\mu_1, \sigma_1^2)$ and $N(\mu_2, \sigma_2^2)$ | $T = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$ | t-Student (Satterthwaite approx for df) |
 | **Equal** | Distributions have equal shape, different location | Wilcoxon's Rank-Sum test | Exact for small $n$, Normal approx. for large $n$ |

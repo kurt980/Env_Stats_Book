@@ -33,11 +33,59 @@ In R, the function *wilcox.test(.)* can be used for testing the location paramet
 
 **Important**: *The sign test does not need any assumption about the shape of the distribution of the data*. The Wilcoxon Signed Rank test requires that the data has a symmetric distribution.
 
-**Example** An example goes here
+**Example** 
+
+An example goes here
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(descstatsr)
+library(goftest)
+library(BSDA)
+hwf<-read.csv("data/hw_factors.csv")
+# Mean Intensity
+hwf$period<- ifelse(hwf$year<2005,"Before 2005","After 2005")
+hwf %>% filter(year<2005) %>% 
+  summarize(mean_int_b2005=mean(mean_intensity))
+hwf %>% filter(year>=2005) %>% 
+  summarize(mean_int_a2005=mean(mean_intensity))
+
+# Mean duration
+hwf %>% filter(year<2005) %>% 
+  summarize(mean_dur_b2005=mean(mean_duration))
+hwf %>% filter(year>=2005) %>% 
+  summarize(mean_dur_a2005=mean(mean_duration))
+
+hwf1<-hwf %>% filter(year<2005)
+hwf2<-hwf %>% filter (year >=2005)
+
+# One-sample t-test for mean intensity
+t.test(hwf1$mean_intensity,mu=5,alternative="l")
+t.test(hwf2$mean_intensity,mu=5, alternative="l")
+# Two-sample t-test for mean intensity
+# By default variances are not assumed equal
+t.test(hwf1$mean_intensity,hwf2$mean_intensity)
+
+# Sign-test (One-sample) for mean duration
+SIGN.test(hwf1$mean_duration, md = 3.5, alternative='two.sided')
+
+SIGN.test(hwf2$mean_duration, md = 3.5, alternative='two.sided')
+
+# Wilcoxon Signed-Rank test (One-sample) for mean duration
+
+#Before 2005
+wilcox.test(hwf1$mean_duration,mu=3.5)
+
+#After 2005
+wilcox.test(hwf2$mean_duration,mu=3.5)
+```
+
 
 ## Rank Tests with Two or More Samples
 
-We have data on precipitation projections from two Global Circulation Models (GCM1 and GCM2) for the period 2070- 2100 (last 30 years of this century), and we want to test the hypothesis that the location parameters for the two distributions ($\tilde{\mu}_1\;\;\mbox{and}\;\;\tilde{\mu}_2$) are the same.
+Assume we have data on precipitation projections from two Global Circulation Models (GCM1 and GCM2) for the period 2070- 2100 (last 30 years of this century), and we want to test the hypothesis that the location parameters for the two distributions ($\tilde{\mu}_1\;\;\mbox{and}\;\;\tilde{\mu}_2$) are the same. We assume that the two samples from models GCM1 and GCM2 are not independent samples, since the models essentially similar differential equations to represent the climate-land-ocean interactions.
 
 We can calculate the differences between each pair of observations for every time step $x_i -y_i$, and apply the Wilcoxon Rank test or the Sign test.
 
@@ -78,6 +126,10 @@ We want to check whether there has been a shift in the distributions of the mean
 
 We will use the function *wilcox.test(x,y)*, where $x$ is the sample vector from the random variable $X$, and $y$ is the sample vector from random variable $Y$.
 
+```{r}
+wilcox.test(hwf1$mean_duration,hwf2$mean_duration)
+```
+
 For a comparison of the location parameters among 3 or more populations we can use the Kruskal-Wallis test. The parametric parallel of this test is the one-way ANOVA model that will be discussed later.
 
 ### Kruskal-Wallis test
@@ -92,6 +144,8 @@ In summary, the Kruskal-Wallis test is a valuable tool in situations where you n
 
 **Example** Here it goes an example of the Kruskall-Wallis test
 
+## Non-parametric correlation measures
+
 ### The Spearman's rank correlation
 
 The Spearman's correlation measures the strength of a monotonic relationship between two variables. This a non-parametric measure of correlation and it is calculated as the Pearson correlation coefficient between the ranks of the two variables:
@@ -102,14 +156,12 @@ $$r_{s_{xy}}= \frac{cov(Rank(x),Rank(y))}{S_{Rank(x)}\times S_{Rank(y)}}$$
 
 It is more robust and efficient than the Spearman's correlation, but more difficult to interpret: Considering all possible pairs $(i,j)$ from the sample. The Kendall's $\tau$ quantifies the difference between the percentage of all discordant and concordant pairs in the data: $$\tau_{xy}=\frac{2}{n(n-1)}\sum_{i<j} sign(x_i-x_j)\times sign(y_i-y_j)$$
 
-## Bootstrapping and Permutation Tests
+## Bootstrapp Confidence Intervals
 
-This chapter discussed rank-based nonparametric methods. Another class of non-parametric methods, known as resampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap method discussed in Chapter 2, which gives confidence intervals. Another example are permutation tests, which perform significance tests. For instance, many null hypotheses are of the form that certain random variables are exchangeable, in the sense the distribution is invariant to rearrangements of the labels assigned to individual sample values. For instance, in the t-test, the distribution of X and Y under the null hypothesis is invariant to randomly reassigning the X and Y- labels. Therefore, the sampling distribution of the test statistic can be derived by calculating the value of the statistic for all possible rearrangements of the labels. This procedure effectively permutes the sample, hence the name. A permutation test can give exact significance levels for real-world problems because it does not make any assumption about the distribution beyond exchangeability. This generality comes at a cost: permutation tests are computationally intensive. Introductions to resampling methods can be found in Efron and Tibshirani (1994), Good (2005), and Good (2006).
+This section discussed rank-based nonparametric methods. Another class of non-parametric methods, known as resampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap methods, which is useful to calculate confidence intervals. 
 
 ### Bootstrapping
 
 **Example**
 
-### Permutation Test
 
-**Example**
