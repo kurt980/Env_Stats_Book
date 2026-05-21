@@ -4,3 +4,5 @@
 .Ruserdata
 /.quarto/
 chapter7_Pred.qmd
+
+**/*.quarto_ipynb
