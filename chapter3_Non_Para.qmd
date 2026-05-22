@@ -33,7 +33,7 @@ In R, the function *wilcox.test(.)* can be used for testing the location paramet
 
 **Important**: *The sign test does not need any assumption about the shape of the distribution of the data*. The Wilcoxon Signed Rank test requires that the data has a symmetric distribution.
 
-**Example** 
+**Example**
 
 An example goes here
 
@@ -81,7 +81,6 @@ wilcox.test(hwf1$mean_duration,mu=3.5)
 #After 2005
 wilcox.test(hwf2$mean_duration,mu=3.5)
 ```
-
 
 ## Rank Tests with Two or More Samples
 
@@ -158,10 +157,8 @@ It is more robust and efficient than the Spearman's correlation, but more diffic
 
 ## Bootstrapp Confidence Intervals
 
-This section discussed rank-based nonparametric methods. Another class of non-parametric methods, known as resampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap methods, which is useful to calculate confidence intervals. 
+This section discussed rank-based nonparametric methods. Another class of non-parametric methods, known as resampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap methods, which is useful to calculate confidence intervals.
 
 ### Bootstrapping
 
 **Example**
-
-

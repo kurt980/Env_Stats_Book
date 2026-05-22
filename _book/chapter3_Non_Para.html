@@ -217,13 +217,15 @@ window.Quarto = {
   <li><a href="#wilcoxon-rank-sum-test" id="toc-wilcoxon-rank-sum-test" class="nav-link" data-scroll-target="#wilcoxon-rank-sum-test"><span class="header-section-number">4.2.1</span> Wilcoxon Rank-Sum test</a></li>
   <li><a href="#wilcoxon-rank-sum-test-and-mann-whitney-test" id="toc-wilcoxon-rank-sum-test-and-mann-whitney-test" class="nav-link" data-scroll-target="#wilcoxon-rank-sum-test-and-mann-whitney-test"><span class="header-section-number">4.2.2</span> Wilcoxon rank sum test and Mann-Whitney test</a></li>
   <li><a href="#kruskal-wallis-test" id="toc-kruskal-wallis-test" class="nav-link" data-scroll-target="#kruskal-wallis-test"><span class="header-section-number">4.2.3</span> Kruskal-Wallis test</a></li>
-  <li><a href="#the-spearmans-rank-correlation" id="toc-the-spearmans-rank-correlation" class="nav-link" data-scroll-target="#the-spearmans-rank-correlation"><span class="header-section-number">4.2.4</span> The Spearman’s rank correlation</a></li>
   </ul></li>
-  <li><a href="#kendals-rank-correlation" id="toc-kendals-rank-correlation" class="nav-link" data-scroll-target="#kendals-rank-correlation"><span class="header-section-number">4.3</span> Kendal’s rank correlation</a></li>
-  <li><a href="#bootstrapping-and-permutation-tests" id="toc-bootstrapping-and-permutation-tests" class="nav-link" data-scroll-target="#bootstrapping-and-permutation-tests"><span class="header-section-number">4.4</span> Bootstrapping and Permutation Tests</a>
+  <li><a href="#non-parametric-correlation-measures" id="toc-non-parametric-correlation-measures" class="nav-link" data-scroll-target="#non-parametric-correlation-measures"><span class="header-section-number">4.3</span> Non-parametric correlation measures</a>
   <ul class="collapse">
-  <li><a href="#bootstrapping" id="toc-bootstrapping" class="nav-link" data-scroll-target="#bootstrapping"><span class="header-section-number">4.4.1</span> Bootstrapping</a></li>
-  <li><a href="#permutation-test" id="toc-permutation-test" class="nav-link" data-scroll-target="#permutation-test"><span class="header-section-number">4.4.2</span> Permutation Test</a></li>
+  <li><a href="#the-spearmans-rank-correlation" id="toc-the-spearmans-rank-correlation" class="nav-link" data-scroll-target="#the-spearmans-rank-correlation"><span class="header-section-number">4.3.1</span> The Spearman’s rank correlation</a></li>
+  </ul></li>
+  <li><a href="#kendals-rank-correlation" id="toc-kendals-rank-correlation" class="nav-link" data-scroll-target="#kendals-rank-correlation"><span class="header-section-number">4.4</span> Kendal’s rank correlation</a></li>
+  <li><a href="#bootstrapp-confidence-intervals" id="toc-bootstrapp-confidence-intervals" class="nav-link" data-scroll-target="#bootstrapp-confidence-intervals"><span class="header-section-number">4.5</span> Bootstrapp Confidence Intervals</a>
+  <ul class="collapse">
+  <li><a href="#bootstrapping" id="toc-bootstrapping" class="nav-link" data-scroll-target="#bootstrapping"><span class="header-section-number">4.5.1</span> Bootstrapping</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -296,9 +298,9 @@ Attaching package: 'dplyr'</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ forcats   1.0.0     ✔ readr     2.1.5
-✔ ggplot2   3.5.2     ✔ stringr   1.5.1
+✔ ggplot2   4.0.0     ✔ stringr   1.5.2
 ✔ lubridate 1.9.4     ✔ tibble    3.3.0
-✔ purrr     1.0.4     ✔ tidyr     1.3.1</code></pre>
+✔ purrr     1.1.0     ✔ tidyr     1.3.1</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -477,7 +479,7 @@ alternative hypothesis: true location is not equal to 3.5</code></pre>
 </section>
 <section id="rank-tests-with-two-or-more-samples" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="rank-tests-with-two-or-more-samples"><span class="header-section-number">4.2</span> Rank Tests with Two or More Samples</h2>
-<p>We have data on precipitation projections from two Global Circulation Models (GCM1 and GCM2) for the period 2070- 2100 (last 30 years of this century), and we want to test the hypothesis that the location parameters for the two distributions (<span class="math inline">\(\tilde{\mu}_1\;\;\mbox{and}\;\;\tilde{\mu}_2\)</span>) are the same.</p>
+<p>Assume we have data on precipitation projections from two Global Circulation Models (GCM1 and GCM2) for the period 2070- 2100 (last 30 years of this century), and we want to test the hypothesis that the location parameters for the two distributions (<span class="math inline">\(\tilde{\mu}_1\;\;\mbox{and}\;\;\tilde{\mu}_2\)</span>) are the same. We assume that the two samples from models GCM1 and GCM2 are not independent samples, since the models essentially similar differential equations to represent the climate-land-ocean interactions.</p>
 <p>We can calculate the differences between each pair of observations for every time step <span class="math inline">\(x_i -y_i\)</span>, and apply the Wilcoxon Rank test or the Sign test.</p>
 <p>For a comparison of the location parameters among 3 or more populations we can use the Kruskal-Wallis test. The parametric parallel of this test is the one-way ANOVA model that will be discussed later.</p>
 <section id="wilcoxon-rank-sum-test" class="level3" data-number="4.2.1">
@@ -528,25 +530,24 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 <p>In summary, the Kruskal-Wallis test is a valuable tool in situations where you need to compare multiple groups and the underlying data does not meet the assumptions of ANOVA. It provides a reliable means of detecting differences in central tendencies across groups while accommodating the realities of real-world data.</p>
 <p><strong>Example</strong> Here it goes an example of the Kruskall-Wallis test</p>
 </section>
-<section id="the-spearmans-rank-correlation" class="level3" data-number="4.2.4">
-<h3 data-number="4.2.4" class="anchored" data-anchor-id="the-spearmans-rank-correlation"><span class="header-section-number">4.2.4</span> The Spearman’s rank correlation</h3>
+</section>
+<section id="non-parametric-correlation-measures" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="non-parametric-correlation-measures"><span class="header-section-number">4.3</span> Non-parametric correlation measures</h2>
+<section id="the-spearmans-rank-correlation" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="the-spearmans-rank-correlation"><span class="header-section-number">4.3.1</span> The Spearman’s rank correlation</h3>
 <p>The Spearman’s correlation measures the strength of a monotonic relationship between two variables. This a non-parametric measure of correlation and it is calculated as the Pearson correlation coefficient between the ranks of the two variables:</p>
 <p><span class="math display">\[r_{s_{xy}}= \frac{cov(Rank(x),Rank(y))}{S_{Rank(x)}\times S_{Rank(y)}}\]</span></p>
 </section>
 </section>
-<section id="kendals-rank-correlation" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="kendals-rank-correlation"><span class="header-section-number">4.3</span> Kendal’s rank correlation</h2>
+<section id="kendals-rank-correlation" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="kendals-rank-correlation"><span class="header-section-number">4.4</span> Kendal’s rank correlation</h2>
 <p>It is more robust and efficient than the Spearman’s correlation, but more difficult to interpret: Considering all possible pairs <span class="math inline">\((i,j)\)</span> from the sample. The Kendall’s <span class="math inline">\(\tau\)</span> quantifies the difference between the percentage of all discordant and concordant pairs in the data: <span class="math display">\[\tau_{xy}=\frac{2}{n(n-1)}\sum_{i&lt;j} sign(x_i-x_j)\times sign(y_i-y_j)\]</span></p>
 </section>
-<section id="bootstrapping-and-permutation-tests" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="bootstrapping-and-permutation-tests"><span class="header-section-number">4.4</span> Bootstrapping and Permutation Tests</h2>
-<p>This chapter discussed rank-based nonparametric methods. Another class of non-parametric methods, known as resampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap method discussed in Chapter 2, which gives confidence intervals. Another example are permutation tests, which perform significance tests. For instance, many null hypotheses are of the form that certain random variables are exchangeable, in the sense the distribution is invariant to rearrangements of the labels assigned to individual sample values. For instance, in the t-test, the distribution of X and Y under the null hypothesis is invariant to randomly reassigning the X and Y- labels. Therefore, the sampling distribution of the test statistic can be derived by calculating the value of the statistic for all possible rearrangements of the labels. This procedure effectively permutes the sample, hence the name. A permutation test can give exact significance levels for real-world problems because it does not make any assumption about the distribution beyond exchangeability. This generality comes at a cost: permutation tests are computationally intensive. Introductions to resampling methods can be found in Efron and Tibshirani (1994), Good (2005), and Good (2006).</p>
-<section id="bootstrapping" class="level3" data-number="4.4.1">
-<h3 data-number="4.4.1" class="anchored" data-anchor-id="bootstrapping"><span class="header-section-number">4.4.1</span> Bootstrapping</h3>
-<p><strong>Example</strong></p>
-</section>
-<section id="permutation-test" class="level3" data-number="4.4.2">
-<h3 data-number="4.4.2" class="anchored" data-anchor-id="permutation-test"><span class="header-section-number">4.4.2</span> Permutation Test</h3>
+<section id="bootstrapp-confidence-intervals" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="bootstrapp-confidence-intervals"><span class="header-section-number">4.5</span> Bootstrapp Confidence Intervals</h2>
+<p>This section discussed rank-based nonparametric methods. Another class of non-parametric methods, known as resampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap methods, which is useful to calculate confidence intervals.</p>
+<section id="bootstrapping" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="bootstrapping"><span class="header-section-number">4.5.1</span> Bootstrapping</h3>
 <p><strong>Example</strong></p>
 
 
