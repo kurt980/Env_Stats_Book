@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>chapter9_temporal</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="chapter9_Temporal_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter9_Temporal_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="chapter9_Temporal_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="chapter9_Temporal_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="chapter9_Temporal_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter9_Temporal_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="chapter9_Temporal_files/libs/quarto-html/anchor.min.js"></script>
+<link href="chapter9_Temporal_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter9_Temporal_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="chapter9_Temporal_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="chapter9_Temporal_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="chapter9_Temporal_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="ch8" class="level1">
+<h1>Temporal Analysis</h1>
+<section id="ch5-intro" class="level2">
+<h2 class="anchored" data-anchor-id="ch5-intro">Introduction</h2>
+<p>The aim of this chapter is to understand and model the stochastic mechanism that generates an observed time series, and predicts or forecast its future values.</p>
+<p>It is important to keep in mind that</p>
+<ul>
+<li>A time series is a set of data collected over time.</li>
+<li>Data can not be assumed independent.</li>
+<li>Time series models are designed to incorporate time dependence.</li>
+</ul>
+<p>Among the time series application we can mentioned:</p>
+<ul>
+<li>Economics (monthly unemployment figures, weekly interest rates, daily stock market values);</li>
+<li>Meteorology (annual precipitation and drought index, global annual temperature series);</li>
+<li>Agriculture (annual crop production, food consumption, cultivated area);</li>
+<li>Biological Sciences (cell tissue hourly growth rate, daily seed germination rate);</li>
+<li>Ecology (annual species abundance, monthly deforestation rate, annual carbon stock rate);</li>
+<li>Medicine (daily blood pressure measurements, brain MRI time series, number of annual breast cancer cases)</li>
+</ul>
+<p><strong>Time series examples</strong></p>
+<p>The following data was downloaded from <span class="citation" data-cites="gistemp2019">[@gistemp2019]</span> and prepared by <span class="citation" data-cites="Lenssenetal2019">[@Lenssenetal2019]</span>.</p>
+<div id="fig-ch5fig1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ch5fig1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<embed src="figures/chapter9_Temporal/globtemp.pdf" class="img-fluid" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ch5fig1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Mean Annual Temperature Anomalies for the Northern Hemisphere and Southern Hemisphere respect to the base period <span class="math inline">\(1951-1980\)</span>
+</figcaption>
+</figure>
+</div>
+<p>It is evident form the two series that there is an upward trend, with a steepest ascent for the Northern Hemisphere temperature anomaly series. It is apparent from both series that the rate of change in temperature increase is slower in the Southern Hemisphere when compared with the Northern hemisphere.</p>
+<p>Two main approaches are available for time series analysis:</p>
+<ol type="1">
+<li>Time domain approach: Modeling a future value of a time series as a parametric function of the current and past values <span class="citation" data-cites="boxjen76">[@boxjen76]</span> and more recently discussed by <span class="citation" data-cites="box2015time">[@box2015time]</span>.</li>
+<li>Frequency domain approach: Assumes the primary feature of a time series is its periodical or systematic sinusoidal variations. These variations are naturally found in most data sets.</li>
+</ol>
+<p>For long time series both approaches produce similar results. The best path to analyze most data sets is to use both approaches in a complementary fashion.</p>
+<p>In the time domain we can mention two approaches to analyse time series data:</p>
+<ol type="1">
+<li>Box and Jenkins approach: the so called ARIMA and SARIMA models, including multivariate ARIMA models and transfer functions modeling. In this case observed data arise from multiplicative models involving products of factors with difference equation operators.</li>
+<li>Additive models approach: Observed data arise from the sum of structured components (for example trend + seasonal effect + error). Resulting state-space model treated as a Kalman filter. Needs time series regression analysis.</li>
+</ol>
+<p>In general the main steps for Time Series analysis can be summarized as follows:</p>
+<ol type="1">
+<li>Model Specification: Select the appropriate model for the observed data set</li>
+<li>Model Fitting: Finding the best estimates of model parameters</li>
+<li>Model Diagnostics: How well does the model fit the Data?</li>
+</ol>
+<p>Given the importance of detecting and explaining potential trends in Time Series we will introduce the main methodologies to model and detecting the trend.</p>
+</section>
+<section id="ch5-trend" class="level2">
+<h2 class="anchored" data-anchor-id="ch5-trend">Trends in Times Series</h2>
+<p>What we observe in nature is a single realization of a set of random variables that we will call a Stochastic Process. We will also need tools to characterize this process.</p>
+<section id="some-definitions" class="level3">
+<h3 class="anchored" data-anchor-id="some-definitions">Some definitions</h3>
+<p><strong>Stochastic Processes</strong></p>
+<p>A <em>Stochastic Process</em> is a sequence of random variables indexed by time: <span class="math inline">\(\{Y_t: t=0, \pm 1, \pm 2, \pm 3, \dots \}\)</span>. The observed values of a stochastic process are a single realization of the process. For example, rainfall data from a particular location and time frame, is understood as a single realization of the rainfall stochastic process.</p>
+<p>The term <em>time series</em> is used to refer to the stochastic process in general, or for a <em>single realization</em> of the process.</p>
+<p>The multivariate probability distribution of the Y’s completely defines the stochastic process. We can use the first and second order moments to describe this distribution.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Stochastic processes</strong></p>
+<p><strong>Example 1: White Noise</strong></p>
+<p>It is a series of uncorrelated random variables <span class="math inline">\(\omega_t\)</span> with zero mean and constant variance <span class="math inline">\(\sigma^2_\omega\)</span>. <span class="math inline">\(\omega_t \sim wn(0, \sigma^2_\omega)\)</span>. Other special cases are:</p>
+<p><strong>White independent noise:</strong> <span class="math inline">\(\omega_t \sim iid\;(0,\sigma^2_\omega)\)</span></p>
+<p><strong>Gaussian white noise</strong>: <span class="math inline">\(\omega_t \sim iid \;N(0,\sigma^2_\omega)\)</span></p>
+<p>If all observed time series were white noise, we would not need time series theory to model the data.</p>
+</div>
+</div>
+<div id="fig-ch5fig2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ch5fig2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<embed src="figures/chapter9_Temporal/wn.pdf" class="img-fluid" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ch5fig2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: White Noise Time Series with <span class="math inline">\(\sigma^2_{\omega}=1\)</span>
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Stochastic processes</strong></p>
+<p><strong>Example 2: Random walk with drift</strong>:</p>
+<p>The value of the process at time <span class="math inline">\(t\)</span> is its value at time <span class="math inline">\(t-1\)</span> plus a completely random movement given by <span class="math inline">\(\omega_t\)</span>:</p>
+<p><span class="math display">\[
+x_t= \delta + x_{t-1} + \omega_t
+\]</span></p>
+<p>for <span class="math inline">\(t=1,2,\dots\)</span>, and initial conditions <span class="math inline">\(x_0=0\)</span>. <span class="math inline">\(\omega_t\)</span> is a white noise. This equation can also be written as:</p>
+<p><span class="math display">\[
+x_t=\delta\;t + \sum_{j=1}^t \omega_j
+\]</span></p>
+<p>When <span class="math inline">\(\delta=0\)</span> this process is simply called a <em>random walk</em>.</p>
+</div>
+</div>
+<div id="fig-ch5fig3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ch5fig3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<embed src="figures/chapter9_Temporal/rwp.pdf" class="img-fluid" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ch5fig3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Random walk with no-drift (x); with drift (xd) and linear trend
+</figcaption>
+</figure>
+</div>
+<p><strong>Mean, Variance and Covariance of a Stochastic process</strong></p>
+<p>Let <span class="math inline">\(\{Y_t: t=0, \pm 1, \pm 2, \pm 3, \dots \}\)</span> a stochastic process.</p>
+<p>The mean function of <span class="math inline">\(Y_t\)</span> can be defined as:</p>
+<p><strong>Mean function</strong></p>
+<p>It is the expected value of the stochastic process defined as:</p>
+<p><span class="math display">\[
+\mu_t=E[Y_t] \;\;\mbox{for}\;\; t=0, \pm 1, \pm 2, \pm 3, \dots
+\]</span></p>
+<p>Covariance and correlation are a measure of the strength of the <strong>linear</strong> relationship between two random variables. In the time series context we talk about Autocovariance and Autocorrelation, to emphasize the estimation of the strength of the linear relationship of a random variable <span class="math inline">\(Y_t\)</span> at time <span class="math inline">\(t\)</span> with the same random variable <span class="math inline">\(Y_s\)</span> at time <span class="math inline">\(s\)</span>.</p>
+<p><strong>Autocovariance function</strong></p>
+<p><span class="math display">\[
+\begin{gathered}
+\gamma_{t,s}= Cov(Y_t,Y_s)\;\;\mbox{for} \;\;t,s=0, \pm 1, \pm 2, \pm 3, \dots\\
+\mbox{where}\;\;Cov(Y_t,Y_s)=E[(Y_t-\mu_t)(Y_s-\mu_s)]=E[Y_t Y_s]-\mu_t \mu_s
+\end{gathered}
+\]</span></p>
+<p><strong>Autocorrelation function</strong></p>
+<p><span class="math display">\[
+\begin{gathered}
+\rho_{t,s}= Corr(Y_t,Y_s) \;\;\mbox{for} \;\;t,s=0, \pm 1, \pm 2, \pm 3, \dots\\
+\mbox{where}\;\; Corr(Y_t,Y_s)=\dfrac{Cov(Y_t,Y_s)}{\sqrt{Var(Y_t) Var(Y_s)}}=
+\dfrac{\gamma_{t,s}}{\sqrt{\gamma_{t,t }\gamma_{s,s}}}
+\end{gathered}
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Properties of a random walk without drift</strong></p>
+<p><strong>Mean function</strong></p>
+<p><span class="math display">\[
+\mu_t=E(Y_t)=0 \;\;\; \mbox{for all t}
+\]</span></p>
+<p><strong>Variance</strong></p>
+<p><span class="math display">\[
+Var(Y_t)=t \sigma^2_w
+\]</span></p>
+<p>(Note: Process variance increases linearly with time)</p>
+<p><strong>Autocovariance function</strong></p>
+<p><span class="math display">\[
+\gamma_{t,s}= \Sigma_{i=1}^t \Sigma_{j=1}^s Cov(w_i,w_j)
+\]</span></p>
+<p><span class="math display">\[
+\gamma_{t,s}=t\sigma^2_w \;\;\; \mbox{for} \;\;\; 1\leq t \leq s
+\]</span></p>
+<p><strong>Autocorrelation function</strong></p>
+<p><span class="math display">\[
+\rho_{t,s}=\frac{\gamma_{t,s}}{\sqrt{\gamma_{t,t} \gamma_{s,s}}}=\sqrt{\frac{t}{s}}
+\;\;\; \mbox{for} \;\;\; 1\leq t \leq s
+\]</span></p>
+</div>
+</div>
+<p><strong>The stationarity concept</strong></p>
+<p>From the above definition, the mean function of a Stochastic Process is an arbitrary function of time. If the process is stationary, the mean function is constant with time. In general we are going to consider Stochastic processes with a mean function which is not constant in time. We will call these mean functions a <strong>Trend</strong>.</p>
+<p><strong>Stochastic vs.&nbsp;Deterministic Trends</strong></p>
+<p>The random walk with no drift has zero mean and variance increasing with time and a strong correlation between nearby values. A perceived trend is the result of the increasing variance and correlation. This trend behavior is called a <em>stochastic trend</em>.</p>
+<p>We will discuss the role of deterministic trends modeling from now on.</p>
+<p>In general we can decompose a time series into the sum of a deterministic function of time <span class="math inline">\(\mu_t\)</span> in this form:</p>
+<p><span class="math display">\[
+\mbox{Observed values}=\mu_t + \mbox{Unobserved variation}
+\]</span></p>
+<p>For example we can consider:</p>
+<p><span class="math display">\[
+\mbox{Observed values}=\mbox{Seasonal cycle} + \mbox{Unobserved variation}
+\]</span></p>
+<p><span class="math display">\[
+Y_t=2cos(2\pi t/25 +0.8\pi) + X_t
+\]</span></p>
+<p>The model is of the form <span class="math inline">\(Y_t= \mu_t + X_t\)</span>, with <span class="math inline">\(\mu_t\)</span> a deterministic function with period <span class="math inline">\(25\)</span>. <span class="math inline">\(\mu_t\)</span> satisfies the following property:</p>
+<p><span class="math display">\[
+\mu_t=\mu_{t-25}
+\]</span></p>
+<p>If the unobserved variation <span class="math inline">\(X_t\)</span> around <span class="math inline">\(\mu_t\)</span> has zero mean, <span class="math inline">\(\mu_t\)</span> is the mean function for the observed series <span class="math inline">\(Y_t\)</span>.</p>
+<p>Other possible trend models are:</p>
+<p><strong>Linear Trend</strong></p>
+<p><span class="math display">\[
+\mu_t=\beta_0 +\beta_1 t
+\]</span></p>
+<p><strong>Quadratic time trend</strong></p>
+<p><span class="math display">\[
+\mu_t=\beta_0 +\beta_1. t + \beta_2.t^2
+\]</span></p>
+<p>Since <span class="math inline">\(E(X_t)=0\)</span>, the trend model applies for all times.</p>
+<p><strong>Constant mean estimation</strong></p>
+<p>Assume a model of the form:</p>
+<p><span class="math display">\[
+Y_t = \mu + X_t
+\]</span></p>
+<p>Assume <span class="math inline">\(E(X_t)=0\)</span>. A common estimate of the mean <span class="math inline">\(\mu\)</span> is:</p>
+<p><span class="math display">\[
+\bar{Y}=\frac{\sum_{i=1}^n Y_i}{n}
+\]</span></p>
+<p>This is an unbiased estimate since <span class="math inline">\(E(\bar{Y})=\mu\)</span>.</p>
+<p>To calculate the variance of <span class="math inline">\(\bar{Y}\)</span> we need to know the autocorrelation structure of <span class="math inline">\(X_t\)</span>.</p>
+<p>Assume <span class="math inline">\(X_t\)</span> is a stationary process with autocorrelation function <span class="math inline">\(\rho_k\)</span>.</p>
+<p>Using result from exercise 2.17 (Textbook) we get</p>
+<p><span class="math display">\[
+Var(\bar{Y})=\frac{\gamma_0}{n}[1+2\sum_{k=1}^{n-1}(1-\frac{k}{n})\rho_k]
+\]</span></p>
+<p>If <span class="math inline">\(\rho_k=0\)</span> for <span class="math inline">\(k&gt;0\)</span>, series <span class="math inline">\(X_t\)</span> is a white noise and the variance collapses to <span class="math inline">\(\gamma_0/n\)</span> (process variance).</p>
+</section>
+<section id="regression-in-the-time-series-context" class="level3">
+<h3 class="anchored" data-anchor-id="regression-in-the-time-series-context">Regression in the time series context</h3>
+<p>Consider some output or dependent time series <span class="math inline">\(Y_t\)</span> as being influenced by a set of independent time series <span class="math inline">\(z_{t1},z_{t2},\ldots,z_{tq}\)</span>.</p>
+<p>We assume the following relationship exists:</p>
+<p><span class="math display">\[
+Y_t=\beta_1 z_{t1}+\ldots+\beta_k z_{tq} +w_t
+\]</span></p>
+<p>where <span class="math inline">\(\beta_1,\ldots,\beta_q\)</span> are unknown regression coefficients to be estimated, and <span class="math inline">\(\{w_t\}\)</span> is a random noise process such that <span class="math inline">\(w_t\sim \mbox{iid} N(0,\sigma^2)\)</span></p>
+<p><strong>Note</strong>: The assumption of independence is not necessarily true as we already discussed.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Times series regression</strong></p>
+<p>Consider the Mean Annual Temperature Anomalies example presented in <a href="#fig-ch5fig1" class="quarto-xref">Figure&nbsp;1</a> for the Northern Hemisphere.</p>
+<p>We can fit the model:</p>
+<p><span class="math display">\[
+Y_t=\beta_1 + \beta_2 t +w_t\;\; t=1880,1881,\ldots, 2015
+\]</span></p>
+<p>in this case <span class="math inline">\(q=2\)</span>, <span class="math inline">\(z_{t1}=1\)</span>, <span class="math inline">\(z_{t2}=t\)</span>, which indicates that time is a covariate to explain the variability of <span class="math inline">\(Y_t\)</span>.</p>
+<p>Please note that we are making the assumption that the errors are independent, which is not necessarily true.</p>
+<p>After fitting the model by using least squares, we obtain the fitted values: <span class="math inline">\(\hat{\beta_2}=0.008532\)</span> with standard error <span class="math inline">\(0.0004572\)</span>; and <span class="math inline">\(\hat{\beta_1}=-16.57\)</span> with standard error <span class="math inline">\(0.8912\)</span>. These results suggest that the slope of the linear regression is highly significantly different from zero (<span class="math inline">\(p-value&lt;0.001\)</span>) and that there is on average a <span class="math inline">\(0.8\)</span> degrees increase in mean temperature per <span class="math inline">\(100\)</span> years. The main question here is whether this rate of increase can be assumed constant during the whole period. By looking at <a href="#fig-ch5fig1" class="quarto-xref">Figure&nbsp;1</a> we notice that this might not be true, specially for the Northern Hemisphere mean temperature anomalies.</p>
+</div>
+</div>
+<p><strong>Least Square Estimation</strong></p>
+<p>We can write:</p>
+<p><span class="math display">\[
+Y_t=\mathbf{\beta' z_t} + w_t
+\]</span></p>
+<p>where <span class="math inline">\(\mathbb{\beta}=(\beta_1,\beta_2,\ldots,\beta_q)\)</span> and <span class="math inline">\(z_t=(z_{t1},z_{t2},\ldots,z_{tq})\)</span>, <span class="math inline">\(w_t\sim iid N(0,\sigma^2)\)</span></p>
+<p>The least-squares estimation implies minimizing the sum of squares</p>
+<p><span class="math display">\[
+Q=\sum_{t=1}^n (y_t-\mathbf{\beta' z_t})^2
+\]</span></p>
+<p>We differentiate with respect to <span class="math inline">\(\mathbb{\beta}\)</span> to get the Normal equations:</p>
+<p><span class="math display">\[
+(\sum_{t=1}^n \mathbf{z_t z_t'})\hat{\beta}=\sum_{t=1}^n \mathbf{x_t y_t}
+\]</span></p>
+<p>If we consider the <span class="math inline">\(n\times q\)</span> matrix <span class="math inline">\(Z=[z_1 z_2 \ldots z_n]'\)</span> and <span class="math inline">\(\mathbf{y}=(y_1,y_2,\ldots,y_n)\)</span>, <span class="math inline">\(\mathbf{w}=(w_1,w_2,\ldots,w_n)\)</span></p>
+<p>The model can be written as</p>
+<p><span class="math display">\[
+\mathbf{y}=Z\mathbf{\beta}+\mathbf{w}
+\]</span></p>
+<p>The Normal equations can be written as:</p>
+<p><span class="math display">\[
+Z'Z\hat{\beta}=Z'\mathbf{y}
+\]</span></p>
+<p>and the least square solutions as:</p>
+<p><span class="math display">\[
+\hat{\beta}=(Z'Z)^{-1}Z'\mathbf{y}
+\]</span></p>
+<p>The residual sum of squares (SSE) is:</p>
+<p><span class="math display">\[
+(\mathbf{y}-Z\hat{\beta})' (\mathbf{y}-Z\hat{\beta})
+\]</span></p>
+<p><strong>Other results</strong></p>
+<p><span class="math display">\[
+E(\hat{\beta})=\beta
+\]</span></p>
+<p>(<span class="math inline">\(\hat{\beta}\)</span> is an unbiased estimator)</p>
+<p><span class="math display">\[
+Cov(\hat{\beta})=\sigma_w^2 (Z'Z)^{-1}
+\]</span></p>
+<p>Unbiased estimator of $_w^2 $:</p>
+<p><span class="math display">\[
+s_w^2=SSE/(n-q)
+\]</span></p>
+<p><span class="math inline">\(s_w^2\)</span> has a Chi-squared distribution with <span class="math inline">\(n-q\)</span> degrees of freedom, and it is independent of <span class="math inline">\(\hat{\beta}\)</span>.</p>
+<p><span class="math display">\[
+t_{n-q}=\frac{\hat{\beta_i}-\beta_i}{s_w \sqrt{c_{ii}}}
+\]</span></p>
+<p>has a t-distribution with <span class="math inline">\(n-q\)</span> degrees of freedom, where <span class="math inline">\(c_{ii}\)</span> is a diagonal element of matrix <span class="math inline">\(C=(Z'Z)^{-1}\)</span></p>
+</section>
+<section id="analysis-of-variance-and-best-model-selection" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-of-variance-and-best-model-selection">Analysis of Variance and best model selection</h3>
+<p>Suppose we want to select the best subset of independent variables.</p>
+<p>Consider a subset <span class="math inline">\(r\)</span> of variables such that <span class="math inline">\(r&lt;q\)</span> (<span class="math inline">\(z_{t:r}=(z_{t1}, z_{t2},\dots,z_{tr})'\)</span>). We can consider a reduced model:</p>
+<p><span class="math display">\[
+\mathbf{y=Z_r\mathbf{\beta}_r} +\mathbf{w}
+\]</span></p>
+<p>where <span class="math inline">\(\beta_r\)</span> is a subset of coefficients corresponding to the independent variables <span class="math inline">\((z_{t1}, z_{t2},\dots,z_{tr})\)</span>. <span class="math inline">\(Z_r\)</span> is a matrix <span class="math inline">\(n\times r\)</span> of inputs.</p>
+<p>We want to test the Null hypothesis:</p>
+<p><span class="math display">\[
+\mathcal{H}_0: \beta_{r+1}=\ldots=\beta_q=0
+\]</span></p>
+<p>We can compare the full model with the reduced model by using the <strong>F</strong>-statistics:</p>
+<p><span class="math display">\[
+\mathbf{F}_{q-r,n-q}=\frac{(SSE_r-SSE)/(q-r)}{SSE/(n-q)} \sim F(q-r,n-q)
+\]</span></p>
+<p>We compute <span class="math inline">\(SSE_r\)</span> by replacing <span class="math inline">\(Z\)</span> by <span class="math inline">\(Z_r\)</span> in the residual sum of squares equation. Normally this information is summarized in the Analysis of Variance table <a href="#tbl-anova" class="quarto-xref">Table&nbsp;1</a> with</p>
+<p><span class="math display">\[
+\mathbf{F}_{q-r,n-q}=\frac{MSR}{MSE}
+\]</span></p>
+<div id="tbl-anova" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Analysis of Variance Table.
+</figcaption>
+<div aria-describedby="tbl-anova-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Source</th>
+<th style="text-align: center;">df</th>
+<th style="text-align: center;">Sum of Squares</th>
+<th style="text-align: center;">Mean Squares</th>
+<th style="text-align: center;">F</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(z_{t,r+1},\ldots, z_{t,q}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(q-r\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSR= SSE_r -SSE\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(MSR=SSR/(q-r)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(F=MSR/MSE\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Error</td>
+<td style="text-align: center;"><span class="math inline">\(n-r\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSE\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(MSE=SSE/(n-q)\)</span></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: center;"><span class="math inline">\(n-q\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSE_r\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Special case: <span class="math inline">\(r=1\)</span> and <span class="math inline">\(z_{t1}=1\)</span>. In this case the model becomes:</p>
+<p><span class="math display">\[
+y_t=\beta_1 + w_t
+\]</span></p>
+<p>Squared multiple correlation between <span class="math inline">\(x_t\)</span> and variables <span class="math inline">\(z_{t1},z_{t2},\ldots,z_{tn}\)</span></p>
+<p><span class="math display">\[
+R^2=\frac{(SSE_1-SSE)}{SSE_1}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+SSE_1=\sum_{t=1}^n (x_t-\bar{x})^2
+\]</span></p>
+<p><span class="math inline">\(R^2\)</span> is called the <em>Coefficient of Determination</em></p>
+<p>The maximum likelihood estimator variance is given by:</p>
+<p><span class="math display">\[
+\hat{\sigma}_k^2=\frac{SSE_k}{n}
+\]</span></p>
+<p>where <span class="math inline">\(SSE_k\)</span> is the residual sum of squares under the model with <span class="math inline">\(k\)</span> regression coefficients.</p>
+<ul>
+<li>Use the F test to compare one model against another</li>
+<li>Use the test in a stepwise manner, by adding and/or deleting variables (stepwise multiple regression)</li>
+<li>Evaluate each model on its own merits, using the maximum likelihood estimator variance</li>
+</ul>
+<p>The F test assumes that the time series <span class="math inline">\(Y_t\)</span> has an approximate Normal distribution, and model comparison is possible for nested models. The Akaike information criteria (AIC) and Bayesian Information criteria (BIC) can be used to compare non-nested models.</p>
+<p>AIC (Akaike, 1969, 1973, 1974) is a balance between the error of the fit and the number of parameters <span class="math inline">\(k\)</span> used to fit the model.</p>
+<p><span class="math display">\[
+AIC= \log \hat{\sigma}_k^2 + \frac{n+2k}{n}
+\]</span></p>
+<p>or</p>
+<p><span class="math display">\[
+AIC_c= \log \hat{\sigma}_k^2 + \frac{n+k}{n-k-2}
+\]</span></p>
+<p>(Bias Corrected version)</p>
+<p>Formal AIC definition: <span class="math inline">\(-2\log L_k +2k\)</span>, where <span class="math inline">\(L_k\)</span> is the maximized log-likelihood function. Under the normal distribution assumption, AIC reduces to the previous definition.</p>
+<p>BIC (Schwarz, 1978):</p>
+<p><span class="math display">\[
+BIC= \log \hat{\sigma}_k^2 + \frac{k\log n}{n}
+\]</span></p>
+<p>Simulation studies:</p>
+<ul>
+<li><span class="math inline">\(BIC\)</span>: Better for large samples</li>
+<li><span class="math inline">\(AIC_c\)</span>: Better for smaller samples</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Linear versus quadratic trend for the Northern Hemisphere mean Temperature anomalies.</p>
+<p>From <a href="#fig-ch5fig1" class="quarto-xref">Figure&nbsp;1</a>, one might infer that fitting a quadratic trend instead of a linear trend seems reasonable. After fitting a polynomial of order 2, the additional quadratic term results in highly significant term. The multiple regression coefficient <span class="math inline">\(R^2=0.815\)</span> in comparison with with a value of <span class="math inline">\(R^2=0.718\)</span> for the linear trend model.</p>
+<p>Model comparison using information criteria are presented in table</p>
+<p>Analysis of Variance table</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">AIC</th>
+<th style="text-align: center;">BIC</th>
+<th style="text-align: center;"><span class="math inline">\(AIC_c\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Linear Model</td>
+<td style="text-align: center;">-2.03373</td>
+<td style="text-align: center;">-1.970396</td>
+<td style="text-align: center;">-2.032451</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Quadratic Model</td>
+<td style="text-align: center;">-2.440568</td>
+<td style="text-align: center;">-2.356123</td>
+<td style="text-align: center;">-2.438421</td>
+</tr>
+</tbody>
+</table>
+<p>All indicators in the previous table suggest the preference for the quadratic model over the linear model.</p>
+</div>
+</div>
+</section>
+<section id="detrending-and-smoothing-in-time-series" class="level3">
+<h3 class="anchored" data-anchor-id="detrending-and-smoothing-in-time-series">Detrending and smoothing in Time Series</h3>
+</section>
+</section>
+<section id="ch5-dependence" class="level2">
+<h2 class="anchored" data-anchor-id="ch5-dependence">Temporal Dependence in Times Series</h2>
+</section>
+<section id="methods-in-temporal-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="methods-in-temporal-data-analysis">Methods in Temporal Data Analysis</h2>
+<section id="fourier-series" class="level3">
+<h3 class="anchored" data-anchor-id="fourier-series">Fourier Series</h3>
+</section>
+<section id="wavelets" class="level3">
+<h3 class="anchored" data-anchor-id="wavelets">Wavelets</h3>
+</section>
+</section>
+<section id="arima-models" class="level2">
+<h2 class="anchored" data-anchor-id="arima-models">ARIMA Models</h2>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

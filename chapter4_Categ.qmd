@@ -1,0 +1,290 @@
+# Categorical Data Analysis {#sec-categorical-data-analysis}
+
+Categorical data analysis is a specialized field within statistics that focuses on the examination and interpretation of categorical variables. Unlike continuous data, which involves measurements on a scale, categorical data consists of categories or labels. This field employs statistical methods tailored to handle these discrete categories, often leveraging tools such as contingency tables, chi-square tests, and logistic regression.
+
+Categorical data analysis has extensive applications in diverse fields, from social sciences to biology and marketing. Its primary goal is to extract meaningful insights and patterns from data that inherently involve qualitative distinctions. This branch of statistics plays a crucial role in discovering relationships, dependencies, and trends in data where variables are not measured on a numerical scale, contributing valuable insights to decision-making processes in various domains.
+
+## Contingency Tables
+
+Another class of nonparametric methods is based on contingency tables. A contingency table is an array of counts or frequencies in matrix form, often used to summarize the outcomes of discrete events. For instance, a forecaster may use a contingency table to record the number of times a forecast system successfully predicted a weather event, such as fog, storm, flood, or rain.
+
+Based on the resulting table, the forecaster may want to test whether the forecast and observations are independent. If forecast and observation are independent, the forecast has no skill. Contingency tables may also be used to test for differences in probabilities. A comprehensive text on contingency table methods is Agresti (2012).
+
+### Models for Contingency Tables
+
+Consider joint observations of two categorical variables:
+
+$$
+X \text{ with } I \text{ categories}
+\qquad\qquad
+Y \text{ with } J \text{ categories}.
+$$
+
+The data can be summarized in an $I \times J$ **contingency table**, where each cell contains a count.
+
+|          | $Y=1$    | $\cdots$ | $Y=J$    |
+|:---------|:--------:|:--------:|:--------:|
+| $X=1$    | $n_{11}$ | $\cdots$ | $n_{1J}$ |
+| $\vdots$ | $\vdots$ | $\ddots$ | $\vdots$ |
+| $X=I$    | $n_{I1}$ | $\cdots$ | $n_{IJ}$ |
+
+### Distributions
+
+If both $X$ and $Y$ are random, let
+
+$$
+\pi_{ij} = P(\text{$X$ in row $i$, $Y$ in column $j$}),
+$$
+
+which defines the **joint distribution** of $X$ and $Y$.
+
+The **marginal distribution** of $X$ is defined by
+
+$$
+\pi_{i+} = P(\text{$X$ in row $i$}),
+$$
+
+and similarly for $Y$,
+
+$$
+\pi_{+j} = P(\text{$Y$ in column $j$}).
+$$
+
+The joint probabilities sum to 1, as do each set of marginal probabilities.
+
+The **conditional distribution** of $Y$ given that $X$ is in row $i$ is defined by
+
+$$
+\pi_{j \mid i}
+=
+P(\text{$Y$ in column $j$} \mid \text{$X$ in row $i$})
+=
+\frac{\pi_{ij}}{\pi_{i+}}.
+$$
+
+These probabilities sum to 1 over $j$, not over $i$.
+
+This conditional distribution may be meaningful even if counts of $X$ are not random. For example, a study may assign half of the subjects to a placebo group and half to an aspirin group. In this case, $X$ is fixed by design, while $Y$ is observed as a response.
+
+### Descriptive Statistics
+
+Let
+
+$$
+n_{ij} = \text{count in row $i$ and column $j$}
+\qquad\qquad
+n = \sum_i \sum_j n_{ij}.
+$$
+
+The **margins** of the table are
+
+$$
+n_{i+} = \sum_j n_{ij}
+\qquad\qquad
+n_{+j} = \sum_i n_{ij}.
+$$
+
+For a $2 \times 2$ table, the counts and margins can be written as follows.
+
+|              |    $Y=1$ |    $Y=2$ | Row total |
+|:-------------|---------:|---------:|----------:|
+| $X=1$        | $n_{11}$ | $n_{12}$ |  $n_{1+}$ |
+| $X=2$        | $n_{21}$ | $n_{22}$ |  $n_{2+}$ |
+| Column total | $n_{+1}$ | $n_{+2}$ |       $n$ |
+
+A natural estimate of $\pi_{ij}$ is
+
+$$
+p_{ij} = \frac{n_{ij}}{n}.
+$$
+
+Similarly, the marginal sample proportions are
+
+$$
+p_{i+} = \sum_j p_{ij}
+\qquad\qquad
+p_{+j} = \sum_i p_{ij}.
+$$
+
+The conditional sample proportions are
+
+$$
+p_{j \mid i}
+=
+\frac{p_{ij}}{p_{i+}}
+=
+\frac{n_{ij}}{n_{i+}}.
+$$
+
+### Independence
+
+If both $X$ and $Y$ are random, they are **independent** if
+
+$$
+\pi_{ij} = \pi_{i+}\pi_{+j}
+\qquad
+\text{for all } i \text{ and } j.
+$$
+
+This implies that
+
+$$
+\pi_{j \mid i}
+=
+\frac{\pi_{i+}\pi_{+j}}{\pi_{i+}}
+=
+\pi_{+j}
+\qquad
+\text{for all } i \text{ and } j.
+$$
+
+That is, $\pi_{j \mid i}$ does not depend on $i$. All conditional distributions of $Y$ given $X$ are the same as the marginal distribution of $Y$. Intuitively, knowing $X$ tells us nothing about $Y$.
+
+Even if $X$ is not random, the condition
+
+$$
+\pi_{j \mid i} = \pi_{+j}
+\qquad
+\text{for all } i \text{ and } j
+$$
+
+is called **homogeneity**. This concept is relevant when $X$ is deliberately chosen and $Y$ is observed as a response.
+
+### Example with Contingency Table
+
+## Conditional Association in Three-Way Tables
+
+When a third variable is introduced into a contingency table, the goal is often to understand the three-way interaction and to quantify whether the association between two variables changes across levels of the third variable.
+
+### Conditional Association and Theory
+
+Suppose we add a third categorical variable $Z$. A typical question of interest is whether the $X$-$Y$ relationship changes across different levels of $Z$. For example, is a drug more effective at curing a disease among younger patients than among older patients?
+
+$$
+\begin{aligned}
+X &= \text{drug or placebo}, \\
+Y &= \text{disease cured or not}, \\
+Z &= \text{age group: young or old}.
+\end{aligned}
+$$
+
+The variable $Z$ may be called a **stratification variable**. We are interested in the distribution of $(X,Y)$ **conditional** on $Z$. In observational studies, $Z$ may be a confounding variable.
+
+Each category of $Z$ defines a **partial table** for $X$ and $Y$. When $Z=1,2$ and $X$ and $Y$ are binary, the result is a $2 \times 2 \times 2$ table. These partial tables represent **conditional associations**.
+
+### Marginal Tables and Simpson's Paradox
+
+The **marginal table** sums the partial tables over the levels of $Z$.
+
+|       |     $Y=1$ |     $Y=2$ |
+|:------|----------:|----------:|
+| $X=1$ | $n_{11+}$ | $n_{12+}$ |
+| $X=2$ | $n_{21+}$ | $n_{22+}$ |
+
+This table represents the **marginal association**, ignoring $Z$.
+
+In general, let
+
+$$
+\mu_{ijk}
+=
+\text{expected count in row $i$, column $j$, table $k$}.
+$$
+
+The **conditional odds ratios** are
+
+$$
+\theta_{XY(k)}
+=
+\frac{\mu_{11k}\mu_{22k}}{\mu_{12k}\mu_{21k}},
+$$
+
+and are estimated by
+
+$$
+\hat{\theta}_{XY(k)}
+=
+\frac{n_{11k}n_{22k}}{n_{12k}n_{21k}}.
+$$
+
+The **marginal odds ratio** is
+
+$$
+\theta_{XY}
+=
+\frac{\mu_{11+}\mu_{22+}}{\mu_{12+}\mu_{21+}},
+$$
+
+and is estimated from the marginal table.
+
+Several counterintuitive but possible situations can occur:
+
+-   There may be conditional associations, with $\theta_{XY(k)} \neq 1$, but no marginal association, with $\theta_{XY}=1$.
+
+    For example:
+
+    $$
+    \begin{aligned}
+    X &= \text{gene allele from mother}, \\
+    Y &= \text{gene allele from father}, \\
+    Z &= \text{phenotype}.
+    \end{aligned}
+    $$
+
+-   There may be a marginal association, with $\theta_{XY} \neq 1$, but no conditional associations, with $\theta_{XY(k)}=1$.
+
+    For example, this pattern appears in the UC Berkeley graduate school admissions data discussed in Agresti, Problem 2.15.
+
+-   **Simpson's paradox** occurs when the conditional associations are in the opposite direction from the marginal association. For example,
+
+    $$
+    \theta_{XY(k)} > 1
+    \qquad\qquad
+    \theta_{XY} < 1.
+    $$
+
+    One example is the Florida multiple murder cases death penalty data:
+
+    $$
+    \begin{aligned}
+    X &= \text{defendant's race: white or black}, \\
+    Y &= \text{death penalty: yes or no}, \\
+    Z &= \text{victims' race: white or black}.
+    \end{aligned}
+    $$
+
+The variables $X$ and $Y$ are **conditionally independent given** $Z=k$ if
+
+$$
+\theta_{XY(k)} = 1.
+$$
+
+If this is true for all $k$, then $X$ and $Y$ are **conditionally independent given** $Z$.
+
+Conditional independence is **not** the same as **marginal independence**, which corresponds to $\theta_{XY}=1$.
+
+For multinomial sampling, conditional independence can be written as
+
+$$
+\pi_{ijk}
+=
+\frac{\pi_{i+k}\pi_{+jk}}{\pi_{++k}}
+\qquad
+\text{for all } i,j,k.
+$$
+
+Let $Z$ have $K$ categories. The variables $X$ and $Y$ have **homogeneous association** over $Z$ if
+
+$$
+\theta_{XY(1)}
+=
+\theta_{XY(2)}
+=
+\cdots
+=
+\theta_{XY(K)}.
+$$
+
+Conditional independence is a special case of homogeneous association. However, even under homogeneous association, the conditional and marginal associations may be different.
+
+## Testing and Confidence Intervals in Contingency Tables

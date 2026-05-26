@@ -1,0 +1,488 @@
+# Temporal Analysis {#ch8}
+
+## Introduction {#ch5-intro}
+
+The aim of this chapter is to understand and model the stochastic mechanism that generates an observed time series, and predicts or forecast its future values.
+
+It is important to keep in mind that
+
+- A time series is a set of data collected over time.
+- Data can not be assumed independent.
+- Time series models are designed to incorporate time dependence.
+
+Among the time series application we can mentioned:
+
+- Economics (monthly unemployment figures, weekly interest rates, daily stock market values);
+- Meteorology (annual precipitation and drought index, global annual temperature series);
+- Agriculture (annual crop production, food consumption, cultivated area);
+- Biological Sciences (cell tissue hourly growth rate, daily seed germination rate);
+- Ecology (annual species abundance, monthly deforestation rate, annual carbon stock rate);
+- Medicine (daily blood pressure measurements, brain MRI time series, number of annual breast cancer cases)
+
+**Time series examples**
+
+The following data was downloaded from [@gistemp2019] and prepared by [@Lenssenetal2019].
+
+![Mean Annual Temperature Anomalies for the Northern Hemisphere and Southern Hemisphere respect to the base period $1951-1980$](figures/chapter9_Temporal/globtemp.pdf){#fig-ch5fig1 width="100%"}
+
+It is evident form the two series that there is an upward trend, with a steepest ascent for the Northern Hemisphere temperature anomaly series. It is apparent from both series that the rate of change in temperature increase is slower in the Southern Hemisphere when compared with the Northern hemisphere.
+
+Two main approaches are available for time series analysis:
+
+1. Time domain approach: Modeling a future value of a time series as a parametric function of the current and past values [@boxjen76] and more recently discussed by [@box2015time].
+2. Frequency domain approach: Assumes the primary feature of a time series is its periodical or systematic sinusoidal variations. These variations are naturally found in most data sets.
+
+For long time series both approaches produce similar results. The best path to analyze most data sets is to use both approaches in a complementary fashion.
+
+In the time domain we can mention two approaches to analyse time series data:
+
+1. Box and Jenkins approach: the so called ARIMA and SARIMA models, including multivariate ARIMA models and transfer functions modeling. In this case observed data arise from multiplicative models involving products of factors with difference equation operators.
+2. Additive models approach: Observed data arise from the sum of structured components (for example trend + seasonal effect + error). Resulting state-space model treated as a Kalman filter. Needs time series regression analysis.
+
+In general the main steps for Time Series analysis can be summarized as follows:
+
+1. Model Specification: Select the appropriate model for the observed data set
+2. Model Fitting: Finding the best estimates of model parameters
+3. Model Diagnostics: How well does the model fit the Data?
+
+Given the importance of detecting and explaining potential trends in Time Series we will introduce the main methodologies to model and detecting the trend.
+
+
+## Trends in Times Series {#ch5-trend}
+
+What we observe in nature is a single realization of a set of random variables that we will call a Stochastic Process. We will also need tools to characterize this process.
+
+
+### Some definitions
+
+**Stochastic Processes**
+
+A *Stochastic Process* is a sequence of random variables indexed by time: $\{Y_t: t=0, \pm 1, \pm 2, \pm 3, \dots \}$. The observed values of a stochastic process are a single realization of the process. For example, rainfall data from a particular location and time frame, is understood as a single realization of the rainfall stochastic process.
+
+The term *time series* is used to refer to the stochastic process in general, or for a *single realization* of the process.
+
+The multivariate probability distribution of the Y's completely defines the stochastic process. We can use the first and second order moments to describe this distribution.
+
+::: {.callout-note}
+**Stochastic processes**
+
+**Example 1: White Noise**
+
+It is a series of uncorrelated random variables $\omega_t$ with zero mean and constant variance $\sigma^2_\omega$. $\omega_t \sim wn(0, \sigma^2_\omega)$. Other special cases are:
+
+**White independent noise:** $\omega_t \sim iid\;(0,\sigma^2_\omega)$
+
+**Gaussian white noise**: $\omega_t \sim iid \;N(0,\sigma^2_\omega)$
+
+If all observed time series were white noise, we would not need time series theory to model the data.
+:::
+
+![White Noise Time Series with $\sigma^2_{\omega}=1$](figures/chapter9_Temporal/wn.pdf){#fig-ch5fig2 width="100%"}
+
+::: {.callout-note}
+**Stochastic processes**
+
+**Example 2: Random walk with drift**:
+
+The value of the process at time $t$ is its value at time $t-1$ plus a completely random movement given by $\omega_t$:
+
+$$
+x_t= \delta + x_{t-1} + \omega_t
+$$
+
+for $t=1,2,\dots$, and initial conditions $x_0=0$. $\omega_t$ is a white noise. This equation can also be written as:
+
+$$
+x_t=\delta\;t + \sum_{j=1}^t \omega_j
+$$
+
+When $\delta=0$ this process is simply called a *random walk*.
+:::
+
+![Random walk with no-drift (x); with drift (xd) and linear trend](figures/chapter9_Temporal/rwp.pdf){#fig-ch5fig3 width="100%"}
+
+**Mean, Variance and Covariance of a Stochastic process**
+
+Let $\{Y_t: t=0, \pm 1, \pm 2, \pm 3, \dots \}$ a stochastic process.
+
+The mean function of $Y_t$ can be defined as:
+
+**Mean function**
+
+It is the expected value of the stochastic process defined as:
+
+$$
+\mu_t=E[Y_t] \;\;\mbox{for}\;\; t=0, \pm 1, \pm 2, \pm 3, \dots
+$$
+
+Covariance and correlation are a measure of the strength of the **linear** relationship between two random variables. In the time series context we talk about Autocovariance and Autocorrelation, to emphasize the estimation of the strength of the linear relationship of a random variable $Y_t$ at time $t$ with the same random variable $Y_s$ at time $s$.
+
+**Autocovariance function**
+
+$$
+\begin{gathered}
+\gamma_{t,s}= Cov(Y_t,Y_s)\;\;\mbox{for} \;\;t,s=0, \pm 1, \pm 2, \pm 3, \dots\\
+\mbox{where}\;\;Cov(Y_t,Y_s)=E[(Y_t-\mu_t)(Y_s-\mu_s)]=E[Y_t Y_s]-\mu_t \mu_s
+\end{gathered}
+$$
+
+**Autocorrelation function**
+
+$$
+\begin{gathered}
+\rho_{t,s}= Corr(Y_t,Y_s) \;\;\mbox{for} \;\;t,s=0, \pm 1, \pm 2, \pm 3, \dots\\
+\mbox{where}\;\; Corr(Y_t,Y_s)=\dfrac{Cov(Y_t,Y_s)}{\sqrt{Var(Y_t) Var(Y_s)}}=
+\dfrac{\gamma_{t,s}}{\sqrt{\gamma_{t,t }\gamma_{s,s}}}
+\end{gathered}
+$$
+
+::: {.callout-note}
+**Properties of a random walk without drift**
+
+**Mean function**
+
+$$
+\mu_t=E(Y_t)=0 \;\;\; \mbox{for all t}
+$$
+
+**Variance**
+
+$$
+Var(Y_t)=t \sigma^2_w
+$$
+
+(Note: Process variance increases linearly with time)
+
+**Autocovariance function**
+
+$$
+\gamma_{t,s}= \Sigma_{i=1}^t \Sigma_{j=1}^s Cov(w_i,w_j)
+$$
+
+$$
+\gamma_{t,s}=t\sigma^2_w \;\;\; \mbox{for} \;\;\; 1\leq t \leq s
+$$
+
+**Autocorrelation function**
+
+$$
+\rho_{t,s}=\frac{\gamma_{t,s}}{\sqrt{\gamma_{t,t} \gamma_{s,s}}}=\sqrt{\frac{t}{s}}
+\;\;\; \mbox{for} \;\;\; 1\leq t \leq s
+$$
+:::
+
+**The stationarity concept**
+
+From the above definition, the mean function of a Stochastic Process is an arbitrary function of time. If the process is stationary, the mean function is constant with time. In general we are going to consider Stochastic processes with a mean function which is not constant in time. We will call these mean functions a **Trend**.
+
+**Stochastic vs. Deterministic Trends**
+
+The random walk with no drift has zero mean and variance increasing with time and a strong correlation between nearby values. A perceived trend is the result of the increasing variance and correlation. This trend behavior is called a *stochastic trend*.
+
+We will discuss the role of deterministic trends modeling from now on.
+
+In general we can decompose a time series into the sum of a deterministic function of time $\mu_t$ in this form:
+
+$$
+\mbox{Observed values}=\mu_t + \mbox{Unobserved variation}
+$$
+
+For example we can consider:
+
+$$
+\mbox{Observed values}=\mbox{Seasonal cycle} + \mbox{Unobserved variation}
+$$
+
+$$
+Y_t=2cos(2\pi t/25 +0.8\pi) + X_t
+$$
+
+The model is of the form $Y_t= \mu_t + X_t$, with $\mu_t$ a deterministic function with period $25$. $\mu_t$ satisfies the following property:
+
+$$
+\mu_t=\mu_{t-25}
+$$
+
+If the unobserved variation $X_t$ around $\mu_t$ has zero mean, $\mu_t$ is the mean function for the observed series $Y_t$.
+
+Other possible trend models are:
+
+**Linear Trend**
+
+$$
+\mu_t=\beta_0 +\beta_1 t
+$$
+
+**Quadratic time trend**
+
+$$
+\mu_t=\beta_0 +\beta_1. t + \beta_2.t^2
+$$
+
+Since $E(X_t)=0$, the trend model applies for all times.
+
+**Constant mean estimation**
+
+Assume a model of the form:
+
+$$
+Y_t = \mu + X_t
+$$
+
+Assume $E(X_t)=0$. A common estimate of the mean $\mu$ is:
+
+$$
+\bar{Y}=\frac{\sum_{i=1}^n Y_i}{n}
+$$
+
+This is an unbiased estimate since $E(\bar{Y})=\mu$.
+
+To calculate the variance of $\bar{Y}$ we need to know the autocorrelation structure of $X_t$.
+
+Assume $X_t$ is a stationary process with autocorrelation function $\rho_k$.
+
+Using result from exercise 2.17 (Textbook) we get
+
+$$
+Var(\bar{Y})=\frac{\gamma_0}{n}[1+2\sum_{k=1}^{n-1}(1-\frac{k}{n})\rho_k]
+$$
+
+If $\rho_k=0$ for $k>0$, series $X_t$ is a white noise and the variance collapses to $\gamma_0/n$ (process variance).
+
+
+### Regression in the time series context
+
+Consider some output or dependent time series $Y_t$ as being influenced by a set of independent time series $z_{t1},z_{t2},\ldots,z_{tq}$.
+
+We assume the following relationship exists:
+
+$$
+Y_t=\beta_1 z_{t1}+\ldots+\beta_k z_{tq} +w_t
+$$
+
+where $\beta_1,\ldots,\beta_q$ are unknown regression coefficients to be estimated, and $\{w_t\}$ is a random noise process such that $w_t\sim \mbox{iid} N(0,\sigma^2)$
+
+**Note**: The assumption of independence is not necessarily true as we already discussed.
+
+::: {.callout-note}
+**Times series regression**
+
+Consider the Mean Annual Temperature Anomalies example presented in @fig-ch5fig1 for the Northern Hemisphere.
+
+We can fit the model:
+
+$$
+Y_t=\beta_1 + \beta_2 t +w_t\;\; t=1880,1881,\ldots, 2015
+$$
+
+in this case $q=2$, $z_{t1}=1$, $z_{t2}=t$, which indicates that time is a covariate to explain the variability of $Y_t$.
+
+Please note that we are making the assumption that the errors are independent, which is not necessarily true.
+
+After fitting the model by using least squares, we obtain the fitted values: $\hat{\beta_2}=0.008532$ with standard error $0.0004572$; and $\hat{\beta_1}=-16.57$ with standard error $0.8912$. These results suggest that the slope of the linear regression is highly significantly different from zero ($p-value<0.001$) and that there is on average a $0.8$ degrees increase in mean temperature per $100$ years. The main question here is whether this rate of increase can be assumed constant during the whole period. By looking at @fig-ch5fig1 we notice that this might not be true, specially for the Northern Hemisphere mean temperature anomalies.
+:::
+
+**Least Square Estimation**
+
+We can write:
+
+$$
+Y_t=\mathbf{\beta' z_t} + w_t
+$$
+
+where $\mathbb{\beta}=(\beta_1,\beta_2,\ldots,\beta_q)$ and $z_t=(z_{t1},z_{t2},\ldots,z_{tq})$, $w_t\sim iid N(0,\sigma^2)$
+
+The least-squares estimation implies minimizing the sum of squares
+
+$$
+Q=\sum_{t=1}^n (y_t-\mathbf{\beta' z_t})^2
+$$
+
+We differentiate with respect to $\mathbb{\beta}$ to get the Normal equations:
+
+$$
+(\sum_{t=1}^n \mathbf{z_t z_t'})\hat{\beta}=\sum_{t=1}^n \mathbf{x_t y_t}
+$$
+
+If we consider the $n\times q$ matrix $Z=[z_1 z_2 \ldots z_n]'$ and $\mathbf{y}=(y_1,y_2,\ldots,y_n)$, $\mathbf{w}=(w_1,w_2,\ldots,w_n)$
+
+The model can be written as
+
+$$
+\mathbf{y}=Z\mathbf{\beta}+\mathbf{w}
+$$
+
+The Normal equations can be written as:
+
+$$
+Z'Z\hat{\beta}=Z'\mathbf{y}
+$$
+
+and the least square solutions as:
+
+$$
+\hat{\beta}=(Z'Z)^{-1}Z'\mathbf{y}
+$$
+
+The residual sum of squares (SSE) is:
+
+$$
+(\mathbf{y}-Z\hat{\beta})' (\mathbf{y}-Z\hat{\beta})
+$$
+
+**Other results**
+
+$$
+E(\hat{\beta})=\beta
+$$
+
+($\hat{\beta}$ is an unbiased estimator)
+
+$$
+Cov(\hat{\beta})=\sigma_w^2 (Z'Z)^{-1}
+$$
+
+Unbiased estimator of $\sigma_w^2 $:
+
+$$
+s_w^2=SSE/(n-q)
+$$
+
+$s_w^2$ has a Chi-squared distribution with $n-q$ degrees of freedom, and it is independent of $\hat{\beta}$.
+
+$$
+t_{n-q}=\frac{\hat{\beta_i}-\beta_i}{s_w \sqrt{c_{ii}}}
+$$
+
+has a t-distribution with $n-q$ degrees of freedom, where $c_{ii}$ is a diagonal element of matrix $C=(Z'Z)^{-1}$
+
+
+### Analysis of Variance and best model selection
+
+Suppose we want to select the best subset of independent variables.
+
+Consider a subset $r$ of variables such that $r<q$ ($z_{t:r}=(z_{t1}, z_{t2},\dots,z_{tr})'$). We can consider a reduced model:
+
+$$
+\mathbf{y=Z_r\mathbf{\beta}_r} +\mathbf{w}
+$$
+
+where $\beta_r$ is a subset of coefficients corresponding to the independent variables $(z_{t1}, z_{t2},\dots,z_{tr})$. $Z_r$ is a matrix $n\times r$ of inputs.
+
+We want to test the Null hypothesis:
+
+$$
+\mathcal{H}_0: \beta_{r+1}=\ldots=\beta_q=0
+$$
+
+We can compare the full model with the reduced model by using the **F**-statistics:
+
+$$
+\mathbf{F}_{q-r,n-q}=\frac{(SSE_r-SSE)/(q-r)}{SSE/(n-q)} \sim F(q-r,n-q)
+$$
+
+We compute $SSE_r$ by replacing $Z$ by $Z_r$ in the residual sum of squares equation. Normally this information is summarized in the Analysis of Variance table @tbl-anova with
+
+$$
+\mathbf{F}_{q-r,n-q}=\frac{MSR}{MSE}
+$$
+
+| Source | df | Sum of Squares | Mean Squares | F |
+|:--|:--:|:--:|:--:|:--:|
+| $z_{t,r+1},\ldots, z_{t,q}$ | $q-r$ | $SSR= SSE_r -SSE$ | $MSR=SSR/(q-r)$ | $F=MSR/MSE$ |
+| Error | $n-r$ | $SSE$ | $MSE=SSE/(n-q)$ |  |
+| Total | $n-q$ | $SSE_r$ |  |  |
+: Analysis of Variance Table. {#tbl-anova}
+
+Special case: $r=1$ and $z_{t1}=1$. In this case the model becomes:
+
+$$
+y_t=\beta_1 + w_t
+$$
+
+Squared multiple correlation between $x_t$ and variables $z_{t1},z_{t2},\ldots,z_{tn}$
+
+$$
+R^2=\frac{(SSE_1-SSE)}{SSE_1}
+$$
+
+where
+
+$$
+SSE_1=\sum_{t=1}^n (x_t-\bar{x})^2
+$$
+
+$R^2$ is called the *Coefficient of Determination*
+
+The maximum likelihood estimator variance is given by:
+
+$$
+\hat{\sigma}_k^2=\frac{SSE_k}{n}
+$$
+
+where $SSE_k$ is the residual sum of squares under the model with $k$ regression coefficients.
+
+- Use the F test to compare one model against another
+- Use the test in a stepwise manner, by adding and/or deleting variables (stepwise multiple regression)
+- Evaluate each model on its own merits, using the maximum likelihood estimator variance
+
+The F test assumes that the time series $Y_t$ has an approximate Normal distribution, and model comparison is possible for nested models. The Akaike information criteria (AIC) and Bayesian Information criteria (BIC) can be used to compare non-nested models.
+
+AIC (Akaike, 1969, 1973, 1974) is a balance between the error of the fit and the number of parameters $k$ used to fit the model.
+
+$$
+AIC= \log \hat{\sigma}_k^2 + \frac{n+2k}{n}
+$$
+
+or
+
+$$
+AIC_c= \log \hat{\sigma}_k^2 + \frac{n+k}{n-k-2}
+$$
+
+(Bias Corrected version)
+
+Formal AIC definition: $-2\log L_k +2k$, where $L_k$ is the maximized log-likelihood function. Under the normal distribution assumption, AIC reduces to the previous definition.
+
+BIC (Schwarz, 1978):
+
+$$
+BIC= \log \hat{\sigma}_k^2 + \frac{k\log n}{n}
+$$
+
+Simulation studies:
+
+- $BIC$: Better for large samples
+- $AIC_c$: Better for smaller samples
+
+::: {.callout-note}
+Linear versus quadratic trend for the Northern Hemisphere mean Temperature anomalies.
+
+From @fig-ch5fig1, one might infer that fitting a quadratic trend instead of a linear trend seems reasonable. After fitting a polynomial of order 2, the additional quadratic term results in highly significant term. The multiple regression coefficient $R^2=0.815$ in comparison with with a value of $R^2=0.718$ for the linear trend model.
+
+Model comparison using information criteria are presented in table
+
+Analysis of Variance table
+
+| Model | AIC | BIC | $AIC_c$ |
+|:--|:--:|:--:|:--:|
+| Linear Model | -2.03373 | -1.970396 | -2.032451 |
+| Quadratic Model | -2.440568 | -2.356123 | -2.438421 |
+
+All indicators in the previous table suggest the preference for the quadratic model over the linear model.
+:::
+
+### Detrending and smoothing in Time Series
+
+
+## Temporal Dependence in Times Series {#ch5-dependence}
+
+
+## Methods in Temporal Data Analysis
+
+### Fourier Series
+
+### Wavelets
+
+
+## ARIMA Models

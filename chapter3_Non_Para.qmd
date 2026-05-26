@@ -37,7 +37,7 @@ In R, the function *wilcox.test(.)* can be used for testing the location paramet
 
 An example goes here
 
-```{r}
+```{r, message=FALSE}
 library(dplyr)
 library(tidyverse)
 library(ggplot2)

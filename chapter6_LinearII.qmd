@@ -1,0 +1,138 @@
+# Extending Linear Models {#ch6}
+
+## Linear Models with Random Effects
+
+Linear models with random effects.
+
+### Random Factors
+
+#### Fixed vs. Random Effects
+
+- item 1
+- item 2
+
+```{r,message=FALSE}
+# simulate means from repeated rolls of 10 dice
+num_dice <- 10
+dice_rolls <- matrix(sample(1:6, 1000, replace = TRUE), ncol = num_dice)
+dice_means <- rowMeans(dice_rolls)
+
+# display the empirical sampling distribution of the dice-roll means
+hist(
+  dice_means,
+  breaks = 20,
+  main = "Central Limit Theorem Simulation",
+  xlab = "Mean of 10 Dice Rolls",
+  ylab = "Frequency"
+)
+```
+
+### Variance Components and Intraclass Correlation
+
+Before vs. After
+
+### Estimation
+
+#### Restricted Maximum Likelihood Estimation
+
+##### Interpretation of Results
+
+##### Bias of Estimation
+
+##### Testing Random Effect Variance
+
+### ANOVA Testing Methods
+
+- **Model Selection**
+- **Parametric Bootstrap**
+- **Bootstrap Confidence Intervals**
+- **Likelihood Ratio Test**
+
+### Mixed Effects Models
+
+<!-- TODO: expand the mixed-effects models discussion. Source placeholder: "blah blah". -->
+
+#### Subsubsection 2
+
+<!-- TODO: expand this subsection. Source placeholder: "blah blah". -->
+
+## Models with Non-linear Assumptions
+
+Linear models are widely employed tools in statistics and machine learning, prized for their simplicity and interpretability. However, these models rest on the critical assumption of linearity, implying that relationships between variables are best described by straight lines. In reality, many phenomena exhibit non-linear patterns, challenging the assumptions of traditional linear models. The field of linear models with non-linear assumptions seeks to address this limitation by extending linear frameworks to capture more complex relationships. By incorporating non-linear transformations of variables, polynomial features, or even employing entirely different model structures like decision trees or neural networks, these models offer increased flexibility to better fit the intricacies of real-world data. This nuanced approach allows practitioners to retain the interpretability of linear models while accommodating the inherent non-linearities often found in diverse datasets, making them valuable tools across various domains.
+
+### Non-Parametric Regression
+
+#### Objectives
+
+##### Parametric model examples
+
+- We are not constrained to linear predictors.
+- We do not have information about the form of the data.
+- More flexible in modeling new data for which $f$ is unknown.
+- Not a formula to describe the relationship between the predictors and the response.
+- Fewer assumptions than in parametric regression.
+
+We will discuss three methods of non-parametric regression:
+
+- Kernel estimators
+- Smoothing splines
+- Local polynomials
+
+We will show the difference between parametric and non-parametric regression starting with **polynomial regression**.
+
+#### Polynomial Regression
+
+##### Theory
+
+#### Kernel Estimators
+
+#### Smoothing Splines
+
+<!-- TODO: add multivariate spline material if it remains part of the chapter plan. -->
+
+#### Local Polynomials
+
+##### Loess Method
+
+#### Other Methods
+
+### Summary
+
+### Subsection 2
+
+<!-- TODO: replace draft placeholder text with substantive chapter content. Source placeholders: "blah blah", "say 1", "say 2". -->
+
+##### Paragraph 1
+
+- item 1
+
+$$
+W_n =
+\frac{
+  \left(\sum_{i=1}^n a_i x^{(i)}\right)^2
+}{
+  \sum_{i=1}^n (x_i - \bar{x})^2
+}
+$$
+
+some texts
+
+##### Paragraph 2
+
+All these statistics measure the departures of the ECDF from the theoretical CDF. Large values of these statistics would lead to the rejection of the null hypothesis.
+
+### Subsection 3
+
+##### Paragraph 1
+
+<!-- TODO: replace draft placeholder text with substantive chapter content. Source placeholder: "beep beep". -->
+
+| Test | Population Assumption | Location parameter $\mu_0$ |
+|---|---|---|
+| **Student's *t*** | *iid* $N(\mu, \sigma^2)$ | mean (same as median) |
+| **Signed Rank** | *iid* symmetric distribution | median |
+| **Sign** | *iid* | median |
+
+## Summary
+
+<!-- TODO: replace draft placeholder text with a chapter summary. Source placeholder: "haeeloe". -->
