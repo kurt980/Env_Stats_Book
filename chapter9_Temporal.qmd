@@ -6,18 +6,18 @@ The aim of this chapter is to understand and model the stochastic mechanism that
 
 It is important to keep in mind that
 
-- A time series is a set of data collected over time.
-- Data can not be assumed independent.
-- Time series models are designed to incorporate time dependence.
+-   A time series is a set of data collected over time.
+-   Data can not be assumed independent.
+-   Time series models are designed to incorporate time dependence.
 
 Among the time series application we can mentioned:
 
-- Economics (monthly unemployment figures, weekly interest rates, daily stock market values);
-- Meteorology (annual precipitation and drought index, global annual temperature series);
-- Agriculture (annual crop production, food consumption, cultivated area);
-- Biological Sciences (cell tissue hourly growth rate, daily seed germination rate);
-- Ecology (annual species abundance, monthly deforestation rate, annual carbon stock rate);
-- Medicine (daily blood pressure measurements, brain MRI time series, number of annual breast cancer cases)
+-   Economics (monthly unemployment figures, weekly interest rates, daily stock market values);
+-   Meteorology (annual precipitation and drought index, global annual temperature series);
+-   Agriculture (annual crop production, food consumption, cultivated area);
+-   Biological Sciences (cell tissue hourly growth rate, daily seed germination rate);
+-   Ecology (annual species abundance, monthly deforestation rate, annual carbon stock rate);
+-   Medicine (daily blood pressure measurements, brain MRI time series, number of annual breast cancer cases)
 
 **Time series examples**
 
@@ -29,29 +29,27 @@ It is evident form the two series that there is an upward trend, with a steepest
 
 Two main approaches are available for time series analysis:
 
-1. Time domain approach: Modeling a future value of a time series as a parametric function of the current and past values [@boxjen76] and more recently discussed by [@box2015time].
-2. Frequency domain approach: Assumes the primary feature of a time series is its periodical or systematic sinusoidal variations. These variations are naturally found in most data sets.
+1.  Time domain approach: Modeling a future value of a time series as a parametric function of the current and past values [@boxjen76] and more recently discussed by [@box2015time].
+2.  Frequency domain approach: Assumes the primary feature of a time series is its periodical or systematic sinusoidal variations. These variations are naturally found in most data sets.
 
 For long time series both approaches produce similar results. The best path to analyze most data sets is to use both approaches in a complementary fashion.
 
 In the time domain we can mention two approaches to analyse time series data:
 
-1. Box and Jenkins approach: the so called ARIMA and SARIMA models, including multivariate ARIMA models and transfer functions modeling. In this case observed data arise from multiplicative models involving products of factors with difference equation operators.
-2. Additive models approach: Observed data arise from the sum of structured components (for example trend + seasonal effect + error). Resulting state-space model treated as a Kalman filter. Needs time series regression analysis.
+1.  Box and Jenkins approach: the so called ARIMA and SARIMA models, including multivariate ARIMA models and transfer functions modeling. In this case observed data arise from multiplicative models involving products of factors with difference equation operators.
+2.  Additive models approach: Observed data arise from the sum of structured components (for example trend + seasonal effect + error). Resulting state-space model treated as a Kalman filter. Needs time series regression analysis.
 
 In general the main steps for Time Series analysis can be summarized as follows:
 
-1. Model Specification: Select the appropriate model for the observed data set
-2. Model Fitting: Finding the best estimates of model parameters
-3. Model Diagnostics: How well does the model fit the Data?
+1.  Model Specification: Select the appropriate model for the observed data set
+2.  Model Fitting: Finding the best estimates of model parameters
+3.  Model Diagnostics: How well does the model fit the Data?
 
 Given the importance of detecting and explaining potential trends in Time Series we will introduce the main methodologies to model and detecting the trend.
-
 
 ## Trends in Times Series {#ch5-trend}
 
 What we observe in nature is a single realization of a set of random variables that we will call a Stochastic Process. We will also need tools to characterize this process.
-
 
 ### Some definitions
 
@@ -63,7 +61,7 @@ The term *time series* is used to refer to the stochastic process in general, or
 
 The multivariate probability distribution of the Y's completely defines the stochastic process. We can use the first and second order moments to describe this distribution.
 
-::: {.callout-note}
+::: callout-note
 **Stochastic processes**
 
 **Example 1: White Noise**
@@ -79,7 +77,7 @@ If all observed time series were white noise, we would not need time series theo
 
 ![White Noise Time Series with $\sigma^2_{\omega}=1$](figures/chapter9_Temporal/wn.pdf){#fig-ch5fig2 width="100%"}
 
-::: {.callout-note}
+::: callout-note
 **Stochastic processes**
 
 **Example 2: Random walk with drift**:
@@ -136,7 +134,7 @@ $$
 \end{gathered}
 $$
 
-::: {.callout-note}
+::: callout-note
 **Properties of a random walk without drift**
 
 **Mean function**
@@ -249,7 +247,6 @@ $$
 
 If $\rho_k=0$ for $k>0$, series $X_t$ is a white noise and the variance collapses to $\gamma_0/n$ (process variance).
 
-
 ### Regression in the time series context
 
 Consider some output or dependent time series $Y_t$ as being influenced by a set of independent time series $z_{t1},z_{t2},\ldots,z_{tq}$.
@@ -264,7 +261,7 @@ where $\beta_1,\ldots,\beta_q$ are unknown regression coefficients to be estimat
 
 **Note**: The assumption of independence is not necessarily true as we already discussed.
 
-::: {.callout-note}
+::: callout-note
 **Times series regression**
 
 Consider the Mean Annual Temperature Anomalies example presented in @fig-ch5fig1 for the Northern Hemisphere.
@@ -342,7 +339,7 @@ $$
 Cov(\hat{\beta})=\sigma_w^2 (Z'Z)^{-1}
 $$
 
-Unbiased estimator of $\sigma_w^2 $:
+Unbiased estimator of \$\sigma\_w\^2 \$:
 
 $$
 s_w^2=SSE/(n-q)
@@ -355,7 +352,6 @@ t_{n-q}=\frac{\hat{\beta_i}-\beta_i}{s_w \sqrt{c_{ii}}}
 $$
 
 has a t-distribution with $n-q$ degrees of freedom, where $c_{ii}$ is a diagonal element of matrix $C=(Z'Z)^{-1}$
-
 
 ### Analysis of Variance and best model selection
 
@@ -388,10 +384,11 @@ $$
 $$
 
 | Source | df | Sum of Squares | Mean Squares | F |
-|:--|:--:|:--:|:--:|:--:|
+|:---|:--:|:--:|:--:|:--:|
 | $z_{t,r+1},\ldots, z_{t,q}$ | $q-r$ | $SSR= SSE_r -SSE$ | $MSR=SSR/(q-r)$ | $F=MSR/MSE$ |
 | Error | $n-r$ | $SSE$ | $MSE=SSE/(n-q)$ |  |
 | Total | $n-q$ | $SSE_r$ |  |  |
+
 : Analysis of Variance Table. {#tbl-anova}
 
 Special case: $r=1$ and $z_{t1}=1$. In this case the model becomes:
@@ -422,9 +419,9 @@ $$
 
 where $SSE_k$ is the residual sum of squares under the model with $k$ regression coefficients.
 
-- Use the F test to compare one model against another
-- Use the test in a stepwise manner, by adding and/or deleting variables (stepwise multiple regression)
-- Evaluate each model on its own merits, using the maximum likelihood estimator variance
+-   Use the F test to compare one model against another
+-   Use the test in a stepwise manner, by adding and/or deleting variables (stepwise multiple regression)
+-   Evaluate each model on its own merits, using the maximum likelihood estimator variance
 
 The F test assumes that the time series $Y_t$ has an approximate Normal distribution, and model comparison is possible for nested models. The Akaike information criteria (AIC) and Bayesian Information criteria (BIC) can be used to compare non-nested models.
 
@@ -452,10 +449,10 @@ $$
 
 Simulation studies:
 
-- $BIC$: Better for large samples
-- $AIC_c$: Better for smaller samples
+-   $BIC$: Better for large samples
+-   $AIC_c$: Better for smaller samples
 
-::: {.callout-note}
+::: callout-note
 Linear versus quadratic trend for the Northern Hemisphere mean Temperature anomalies.
 
 From @fig-ch5fig1, one might infer that fitting a quadratic trend instead of a linear trend seems reasonable. After fitting a polynomial of order 2, the additional quadratic term results in highly significant term. The multiple regression coefficient $R^2=0.815$ in comparison with with a value of $R^2=0.718$ for the linear trend model.
@@ -464,9 +461,9 @@ Model comparison using information criteria are presented in table
 
 Analysis of Variance table
 
-| Model | AIC | BIC | $AIC_c$ |
-|:--|:--:|:--:|:--:|
-| Linear Model | -2.03373 | -1.970396 | -2.032451 |
+| Model           |    AIC    |    BIC    |  $AIC_c$  |
+|:----------------|:---------:|:---------:|:---------:|
+| Linear Model    | -2.03373  | -1.970396 | -2.032451 |
 | Quadratic Model | -2.440568 | -2.356123 | -2.438421 |
 
 All indicators in the previous table suggest the preference for the quadratic model over the linear model.
@@ -474,15 +471,12 @@ All indicators in the previous table suggest the preference for the quadratic mo
 
 ### Detrending and smoothing in Time Series
 
-
 ## Temporal Dependence in Times Series {#ch5-dependence}
-
 
 ## Methods in Temporal Data Analysis
 
 ### Fourier Series
 
 ### Wavelets
-
 
 ## ARIMA Models
