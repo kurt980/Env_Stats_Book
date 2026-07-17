@@ -3,4 +3,5 @@
 .RData
 .Ruserdata
 /.quarto/
-chapter7_Pred.qmd
+/_book/
+
