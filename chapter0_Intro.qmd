@@ -23,15 +23,15 @@ Environmental Statistics has a wide range of applications and offers a variety o
 
 There are many problems in statistical sciences that were originally proposed as solutions to important environmental problems as:
 
-* Spatial statistics and geostatistics
-* Spatio-temporal models
-* Extreme value analysis
-* Change-point detection
-* Hierarchical Bayesian models
-* Measurement-error models
-* Missing-data methods
-* Risk assessment methodologies
-* Environmental monitoring design
+- Spatial statistics and geostatistics
+- Spatio-temporal models
+- Extreme value analysis
+- Change-point detection
+- Hierarchical Bayesian models
+- Measurement-error models
+- Missing-data methods
+- Risk assessment methodologies
+- Environmental monitoring design
 
 The wide range of problems analyzed within this field has created close connections with other statistical science domains as spatial statistics, data science, and environmental informatics.
 

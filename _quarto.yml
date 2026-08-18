@@ -4,7 +4,7 @@ project:
 book:
   title: "Environmental Statistics Book (Draft)"
   author: "Lelys Bravo de Guenni and Kurt Ji"
-  date: "08/17/2025"
+  date: "08/18/2026"
   chapters:
     - index.qmd
 #   - intro.qmd
