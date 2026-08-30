@@ -2,11 +2,11 @@
 
 In the previous chapter we discussed several statistical tests applied to a sample from a population. The sample is assumed to be independent and identically distributed, and all values are assumed to be a random sample from a Normal distribution.
 
-Non-parametric methods in statistics provide a versatile and robust alternative to traditional parametric techniques, particularly when the assumptions of normality or other underlying distributions cannot be met. These methods are characterized by their flexibility and ability to analyze data without making specific assumptions about the population distribution. Examples of non-parametric methods include the Wilcoxon signed-rank test, which assesses differences between paired observations, the Mann-Whitney U test, used for comparing two independent groups, and the Kruskal-Wallis test, which extends the comparison to multiple groups. These techniques are valuable tools for researchers and analysts working with real-world data, as they offer reliable solutions in scenarios where parametric methods may fall short.
+Non-parametric methods in statistics provide a versatile and robust alternative to traditional parametric techniques, particularly when the assumptions of normality or other underlying distributions cannot be met. These methods are characterized by their flexibility and ability to analyze data without making specific assumptions about the population distribution. Examples of non-parametric methods include the Wilcoxon signed-rank test, which is a non-parametric alternative to the paired t-test when assessing differences between paired observations; the Mann-Whitney U test, used for comparing two independent groups, and the Kruskal-Wallis test, which extends the comparison to multiple groups. These techniques are valuable tools for researchers and analysts working with real-world data, as they offer reliable solutions in scenarios where parametric methods may fall short.
 
 ## Introduction to One-Sample Rank Tests
 
-One common scenario where rank tests shine is when dealing with skewed or non-normally distributed data. In such cases, traditional parametric tests like the t-test or ANOVA may produce unreliable results. Rank tests offer a solution by focusing on the ranks or orders of observations, making them robust to distributional assumptions.
+One common scenario where rank tests shine is when dealing with skewed or non-normally distributed data. In such cases, traditional parametric tests like the t-test or ANOVA may produce unreliable results. Rank tests offer a solution by focusing on the ranks or orders of observations, making them robust to distributional assumptions and potential outliers.
 
 For example, consider a study evaluating the effectiveness of a new medication. The response variable is the level of pain relief reported by patients on a scale from 1 (no relief) to 10 (complete relief). The data collected may not follow a normal distribution, and the scale itself is ordinal rather than continuous. In this situation, a rank-based test like the Wilcoxon signed-rank test for paired data or the Mann-Whitney U test for independent samples can provide a more appropriate analysis, comparing the central tendency of pain relief between groups or before and after treatment without relying on distributional assumptions.
 
@@ -14,20 +14,20 @@ In essence, rank tests offer a valuable tool for statisticians and researchers w
 
 ### Wilcoxon Signed-Rank Test
 
-The signed rank tests uses the difference between the sample values from the proposed median $x_i-\mu_0$ , but also uses the size of the difference to calculate a rank. This tests assumes that the sample is coming from a symmetrical distribution.
+The signed rank tests uses the difference between the sample values from the proposed median $x_i-m$ , but also uses the size of the difference to calculate a rank. This tests assumes that the sample is coming from a symmetrical distribution.
 
 **Example**
 
-If the differences of the sample from the proposed median are: -1.6, 2.3, -5.1, 3.9, the sorted values without considering the signs are: -1.6, 2.3, 3.9, -5.1, with ranks 1, 2, 3 and 4. The values of the signed rank test statistic ($TS$) are the ranks for the **negative values**, this is: $TS=1+4=5$. Other options are to use the positive values: $TS=2+3$.
+If the differences of the sample from the proposed median are: -1.6, 2.3, -5.1, 3.9, the sorted values without considering the signs are: -1.6, 2.3, 3.9, -5.1, with ranks 1, 2, 3 and 4. The values of the signed rank test statistic ($TS$) are the ranks for the **negative values**, this is: $TS=1+4=5$. Other options are to use the positive value ranks: $TS=2+3$.
 
--   A large value of TS would indicate more observations **below the median** than expected under $H_0$.
--   When ties are present in the data, they are removed and the sample size is adjusted accordingly.
--   When $n$ is moderately large, the TS statistic has an Normal distribution under the Null hypothesis, with mean and variance: $$E[TS]=\frac{n(n+1)}{4}$$ $$Var[TS]=\frac{n(n+1)(2n+1)}{24}$$
+- A large value of TS would indicate more observations **below the median** than expected under $H_0$.
+- When ties are present in the data, they are removed and the sample size is adjusted accordingly.
+- When $n$ is moderately large, the TS statistic has an Normal distribution under the Null hypothesis, with mean and variance: $$E[TS]=\frac{n(n+1)}{4}$$ $$Var[TS]=\frac{n(n+1)(2n+1)}{24}$$
 
 Assume that $TS=t$. The Signed Rank Test rejects the Null hypothesis for a two-tailed test if:
 
--   $P(TS\leq t) \leq \alpha/2$
--   $P(TS\geq t) \leq \alpha/2$
+- $P(TS\leq t) \leq \alpha/2$
+- $P(TS\geq t) \leq \alpha/2$
 
 In R, the function *wilcox.test(.)* can be used for testing the location parameter for a single population, using the parameter $\mu=\ldots$ in the function call.
 
@@ -35,7 +35,9 @@ In R, the function *wilcox.test(.)* can be used for testing the location paramet
 
 **Example**
 
-An example goes here
+In this example, we want to compare the mean duration and mean intensity of historical heat waves in the city of Champaign, Illinois before the year 2005 and after 2005.
+
+The data is available in the file `hw_factors.csv`.
 
 ```{r, message=FALSE}
 library(dplyr)
@@ -84,7 +86,7 @@ wilcox.test(hwf2$mean_duration,mu=3.5)
 
 ## Rank Tests with Two or More Samples
 
-Assume we have data on precipitation projections from two Global Circulation Models (GCM1 and GCM2) for the period 2070- 2100 (last 30 years of this century), and we want to test the hypothesis that the location parameters for the two distributions ($\tilde{\mu}_1\;\;\mbox{and}\;\;\tilde{\mu}_2$) are the same. We assume that the two samples from models GCM1 and GCM2 are not independent samples, since the models essentially similar differential equations to represent the climate-land-ocean interactions.
+Assume we have data on precipitation projections from two Global Circulation Models (GCM1 and GCM2) for the period 2070- 2100 (last 30 years of this century), and we want to test the hypothesis that the location parameters for the two distributions ($\tilde{\mu}_1\;\;\mbox{and}\;\;\tilde{\mu}_2$) are the same. We assume that the two samples from models GCM1 and GCM2 are not independent samples, since the models essentially have similar differential equations to represent the climate-land-ocean interactions.
 
 We can calculate the differences between each pair of observations for every time step $x_i -y_i$, and apply the Wilcoxon Rank test or the Sign test.
 
