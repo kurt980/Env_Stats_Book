@@ -16,7 +16,7 @@ In essence, rank tests offer a valuable tool for statisticians and researchers w
 
 The signed rank tests uses the difference between the sample values from the proposed median $x_i-m$ , but also uses the size of the difference to calculate a rank. This tests assumes that the sample is coming from a symmetrical distribution.
 
-**Example**
+**A simple example**
 
 If the differences of the sample from the proposed median are: -1.6, 2.3, -5.1, 3.9, the sorted values without considering the signs are: -1.6, 2.3, 3.9, -5.1, with ranks 1, 2, 3 and 4. The values of the signed rank test statistic ($TS$) are the ranks for the **negative values**, this is: $TS=1+4=5$. Other options are to use the positive value ranks: $TS=2+3$.
 
@@ -90,9 +90,11 @@ Assume we have data on precipitation projections from two Global Circulation Mod
 
 We can calculate the differences between each pair of observations for every time step $x_i -y_i$, and apply the Wilcoxon Rank test or the Sign test.
 
-For a comparison of the location parameters among 3 or more populations we can use the Kruskal-Wallis test. The parametric parallel of this test is the one-way ANOVA model that will be discussed later.
+For a comparison of the location parameters among 3 or more populations we can use the `Kruskal-Wallis` test. The parametric parallel of this test is the one-way ANOVA model that will be discussed later.
 
 ### Wilcoxon Rank-Sum test
+
+The `Wilcoxon Rank Sum Test`, also known as the Mann-Whitney U test, is a non-parametric test used to assess whether there is a difference between two independent groups. It doesn't assume normality and it is appropriate when the data may not meet the assumptions of a t-test.
 
 We want to show that observations from one population $x_1, x_2,\ldots, x_{n_1}$ tend to be larger (or smaller) than observations from another population $y_1, y_2, \ldots, y_{n_2}$.
 
@@ -100,15 +102,11 @@ It is assumed that the distribution $F_1$ of $X$ and $F_2$ of $Y$ are identical 
 
 In this case we set up the hypothesis (more general set up): $$H_0: F_1=F_2\;\;\mbox{vs.}\;\; H_a: F_1> F_2$$ (one-sided) or $$H_0: F_1=F_2\;\; \mbox{vs.}\;\; H_a: F_1 > F_2\;\;\mbox{or} \;\; H_a: F_1 < F_2 $$ (two-sided).
 
-If the data support the alternative hypothesis $H_A: F_1< F_2$ we can say that random variable $Y$ has **stochastic dominance** over random variable $X$.
+If the data support the alternative hypothesis $H_a: F_1< F_2$ we can say that random variable $Y$ has **stochastic dominance** over random variable $X$.
 
-The steps for the test are as follows (assume no ties are present): 1. Rank all $N=n_1+n_2$ observations in ascending order 2. Sum the ranks of the $x's$ ($W_1=\omega_1$) and the ranks of the $y's$ ($W_2=\omega_2$) 3. Reject $H_0$ if $\omega_1$ is large and equivalently $\omega_2$ is small.
+The steps for the test are as follows (assume no ties are present): 1. Rank all $N=n_1+n_2$ observations in ascending order; 2. Sum the ranks of the $x's$ ($W_1=\omega_1$) and the ranks of the $y's$ ($W_2=\omega_2$); 3. Reject $H_0$ if $\omega_1$ is large and equivalently $\omega_2$ is small.
 
 The distributions of $W_1$ and $W_2$ are not the same when the sample sizes $n_1$ and $n_2$ are not equal.
-
-The Wilcoxon Rank Sum Test, also known as the Mann-Whitney U test, is a non-parametric test used to assess whether there is a difference between two independent groups. It doesn't assume normality and is appropriate when the data may not meet the assumptions of a t-test.
-
-**Example** An example goes here
 
 ### Wilcoxon rank sum test and Mann-Whitney test
 
@@ -121,7 +119,9 @@ The Wilcoxon rank sum test and Mann-Whitney test are related in the following wa
 
 The upper tail probability distributions for the $U$ and $W$ statistics under $H_0$ are tabulated. An $\alpha$-level test rejects $H_0$ if $P-value\leq \alpha$
 
-**Example** Compare mean heat wave's duration before and after 2005
+**Example**
+
+Compare mean heat wave's duration before and after 2005
 
 We want to check whether there has been a shift in the distributions of the mean heat wave's duration after 2005.
 
@@ -131,7 +131,7 @@ We will use the function *wilcox.test(x,y)*, where $x$ is the sample vector from
 wilcox.test(hwf1$mean_duration,hwf2$mean_duration)
 ```
 
-For a comparison of the location parameters among 3 or more populations we can use the Kruskal-Wallis test. The parametric parallel of this test is the one-way ANOVA model that will be discussed later.
+For a comparison of the location parameters among 3 or more populations we can use the Kruskal-Wallis test.
 
 ### Kruskal-Wallis test
 
@@ -141,25 +141,35 @@ In cases where the data is not normally distributed or the group variances are u
 
 Imagine a clinical trial comparing the pain relief efficacy of three different treatments. Patients' pain relief scores may not follow a normal distribution, and the variability in responses between treatments could be quite different. In this scenario, the Kruskal-Wallis test allows researchers to determine whether there are statistically significant differences in pain relief among the treatments without the need for stringent parametric assumptions.
 
-In summary, the Kruskal-Wallis test is a valuable tool in situations where you need to compare multiple groups and the underlying data does not meet the assumptions of ANOVA. It provides a reliable means of detecting differences in central tendencies across groups while accommodating the realities of real-world data.
+In summary, the Kruskal-Wallis test is a valuable tool in situations where you need to compare multiple groups and the underlying data does not meet the assumptions of ANOVA. It provides a reliable means of detecting differences in central tendencies across groups while accommodating the realities of real-world data. When the number of groups is equal to two, the Kruskall-Wallis test reduces to the Wilcoxon Rank Sum test.
 
-**Example** Here it goes an example of the Kruskall-Wallis test
+**Example**
+
+Increased greenhouse gas concentrations in the atmosphere as a consequence of human activities, might modify the behaviour of rainfall extreme events. To investigate that, we use data from the CMIP5 project consisting of simulated values of daily rainfall for three different scenarios: historical conditions, RCP4.5 and RCP8.5 climate scenarios proposed by the IPCC, being the last one the worst case scenario with the highest radiative forcing level (8.5 $Watts/m^2$) for the projected future climate. We want to study potential changes in the location parameter of the maximum annual daily rainfall. The Generalized Extreme Value (GEV) distribution (to be discussed in Chapter XX) was fitted to the simulated daily annual maximum for the three experiments (historical, RCP4.5 and RCP8.5) using simulated data from 30 General Circulation Models (GCMs). The location, scale and shape parameters of the GEV fitted models were estimated using maximum likelihood; and the Kruskal-Wallis test was used to assess whether significant differences in the model parameters for the three experiments are observed.
 
 ## Non-parametric correlation measures
 
 ### The Spearman's rank correlation
 
-The Spearman's correlation measures the strength of a monotonic relationship between two variables. This a non-parametric measure of correlation and it is calculated as the Pearson correlation coefficient between the ranks of the two variables:
+The Spearman's correlation ($\rho_S$) measures the strength of a monotonic relationship between two variables. When the relationship between two variables is non-linear but there is a monotonic relationship between then, the Spearman's correlation coefficient is a better measure of the association between the two variables. This a non-parametric measure of correlation and it is calculated as the Pearson correlation coefficient between the ranks of the two variables with sample estimate:
 
 $$r_{s_{xy}}= \frac{cov(Rank(x),Rank(y))}{S_{Rank(x)}\times S_{Rank(y)}}$$
 
-## Kendal's rank correlation
+where `cov` is the covariance between the ranks of the two variables and $S_{rank(.)}$ is the standard deviation of the ranks for each variable. This formula is equivalent to the Pearson correlation formula between the ranks of the two samples.
 
-It is more robust and efficient than the Spearman's correlation, but more difficult to interpret: Considering all possible pairs $(i,j)$ from the sample. The Kendall's $\tau$ quantifies the difference between the percentage of all discordant and concordant pairs in the data: $$\tau_{xy}=\frac{2}{n(n-1)}\sum_{i<j} sign(x_i-x_j)\times sign(y_i-y_j)$$
+The significance of $\rho_S$ can be tested by using the R function `cor.test` by setting the function parameter `method=spearman.`
 
-## Bootstrapp Confidence Intervals
+### Kendal's tau correlation
 
-This section discussed rank-based nonparametric methods. Another class of non-parametric methods, known as resampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap methods, which is useful to calculate confidence intervals.
+It is more robust and efficient than the Spearman's correlation, but more difficult to interpret: Considering all possible pairs $(i,j)$ from the sample. The Kendall's $\tau$ quantifies the difference between the percentage of all discordant (ranks disagree) and concordant pairs (ranks agree) in the data: $$\tau_{xy}=\frac{2}{n(n-1)}\sum_{i<j} sign(x_i-x_j)\times sign(y_i-y_j)$$
+
+Kendall's $\tau$ is recommended for small sample size or when there are many ties in the data. A significance test is also implemented using the `cor.test` function with `method=kendall`.
+
+When there relationship between two variables is highly non-linear or there is presence of outliers, the Spearman and Kendall's $\tau$ are recommended over the Pearson correlation coefficient.
+
+## Bootstrap standard errors and  Confidence Intervals
+
+Another class of non-parametric methods, known as re-sampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap method, which is useful to calculate uncertainty estimates of the sample paremeters and confidence intervals of the true parameter values. Usually these uncertainty estimates are measured through the standard errors.
 
 ### Bootstrapping
 
