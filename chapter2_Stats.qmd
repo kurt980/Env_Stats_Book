@@ -493,10 +493,10 @@ In this case the assumption (null hypothesis $H_0$) assumes that the data is a s
 This is:
 
 $$
-  \begin{align*}
+  \begin{aligned}
   H_0: & \quad \text{Data is a sample from a Normal Distribution} \\
   H_a: & \quad \text{Data is not a sample from a Normal Distribution}
-  \end{align*}
+  \end{aligned}
 $$
 
 ##### Goodness for Fit tests for the Normal Distribution
