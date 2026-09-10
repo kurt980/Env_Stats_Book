@@ -167,10 +167,118 @@ Kendall's $\tau$ is recommended for small sample size or when there are many tie
 
 When there relationship between two variables is highly non-linear or there is presence of outliers, the Spearman and Kendall's $\tau$ are recommended over the Pearson correlation coefficient.
 
-## Bootstrap standard errors and  Confidence Intervals
+## Bootstrap standard errors and Confidence Intervals
 
-Another class of non-parametric methods, known as re-sampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap method, which is useful to calculate uncertainty estimates of the sample paremeters and confidence intervals of the true parameter values. Usually these uncertainty estimates are measured through the standard errors.
+Another class of non-parametric methods, known as re-sampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap method, which is useful to calculate the accuracy of the sample parameter estimates and confidence intervals of the true parameter values. Usually these accuracy estimates are measured through the standard errors. Standard errors also provide a measure of the uncertainty of the estimates from the sample as well as the confidence intervals.
 
-### Bootstrapping
+If we have a sample $x_1,x_2,\ldots,x_n$ from a normal distribution with mean $\mu$ and variance $\sigma^2$, we can estimate $\mu$ as $\hat{\mu}=\bar{x}$. A measure of uncertainty of this estimate is given by the standard error of $\bar{x}$ which is calculated as $se(\bar{x})=s/\sqrt{n}$ where $s$ is the sample standard deviation. Knowing the `se` allows us to confirm that the sample estimate (\$\\bar{x}\$) is going to be one `se` away from its true value 68\\% of the times, two `se` away from its true value, 95\\% of the times.
 
-**Example**
+For many estimates we can calculate the standard errors exactly, but there are many model parameter estimates for which their standard error is more difficult to obtain. Bootstrap methods are a great alternative in these cases.
+
+**Example: Calculate the standard error of the sample median using Bootstrap**
+
+In order to calculate the standard error of the sample median of a given sample, we do not require to know the probability distribution of the sample. We can use bootstrap to re-sample several times from the original sample. We can calculate the median for each sample and estimate the standard deviation of all meadian estimates. This standard deviation is a bootstrap estimator of the standard error of the sample median.
+
+We can demonstrate this procedure using the following R code. Suppose that your data is stored in a vector $x$. We can re-sample `x` 5,000 times with replacement, and obtain the median for each sample:
+
+```{r}
+# Original data
+x <- c(12, 15, 18, 20, 21, 24, 30, 35, 40)
+# Number of bootstrap samples
+B <- 5000
+# Bootstrap medians
+boot.medians <- replicate(B,median(sample(x, size = length(x), replace = TRUE))
+)
+# Bootstrap estimate of SE(median)
+se.median <- sd(boot.medians)
+se.median
+```
+
+We can use a simulated data set:
+
+```{r}
+set.seed(123)
+# Sample from a skewed distribution
+x <- rexp(100, rate = 0.2)
+# Sample median
+median(x)
+# Bootstrap SE
+B <- 5000
+boot.medians <- replicate(B,median(sample(x, replace = TRUE))
+)
+se.median <- sd(boot.medians)
+cat("Median =", median(x), "\n")
+cat("Bootstrap SE =", se.median, "\n")
+```
+
+The library `boot` is a more general library:
+
+```{r}
+library(boot)
+# Statistic of interest
+median.fun <- function(data, indices) {
+  median(data[indices])
+}
+# Bootstrap
+results <- boot(data = x,
+                statistic = median.fun,
+                R = 5000)
+# Bootstrap SE
+results$t0 # original median
+sd(results$t) # bootstrap SE
+```
+
+**Confidence interval for the median**
+
+Once the standard error is estimated, we can calculate the confidence interval for the median. A `percentile` confidence interval is calculated using the option `perc` of the function `boot.ci` from the `boot` library. This function generate different types of nonparametric confidence intervals, including the studentized bootstrap interval, the bootstrap percentile interval, and the adjusted bootstrap percentile (BCa) interval.
+
+The types of confidence intervals to be calculated can be defined with argument `type`:
+
+```{r}
+boot.ci(results, type = "perc")
+```
+
+The probability distribution of the bootstrap sample estimates is an approximation of the sampling distribution of the estimate.
+
+```{r}
+# Kernel density estimate
+kd <- density(results$t)
+
+# Plot histogram as density
+hist(results$t,
+  probability = TRUE,
+  breaks = 30,
+  col = "lightgray",
+  border = "white",
+  main = "Bootstrap Distribution of the Sample Median",xlab = "Bootstrap Median")
+
+# Add kernel density estimate
+lines(kd,col = "blue",lwd = 3
+)
+
+# Add asymptotic normal approximation
+x.grid <- seq(
+  min(results$t),
+  max(results$t),
+  length.out = 500
+)
+
+lines(x.grid,dnorm(x.grid,mean = median(x),sd = sd(results$t)),col = "red",lwd = 3,lty = 2)
+
+# Add vertical line at sample median
+abline(v = median(x),col = "darkgreen",lwd = 2
+)
+
+legend("topright",
+  legend = c(
+    "Kernel density estimate",
+    "Normal approximation",
+    "Sample median"),
+  col = c("blue", "red", "darkgreen"),
+  lwd = c(3, 3, 2),
+  lty = c(1, 2, 1),
+  bty = "n"
+)
+
+cat("Bootstrap SE of median =", round(sd(results$t), 4), "\n")
+```
