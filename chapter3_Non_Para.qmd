@@ -282,3 +282,5 @@ legend("topright",
 
 cat("Bootstrap SE of median =", round(sd(results$t), 4), "\n")
 ```
+
+We can also calculate the bias between the bootstrap estimate and the original sample estimate.
