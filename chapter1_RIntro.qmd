@@ -26,18 +26,18 @@ Before you start, you want to do these 3 things first:
 
 - **Install tidyverse** tidyverse is the collection of packages that are widely used for data analysis. The detailed introduction to tidyverse can be found in Section 1.2. You can use the below command in R to install tidyverse
 
-  ```{r, eval=FALSE}
+```{r, eval=FALSE}
   # install.packages("tidyverse")
   library(tidyverse)
   library(dplyr)
   library(magrittr)
-  ```
+```
 
 - **The pipe operator**
 
   The %\>% operator, also known as the "pipe operator", is a powerful feature introduced by the `magrittr` package in R. It allows for a more readable and concise way of chaining together multiple function calls or operations. The pipe operator facilitates the creation of efficient and streamlined data analysis pipelines.
 
-  ```{r, eval=FALSE}
+```{r, eval=FALSE}
   # Using pipe operator to integrate commands
   example <- data.frame(x = c(1, 2, 3, 4, 5), y = c(2, 4, 6, 8, 10))
 
@@ -46,7 +46,7 @@ Before you start, you want to do these 3 things first:
 
   # Print the mean
   print(mean_y)
-  ```
+```
 
 ### Introduction to Packages
 
@@ -89,16 +89,16 @@ You can also assign numeric values or vectors to your variables
 
 - **Numbers can be in many forms**
 
-  ```{r}
+```{r}
   # Create numbers in r 
   x <- 3.5 # numeric 
   y <- 3L # integer 
   z <- 1i # complex
-  ```
+```
 
 - **Vectors**
 
-  ```{r}
+```{r}
   # Using the combine operator `c()` in r 
   u <- c(1,1,2,3,5) 
   # Using the sequence operator `:` in r 
@@ -109,7 +109,7 @@ You can also assign numeric values or vectors to your variables
 
   # length of vectors 
   length(u)
-  ```
+```
 
 ### Strings and Boolean
 
@@ -117,22 +117,22 @@ Other types of variables include strings and booleans
 
 - **String**
 
-  ```{r}
+```{r}
   # String 
   s <- "This is a string" 
   print(s)
-  ```
+```
 
 - **Boolean**
 
-  ```{r}
+```{r}
   # Boolean 
   a <- TRUE 
   b <- (1 > 2)
 
   print(a) 
   print(b)
-  ```
+```
 
 ### Working with Dates
 
@@ -177,41 +177,41 @@ To perform meaningful tasks, you need to use operators, functions and loops smar
 
 - Fundamental operators
 
-  ```{r}
+```{r}
   # plus, minus, multiply and subtraction
   x <- 1
   y <- 2
 
   # print multiple arguments together using `cat`
   cat(x+y, x-y, x*y, x/y)
-  ```
+```
 
 - Logarithm and exponential
 
-  ```{r}
+```{r}
   # print exp(2) and log(1)
   cat(exp(y), log(x))
-  ```
+```
 
 - Operations on vectors
 
-  ```{r}
+```{r}
   # compute the vector max,min and median
   u <- c(-1, 0, 3, -12.5, 8.3)
   cat(max(u), min(u), median(u))
   # compute the sum and length
   cat(sum(u), length(u))
-  ```
+```
 
 - Logical operators
 
-  ```{r}
+```{r}
   # and or
   x <- TRUE
   y <- FALSE
 
   cat(x && y, x || y)
-  ```
+```
 
 ### Functions
 
@@ -315,25 +315,25 @@ print(thislist[1:2])
 
   Matrix is 2-D
 
-  ```{r}
+```{r}
   # Create a matrix
   mat <- matrix(c(1,2,3,4,5,6), nrow = 3, ncol = 2)
 
   # Print the matrix
   mat
-  ```
+```
 
 - Array
 
   Array can be more than 2-D
 
-  ```{r}
+```{r}
   # create a 3-dimensional array
   arr <- array(c(1,2,3,4,5,6,7,8), dim = c(2,2,2))
 
   # Print the array
   arr
-  ```
+```
 
 ### Manipulating Matrices and Arrays
 
@@ -341,17 +341,17 @@ You can access, edit, do operations and even combine matrices and arrays using t
 
 - Access elements
 
-  ```{r}
+```{r}
   # Print the 2nd row of a matrix
   mat[2,]
 
   # Use multi-level parsing
   arr[1,2,1]
-  ```
+```
 
 - Edit elements
 
-  ```{r}
+```{r}
   # Change the second element of the first row
   mat[1,2] = 96
   # Change the second column of the first matrix
@@ -360,11 +360,11 @@ You can access, edit, do operations and even combine matrices and arrays using t
   # Print the matrix
   print(mat)
   print(arr)
-  ```
+```
 
 - Perform element-wise operations
 
-  ```{r}
+```{r}
   # Creating 2 matrices
   mat1 <- matrix(1:4, nrow = 2)
   mat2 <- matrix(5:8, nrow = 2)
@@ -373,16 +373,16 @@ You can access, edit, do operations and even combine matrices and arrays using t
   print(mat1 + mat2)
   # Element-wise multiplication of two matrices
   print(mat1 * mat2)
-  ```
+```
 
 - Combine matrices You can bind matrices use `rbind` and `cbind`
 
-  ```{r}
+```{r}
   # Stack a matrix on the top of the other
   print(rbind(mat1,mat2))
   # Link matrices side by side
   print(cbind(mat1,mat2))
-  ```
+```
 
 ### Dataframes
 
@@ -443,7 +443,7 @@ library(readr)
 
 - You can specify column types with a series of codes, note we are using `read_csv` from the `readr` package, not the built-in `read.csv`
 
-  ```{r}
+```{r}
   # Read with custom column types
   data <- read_csv("data/CMI_TRH.csv", 
                     col_types = cols(
@@ -457,7 +457,7 @@ library(readr)
                                     date = col_date(format = "%m/%d/%Y") # be sure this format matches the one in your data
                                     )
                    )
-  ```
+```
 
 Now the "date" column in your dataset has the date type
 
@@ -471,15 +471,15 @@ Dataframe is powerful with geostatistical data analysis.
 
   You can parse data by location to get different portions of the data.
 
-  ```{r}
+```{r}
   # Print first 3 rows
   data[1:3,]
-  ```
+```
 
-  ```{r}
+```{r}
   # Print first 3 rows and 3 columns
   data[1:3,1:3]
-  ```
+```
 
 - Add a new column
 
@@ -498,13 +498,13 @@ Dataframe is powerful with geostatistical data analysis.
 
 - Remove a column
 
-  ```{r}
+```{r}
   # Remove a column using the dollar sign
   New_df$NewCol <- NULL
 
   # The new column is gone
   New_df
-  ```
+```
 
 ### Apply functions
 
@@ -514,44 +514,44 @@ The apply function family in R provides powerful tools for efficiently working w
 
   Applies a function to rows or columns of an array-like object.
 
-  ```{r}
+```{r}
   # apply the mean and sd function to a dataframe to get the mean and standard deviation of columns
   df <- matrix(rnorm(25), ncol = 5) # 100 random variables organzied into 5 columns
   print(df)
   apply(df, 2, function(x) c(mean=mean(x), sd=sd(x)))
-  ```
+```
 
 - lapply
 
   Applies a function to each element of a list, maintaining a list structure.
 
-  ```{r}
+```{r}
   # use lapply to find the column sums of the 2 dataframes
   list_of_dfs <- list(data.frame(x = 1:3, y = 4:6), data.frame(x = 7:9, y = 10:12))
   print(list_of_dfs)
   lapply(list_of_dfs, function(df) colSums(df))
-  ```
+```
 
 - sapply
 
   Applies a function to each element of a list, aiming to streamline output.
 
-  ```{r}
+```{r}
   # use sapply to find the cumulative sum along columns
   df <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6), c = c(7, 8, 9))
   sapply(df, cumsum)
-  ```
+```
 
 - mapply
 
   Applies a function to corresponding elements from multiple vectors or lists.
 
-  ```{r}
+```{r}
   # Use mapply to find if each "divisor" divides its corresponding "integer"
   integers <- c(14, 196, 1321, 948, 125)
   divisors <- c(2, 4, 7, 12, 3)
   mapply(function(s, r) s %% r == 0, integers, divisors)
-  ```
+```
 
 ### Dplyr
 
@@ -566,9 +566,9 @@ library(dplyr)
 
 - **Descriptive Statistics**
 
-  You can get descriptive statistics for a dataframe using dplyr and the 'pipe' operator easily.
+  You can get descriptive statistics for a data frame using dplyr and the 'pipe' operator easily.
 
-  ```{r}
+```{r}
   # Calculate descriptive statistics using dplyr
   summary_df <- data %>%
     summarise(
@@ -581,11 +581,11 @@ library(dplyr)
     )
 
   print(summary_df)
-  ```
+```
 
 - **Select and Filter data**
 
-  ```{r}
+```{r}
   # Select average humidity and date
   selected_data <- data %>%
     select(avg_rel_hum, date_string)
@@ -597,30 +597,30 @@ library(dplyr)
     filter(avg_rel_hum > 100)
 
   print(filtered_data)
-  ```
+```
 
 - **Sort data**
 
-  ```{r}
+```{r}
   # Sorting the data frame by "year" column in ascending order
   data_sorted <- data %>%
     arrange(avg_rel_hum)
 
   print(data_sorted[1:5, ])
-  ```
+```
 
 - **Group by data**
 
   You can also find the aggregate values by grouping data.
 
-  ```{r}
+```{r}
   # Find the mean average humidity of each year
   grouped_data <- data %>%
     group_by(year) %>%
     summarise(Avg_Hum = mean(avg_rel_hum))
 
   print(grouped_data[1:5, ])
-  ```
+```
 
 ## Plots and Graphics
 
@@ -630,7 +630,7 @@ The built-in `plot` function in R allows you to create scatter plots, line chart
 
 - **scatter plot**
 
-  ```{r}
+```{r}
   library(tidyverse)
   library(dplyr)
   library(magrittr)
@@ -641,30 +641,30 @@ The built-in `plot` function in R allows you to create scatter plots, line chart
 
   # Create a scatter plot
   plot(data_between_2010_2012$avg_rel_hum, data_between_2010_2012$avg_air_temp_c, main = "AVG Rel Humidity VS. AVG Rel Temperature in C, between 2010-2012", xlab = "X", ylab = "Y", pch = 16, col = "blue")
-  ```
+```
 
 - **histogram and bar plot**
 
-  ```{r}
+```{r}
   # Create a histogram 
   hist(data_between_2010_2012$avg_rel_hum, main = "AVG Rel Humidity between 2010 and 2012", xlab = "Value", ylab = "Frequency", col = "lightblue")
-  ```
+```
 
 - **box plot**
 
-  ```{r}
+```{r}
   # Create a box plot for average realative humidity each year
   boxplot(avg_rel_hum ~ year, data = data_between_2010_2012,
           main = "Distribution of AVG Rel Humidity by Year",
           xlab = "Year", ylab = "AVG Rel Humidity",
           col = "lightblue", border = "black")
-  ```
+```
 
 - **multiple plots and organize plots**
 
   You can use par() to organize the positions of multiple plots
 
-  ```{r}
+```{r}
   data_cmi <- read.csv("data/CMI_TRH.csv")
       
       # Set up a 3x4 grid for 12 plots
@@ -686,7 +686,7 @@ The built-in `plot` function in R allows you to create scatter plots, line chart
       
       # Reset par settings
       par(mfrow = c(1, 1), mar = c(5, 4, 4, 2) + 0.1)
-  ```
+```
 
 ### ggplot2
 
@@ -701,19 +701,19 @@ library(ggplot2)
 
   You can also add color and size to represent more dimensions.
 
-  ```{r}
+```{r}
   # Create the bubble chart
   ggplot(data[1:100, ], 
          aes(x = avg_rel_hum, y = avg_air_temp_f, size = avg_air_temp_c, color = month)) +
   geom_point() +
   labs(x = "avg_rel_hum", y = "avg_air_temp_f", title = "Bubble Chart")
-  ```
+```
 
 - **Create insightful visualizations**
 
   We will do an example to find the highest and lowest average air temperature in the year 2012, and plot them using `ggplot2`, along with the average relative humidity
 
-  ```{r}
+```{r}
   # Find the highest temperature in 2012
   data %>%
     filter(year(date) == 2012) %>%
@@ -725,9 +725,9 @@ library(ggplot2)
     filter(year(date) == 2012) %>%
     arrange(avg_air_temp_f) %>%
     head(1)
-  ```
+```
 
-  ```{r}
+```{r}
   data$date <- as.Date(data$date) # Convert date strings to date objects
 
   # plot the temperature and humidity of the year 2012, labeling the highest and lowest point
@@ -746,13 +746,13 @@ library(ggplot2)
       scale_color_manual(values = c("Temperature" = "#69b3a2", "Humidity" = "#404080")) + 
       labs(color = "Legend") +
       theme_minimal()
-  ```
+```
 
 - **Plot multiple plots**
 
   You can also plot multiple in one chart
 
-  ```{r}
+```{r}
   data %>%
     filter(year(date) == 2012) %>% 
     ggplot(aes(x=date, y=avg_air_temp_f, group=month(date), fill=month(date))) +
@@ -763,7 +763,7 @@ library(ggplot2)
       ) +
       facet_wrap(~month(date), scale="free_x") + 
       scale_fill_gradient(low = "green", high = "darkgreen")
-  ```
+```
 
 <!-- -   **Using geospatial data** -->
 
