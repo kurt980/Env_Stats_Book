@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -75,10 +78,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d3f7f8e73c8d287b30bcf59c2b563615.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -108,7 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -226,12 +229,9 @@ window.Quarto = {
   <li><a href="#non-parametric-correlation-measures" id="toc-non-parametric-correlation-measures" class="nav-link" data-scroll-target="#non-parametric-correlation-measures"><span class="header-section-number">4.3</span> Non-parametric correlation measures</a>
   <ul class="collapse">
   <li><a href="#the-spearmans-rank-correlation" id="toc-the-spearmans-rank-correlation" class="nav-link" data-scroll-target="#the-spearmans-rank-correlation"><span class="header-section-number">4.3.1</span> The Spearman’s rank correlation</a></li>
+  <li><a href="#kendals-tau-correlation" id="toc-kendals-tau-correlation" class="nav-link" data-scroll-target="#kendals-tau-correlation"><span class="header-section-number">4.3.2</span> Kendal’s tau correlation</a></li>
   </ul></li>
-  <li><a href="#kendals-rank-correlation" id="toc-kendals-rank-correlation" class="nav-link" data-scroll-target="#kendals-rank-correlation"><span class="header-section-number">4.4</span> Kendal’s rank correlation</a></li>
-  <li><a href="#bootstrapp-confidence-intervals" id="toc-bootstrapp-confidence-intervals" class="nav-link" data-scroll-target="#bootstrapp-confidence-intervals"><span class="header-section-number">4.5</span> Bootstrapp Confidence Intervals</a>
-  <ul class="collapse">
-  <li><a href="#bootstrapping" id="toc-bootstrapping" class="nav-link" data-scroll-target="#bootstrapping"><span class="header-section-number">4.5.1</span> Bootstrapping</a></li>
-  </ul></li>
+  <li><a href="#bootstrap-standard-errors-and-confidence-intervals" id="toc-bootstrap-standard-errors-and-confidence-intervals" class="nav-link" data-scroll-target="#bootstrap-standard-errors-and-confidence-intervals"><span class="header-section-number">4.4</span> Bootstrap standard errors and Confidence Intervals</a></li>
   </ul>
 </nav>
     </div>
@@ -258,17 +258,17 @@ window.Quarto = {
 
 
 <p>In the previous chapter we discussed several statistical tests applied to a sample from a population. The sample is assumed to be independent and identically distributed, and all values are assumed to be a random sample from a Normal distribution.</p>
-<p>Non-parametric methods in statistics provide a versatile and robust alternative to traditional parametric techniques, particularly when the assumptions of normality or other underlying distributions cannot be met. These methods are characterized by their flexibility and ability to analyze data without making specific assumptions about the population distribution. Examples of non-parametric methods include the Wilcoxon signed-rank test, which assesses differences between paired observations, the Mann-Whitney U test, used for comparing two independent groups, and the Kruskal-Wallis test, which extends the comparison to multiple groups. These techniques are valuable tools for researchers and analysts working with real-world data, as they offer reliable solutions in scenarios where parametric methods may fall short.</p>
+<p>Non-parametric methods in statistics provide a versatile and robust alternative to traditional parametric techniques, particularly when the assumptions of normality or other underlying distributions cannot be met. These methods are characterized by their flexibility and ability to analyze data without making specific assumptions about the population distribution. Examples of non-parametric methods include the Wilcoxon signed-rank test, which is a non-parametric alternative to the paired t-test when assessing differences between paired observations; the Mann-Whitney U test, used for comparing two independent groups, and the Kruskal-Wallis test, which extends the comparison to multiple groups. These techniques are valuable tools for researchers and analysts working with real-world data, as they offer reliable solutions in scenarios where parametric methods may fall short.</p>
 <section id="introduction-to-one-sample-rank-tests" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="introduction-to-one-sample-rank-tests"><span class="header-section-number">4.1</span> Introduction to One-Sample Rank Tests</h2>
-<p>One common scenario where rank tests shine is when dealing with skewed or non-normally distributed data. In such cases, traditional parametric tests like the t-test or ANOVA may produce unreliable results. Rank tests offer a solution by focusing on the ranks or orders of observations, making them robust to distributional assumptions.</p>
+<p>One common scenario where rank tests shine is when dealing with skewed or non-normally distributed data. In such cases, traditional parametric tests like the t-test or ANOVA may produce unreliable results. Rank tests offer a solution by focusing on the ranks or orders of observations, making them robust to distributional assumptions and potential outliers.</p>
 <p>For example, consider a study evaluating the effectiveness of a new medication. The response variable is the level of pain relief reported by patients on a scale from 1 (no relief) to 10 (complete relief). The data collected may not follow a normal distribution, and the scale itself is ordinal rather than continuous. In this situation, a rank-based test like the Wilcoxon signed-rank test for paired data or the Mann-Whitney U test for independent samples can provide a more appropriate analysis, comparing the central tendency of pain relief between groups or before and after treatment without relying on distributional assumptions.</p>
 <p>In essence, rank tests offer a valuable tool for statisticians and researchers when dealing with real-world data that doesn’t conform to the idealized assumptions of parametric methods. They provide a robust and reliable means of drawing valid conclusions, even in challenging situations.</p>
 <section id="wilcoxon-signed-rank-test" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="wilcoxon-signed-rank-test"><span class="header-section-number">4.1.1</span> Wilcoxon Signed-Rank Test</h3>
-<p>The signed rank tests uses the difference between the sample values from the proposed median <span class="math inline">\(x_i-\mu_0\)</span> , but also uses the size of the difference to calculate a rank. This tests assumes that the sample is coming from a symmetrical distribution.</p>
-<p><strong>Example</strong></p>
-<p>If the differences of the sample from the proposed median are: -1.6, 2.3, -5.1, 3.9, the sorted values without considering the signs are: -1.6, 2.3, 3.9, -5.1, with ranks 1, 2, 3 and 4. The values of the signed rank test statistic (<span class="math inline">\(TS\)</span>) are the ranks for the <strong>negative values</strong>, this is: <span class="math inline">\(TS=1+4=5\)</span>. Other options are to use the positive values: <span class="math inline">\(TS=2+3\)</span>.</p>
+<p>The signed rank tests uses the difference between the sample values from the proposed median <span class="math inline">\(x_i-m\)</span> , but also uses the size of the difference to calculate a rank. This tests assumes that the sample is coming from a symmetrical distribution.</p>
+<p><strong>A simple example</strong></p>
+<p>If the differences of the sample from the proposed median are: -1.6, 2.3, -5.1, 3.9, the sorted values without considering the signs are: -1.6, 2.3, 3.9, -5.1, with ranks 1, 2, 3 and 4. The values of the signed rank test statistic (<span class="math inline">\(TS\)</span>) are the ranks for the <strong>negative values</strong>, this is: <span class="math inline">\(TS=1+4=5\)</span>. Other options are to use the positive value ranks: <span class="math inline">\(TS=2+3\)</span>.</p>
 <ul>
 <li>A large value of TS would indicate more observations <strong>below the median</strong> than expected under <span class="math inline">\(H_0\)</span>.</li>
 <li>When ties are present in the data, they are removed and the sample size is adjusted accordingly.</li>
@@ -282,7 +282,8 @@ window.Quarto = {
 <p>In R, the function <em>wilcox.test(.)</em> can be used for testing the location parameter for a single population, using the parameter <span class="math inline">\(\mu=\ldots\)</span> in the function call.</p>
 <p><strong>Important</strong>: <em>The sign test does not need any assumption about the shape of the distribution of the data</em>. The Wilcoxon Signed Rank test requires that the data has a symmetric distribution.</p>
 <p><strong>Example</strong></p>
-<p>An example goes here</p>
+<p>In this example, we want to compare the mean duration and mean intensity of historical heat waves in the city of Champaign, Illinois before the year 2005 and after 2005.</p>
+<p>The data is available in the file <code>hw_factors.csv</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -303,7 +304,7 @@ window.Quarto = {
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_int_a2005=</span><span class="fu">mean</span>(mean_intensity))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  mean_int_a2005
-1       3.771778</code></pre>
+1       4.313146</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean duration</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hwf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">&lt;</span><span class="dv">2005</span>) <span class="sc">%&gt;%</span> </span>
@@ -316,7 +317,7 @@ window.Quarto = {
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_dur_a2005=</span><span class="fu">mean</span>(mean_duration))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  mean_dur_a2005
-1       3.462054</code></pre>
+1        3.53631</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hwf1<span class="ot">&lt;-</span>hwf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">&lt;</span><span class="dv">2005</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>hwf2<span class="ot">&lt;-</span>hwf <span class="sc">%&gt;%</span> <span class="fu">filter</span> (year <span class="sc">&gt;=</span><span class="dv">2005</span>)</span>
@@ -342,13 +343,13 @@ mean of x
     One Sample t-test
 
 data:  hwf2$mean_intensity
-t = -3.2016, df = 15, p-value = 0.002972
+t = -1.3956, df = 19, p-value = 0.08947
 alternative hypothesis: true mean is less than 5
 95 percent confidence interval:
-     -Inf 4.444288
+    -Inf 5.16418
 sample estimates:
 mean of x 
- 3.771778 </code></pre>
+ 4.313146 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Two-sample t-test for mean intensity</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># By default variances are not assumed equal</span></span>
@@ -358,13 +359,13 @@ mean of x
     Welch Two Sample t-test
 
 data:  hwf1$mean_intensity and hwf2$mean_intensity
-t = 0.84076, df = 24.525, p-value = 0.4086
+t = 0.057571, df = 29.948, p-value = 0.9545
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -0.8497143  2.0201043
+ -1.510998  1.598652
 sample estimates:
 mean of x mean of y 
- 4.356973  3.771778 </code></pre>
+ 4.356973  4.313146 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sign-test (One-sample) for mean duration</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">SIGN.test</span>(hwf1<span class="sc">$</span>mean_duration, <span class="at">md =</span> <span class="fl">3.5</span>, <span class="at">alternative=</span><span class="st">'two.sided'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -394,53 +395,41 @@ Upper Achieved CI     0.9648 2.0000 4.0000</code></pre>
     One-sample Sign-Test
 
 data:  hwf2$mean_duration
-s = 7, p-value = 1
+s = 10, p-value = 1
 alternative hypothesis: true median is not equal to 3.5
 95 percent confidence interval:
- 2.536947 4.120687
+ 2.779118 4.000000
 sample estimates:
 median of x 
-   3.416667 
+   3.535714 
 
 Achieved and Interpolated Confidence Intervals: 
 
                   Conf.Level L.E.pt U.E.pt
-Lower Achieved CI     0.9232 2.5714 4.0000
-Interpolated CI       0.9500 2.5369 4.1207
-Upper Achieved CI     0.9787 2.5000 4.2500</code></pre>
+Lower Achieved CI     0.8847 3.0000      4
+Interpolated CI       0.9500 2.7791      4
+Upper Achieved CI     0.9586 2.7500      4</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wilcoxon Signed-Rank test (One-sample) for mean duration</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Before 2005</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(hwf1<span class="sc">$</span>mean_duration,<span class="at">mu=</span><span class="fl">3.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in wilcox.test.default(hwf1$mean_duration, mu = 3.5): cannot compute
-exact p-value with ties</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-    Wilcoxon signed rank test with continuity correction
+    Wilcoxon signed rank exact test
 
 data:  hwf1$mean_duration
-V = 44, p-value = 0.3764
+V = 44, p-value = 0.3845
 alternative hypothesis: true location is not equal to 3.5</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#After 2005</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(hwf2<span class="sc">$</span>mean_duration,<span class="at">mu=</span><span class="fl">3.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in wilcox.test.default(hwf2$mean_duration, mu = 3.5): cannot compute
-exact p-value with ties</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in wilcox.test.default(hwf2$mean_duration, mu = 3.5): cannot compute
-exact p-value with zeroes</code></pre>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#After 2005</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(hwf2<span class="sc">$</span>mean_duration,<span class="at">mu=</span><span class="fl">3.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-    Wilcoxon signed rank test with continuity correction
+    Wilcoxon signed rank exact test
 
 data:  hwf2$mean_duration
-V = 54.5, p-value = 0.7753
+V = 104, p-value = 0.9919
 alternative hypothesis: true location is not equal to 3.5</code></pre>
 </div>
 </div>
@@ -448,19 +437,18 @@ alternative hypothesis: true location is not equal to 3.5</code></pre>
 </section>
 <section id="rank-tests-with-two-or-more-samples" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="rank-tests-with-two-or-more-samples"><span class="header-section-number">4.2</span> Rank Tests with Two or More Samples</h2>
-<p>Assume we have data on precipitation projections from two Global Circulation Models (GCM1 and GCM2) for the period 2070- 2100 (last 30 years of this century), and we want to test the hypothesis that the location parameters for the two distributions (<span class="math inline">\(\tilde{\mu}_1\;\;\mbox{and}\;\;\tilde{\mu}_2\)</span>) are the same. We assume that the two samples from models GCM1 and GCM2 are not independent samples, since the models essentially similar differential equations to represent the climate-land-ocean interactions.</p>
+<p>Assume we have data on precipitation projections from two Global Circulation Models (GCM1 and GCM2) for the period 2070- 2100 (last 30 years of this century), and we want to test the hypothesis that the location parameters for the two distributions (<span class="math inline">\(\tilde{\mu}_1\;\;\mbox{and}\;\;\tilde{\mu}_2\)</span>) are the same. We assume that the two samples from models GCM1 and GCM2 are not independent samples, since the models essentially have similar differential equations to represent the climate-land-ocean interactions.</p>
 <p>We can calculate the differences between each pair of observations for every time step <span class="math inline">\(x_i -y_i\)</span>, and apply the Wilcoxon Rank test or the Sign test.</p>
-<p>For a comparison of the location parameters among 3 or more populations we can use the Kruskal-Wallis test. The parametric parallel of this test is the one-way ANOVA model that will be discussed later.</p>
+<p>For a comparison of the location parameters among 3 or more populations we can use the <code>Kruskal-Wallis</code> test. The parametric parallel of this test is the one-way ANOVA model that will be discussed later.</p>
 <section id="wilcoxon-rank-sum-test" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="wilcoxon-rank-sum-test"><span class="header-section-number">4.2.1</span> Wilcoxon Rank-Sum test</h3>
+<p>The <code>Wilcoxon Rank Sum Test</code>, also known as the Mann-Whitney U test, is a non-parametric test used to assess whether there is a difference between two independent groups. It doesn’t assume normality and it is appropriate when the data may not meet the assumptions of a t-test.</p>
 <p>We want to show that observations from one population <span class="math inline">\(x_1, x_2,\ldots, x_{n_1}\)</span> tend to be larger (or smaller) than observations from another population <span class="math inline">\(y_1, y_2, \ldots, y_{n_2}\)</span>.</p>
 <p>It is assumed that the distribution <span class="math inline">\(F_1\)</span> of <span class="math inline">\(X\)</span> and <span class="math inline">\(F_2\)</span> of <span class="math inline">\(Y\)</span> are identical in shape and only differ by location. This is equivalent to say that there is a shift in location.</p>
 <p>In this case we set up the hypothesis (more general set up): <span class="math display">\[H_0: F_1=F_2\;\;\mbox{vs.}\;\; H_a: F_1&gt; F_2\]</span> (one-sided) or <span class="math display">\[H_0: F_1=F_2\;\; \mbox{vs.}\;\; H_a: F_1 &gt; F_2\;\;\mbox{or} \;\; H_a: F_1 &lt; F_2 \]</span> (two-sided).</p>
-<p>If the data support the alternative hypothesis <span class="math inline">\(H_A: F_1&lt; F_2\)</span> we can say that random variable <span class="math inline">\(Y\)</span> has <strong>stochastic dominance</strong> over random variable <span class="math inline">\(X\)</span>.</p>
-<p>The steps for the test are as follows (assume no ties are present): 1. Rank all <span class="math inline">\(N=n_1+n_2\)</span> observations in ascending order 2. Sum the ranks of the <span class="math inline">\(x's\)</span> (<span class="math inline">\(W_1=\omega_1\)</span>) and the ranks of the <span class="math inline">\(y's\)</span> (<span class="math inline">\(W_2=\omega_2\)</span>) 3. Reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(\omega_1\)</span> is large and equivalently <span class="math inline">\(\omega_2\)</span> is small.</p>
+<p>If the data support the alternative hypothesis <span class="math inline">\(H_a: F_1&lt; F_2\)</span> we can say that random variable <span class="math inline">\(Y\)</span> has <strong>stochastic dominance</strong> over random variable <span class="math inline">\(X\)</span>.</p>
+<p>The steps for the test are as follows (assume no ties are present): 1. Rank all <span class="math inline">\(N=n_1+n_2\)</span> observations in ascending order; 2. Sum the ranks of the <span class="math inline">\(x's\)</span> (<span class="math inline">\(W_1=\omega_1\)</span>) and the ranks of the <span class="math inline">\(y's\)</span> (<span class="math inline">\(W_2=\omega_2\)</span>); 3. Reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(\omega_1\)</span> is large and equivalently <span class="math inline">\(\omega_2\)</span> is small.</p>
 <p>The distributions of <span class="math inline">\(W_1\)</span> and <span class="math inline">\(W_2\)</span> are not the same when the sample sizes <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_2\)</span> are not equal.</p>
-<p>The Wilcoxon Rank Sum Test, also known as the Mann-Whitney U test, is a non-parametric test used to assess whether there is a difference between two independent groups. It doesn’t assume normality and is appropriate when the data may not meet the assumptions of a t-test.</p>
-<p><strong>Example</strong> An example goes here</p>
 </section>
 <section id="wilcoxon-rank-sum-test-and-mann-whitney-test" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="wilcoxon-rank-sum-test-and-mann-whitney-test"><span class="header-section-number">4.2.2</span> Wilcoxon rank sum test and Mann-Whitney test</h3>
@@ -471,56 +459,199 @@ alternative hypothesis: true location is not equal to 3.5</code></pre>
 </ol>
 <p>The Wilcoxon rank sum test and Mann-Whitney test are related in the following way: <span class="math display">\[u_1=\omega_1 - \frac{n_1(n_1+1)}{2}\;\;\mbox{and}\;\;u_2=\omega_2 - \frac{n_2(n_2+1)}{2}\]</span></p>
 <p>The upper tail probability distributions for the <span class="math inline">\(U\)</span> and <span class="math inline">\(W\)</span> statistics under <span class="math inline">\(H_0\)</span> are tabulated. An <span class="math inline">\(\alpha\)</span>-level test rejects <span class="math inline">\(H_0\)</span> if <span class="math inline">\(P-value\leq \alpha\)</span></p>
-<p><strong>Example</strong> Compare mean heat wave’s duration before and after 2005</p>
+<p><strong>Example</strong></p>
+<p>Compare mean heat wave’s duration before and after 2005</p>
 <p>We want to check whether there has been a shift in the distributions of the mean heat wave’s duration after 2005.</p>
 <p>We will use the function <em>wilcox.test(x,y)</em>, where <span class="math inline">\(x\)</span> is the sample vector from the random variable <span class="math inline">\(X\)</span>, and <span class="math inline">\(y\)</span> is the sample vector from random variable <span class="math inline">\(Y\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(hwf1<span class="sc">$</span>mean_duration,hwf2<span class="sc">$</span>mean_duration)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in wilcox.test.default(hwf1$mean_duration, hwf2$mean_duration): cannot
-compute exact p-value with ties</code></pre>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(hwf1<span class="sc">$</span>mean_duration,hwf2<span class="sc">$</span>mean_duration)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-    Wilcoxon rank sum test with continuity correction
+    Wilcoxon rank sum exact test
 
 data:  hwf1$mean_duration and hwf2$mean_duration
-W = 110, p-value = 0.7052
+W = 130.5, p-value = 0.5237
 alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 </div>
-<p>For a comparison of the location parameters among 3 or more populations we can use the Kruskal-Wallis test. The parametric parallel of this test is the one-way ANOVA model that will be discussed later.</p>
+<p>For a comparison of the location parameters among 3 or more populations we can use the Kruskal-Wallis test.</p>
 </section>
 <section id="kruskal-wallis-test" class="level3" data-number="4.2.3">
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="kruskal-wallis-test"><span class="header-section-number">4.2.3</span> Kruskal-Wallis test</h3>
 <p>The Kruskal-Wallis test is a powerful non-parametric statistical test designed to address situations where the assumptions of normality and homogeneity of variances required by traditional analysis of variance (ANOVA) cannot be met. This test is particularly useful when you have three or more independent groups or conditions and you want to determine whether there are statistically significant differences in the central tendencies of these groups.</p>
 <p>In cases where the data is not normally distributed or the group variances are unequal, the Kruskal-Wallis test provides a reliable alternative to traditional ANOVA. Instead of relying on means and variances, the Kruskal-Wallis test operates on the ranks of the data, making it robust to deviations from normality and homoscedasticity.</p>
 <p>Imagine a clinical trial comparing the pain relief efficacy of three different treatments. Patients’ pain relief scores may not follow a normal distribution, and the variability in responses between treatments could be quite different. In this scenario, the Kruskal-Wallis test allows researchers to determine whether there are statistically significant differences in pain relief among the treatments without the need for stringent parametric assumptions.</p>
-<p>In summary, the Kruskal-Wallis test is a valuable tool in situations where you need to compare multiple groups and the underlying data does not meet the assumptions of ANOVA. It provides a reliable means of detecting differences in central tendencies across groups while accommodating the realities of real-world data.</p>
-<p><strong>Example</strong> Here it goes an example of the Kruskall-Wallis test</p>
+<p>In summary, the Kruskal-Wallis test is a valuable tool in situations where you need to compare multiple groups and the underlying data does not meet the assumptions of ANOVA. It provides a reliable means of detecting differences in central tendencies across groups while accommodating the realities of real-world data. When the number of groups is equal to two, the Kruskall-Wallis test reduces to the Wilcoxon Rank Sum test.</p>
+<p><strong>Example</strong></p>
+<p>Increased greenhouse gas concentrations in the atmosphere as a consequence of human activities, might modify the behaviour of rainfall extreme events. To investigate that, we use data from the CMIP5 project consisting of simulated values of daily rainfall for three different scenarios: historical conditions, RCP4.5 and RCP8.5 climate scenarios proposed by the IPCC, being the last one the worst case scenario with the highest radiative forcing level (8.5 <span class="math inline">\(Watts/m^2\)</span>) for the projected future climate. We want to study potential changes in the location parameter of the maximum annual daily rainfall. The Generalized Extreme Value (GEV) distribution (to be discussed in Chapter XX) was fitted to the simulated daily annual maximum for the three experiments (historical, RCP4.5 and RCP8.5) using simulated data from 30 General Circulation Models (GCMs). The location, scale and shape parameters of the GEV fitted models were estimated using maximum likelihood; and the Kruskal-Wallis test was used to assess whether significant differences in the model parameters for the three experiments are observed.</p>
 </section>
 </section>
 <section id="non-parametric-correlation-measures" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="non-parametric-correlation-measures"><span class="header-section-number">4.3</span> Non-parametric correlation measures</h2>
 <section id="the-spearmans-rank-correlation" class="level3" data-number="4.3.1">
 <h3 data-number="4.3.1" class="anchored" data-anchor-id="the-spearmans-rank-correlation"><span class="header-section-number">4.3.1</span> The Spearman’s rank correlation</h3>
-<p>The Spearman’s correlation measures the strength of a monotonic relationship between two variables. This a non-parametric measure of correlation and it is calculated as the Pearson correlation coefficient between the ranks of the two variables:</p>
+<p>The Spearman’s correlation (<span class="math inline">\(\rho_S\)</span>) measures the strength of a monotonic relationship between two variables. When the relationship between two variables is non-linear but there is a monotonic relationship between then, the Spearman’s correlation coefficient is a better measure of the association between the two variables. This a non-parametric measure of correlation and it is calculated as the Pearson correlation coefficient between the ranks of the two variables with sample estimate:</p>
 <p><span class="math display">\[r_{s_{xy}}= \frac{cov(Rank(x),Rank(y))}{S_{Rank(x)}\times S_{Rank(y)}}\]</span></p>
+<p>where <code>cov</code> is the covariance between the ranks of the two variables and <span class="math inline">\(S_{rank(.)}\)</span> is the standard deviation of the ranks for each variable. This formula is equivalent to the Pearson correlation formula between the ranks of the two samples.</p>
+<p>The significance of <span class="math inline">\(\rho_S\)</span> can be tested by using the R function <code>cor.test</code> by setting the function parameter <code>method=spearman.</code></p>
+</section>
+<section id="kendals-tau-correlation" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="kendals-tau-correlation"><span class="header-section-number">4.3.2</span> Kendal’s tau correlation</h3>
+<p>It is more robust and efficient than the Spearman’s correlation, but more difficult to interpret: Considering all possible pairs <span class="math inline">\((i,j)\)</span> from the sample. The Kendall’s <span class="math inline">\(\tau\)</span> quantifies the difference between the percentage of all discordant (ranks disagree) and concordant pairs (ranks agree) in the data: <span class="math display">\[\tau_{xy}=\frac{2}{n(n-1)}\sum_{i&lt;j} sign(x_i-x_j)\times sign(y_i-y_j)\]</span></p>
+<p>Kendall’s <span class="math inline">\(\tau\)</span> is recommended for small sample size or when there are many ties in the data. A significance test is also implemented using the <code>cor.test</code> function with <code>method=kendall</code>.</p>
+<p>When there relationship between two variables is highly non-linear or there is presence of outliers, the Spearman and Kendall’s <span class="math inline">\(\tau\)</span> are recommended over the Pearson correlation coefficient.</p>
 </section>
 </section>
-<section id="kendals-rank-correlation" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="kendals-rank-correlation"><span class="header-section-number">4.4</span> Kendal’s rank correlation</h2>
-<p>It is more robust and efficient than the Spearman’s correlation, but more difficult to interpret: Considering all possible pairs <span class="math inline">\((i,j)\)</span> from the sample. The Kendall’s <span class="math inline">\(\tau\)</span> quantifies the difference between the percentage of all discordant and concordant pairs in the data: <span class="math display">\[\tau_{xy}=\frac{2}{n(n-1)}\sum_{i&lt;j} sign(x_i-x_j)\times sign(y_i-y_j)\]</span></p>
-</section>
-<section id="bootstrapp-confidence-intervals" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="bootstrapp-confidence-intervals"><span class="header-section-number">4.5</span> Bootstrapp Confidence Intervals</h2>
-<p>This section discussed rank-based nonparametric methods. Another class of non-parametric methods, known as resampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap methods, which is useful to calculate confidence intervals.</p>
-<section id="bootstrapping" class="level3" data-number="4.5.1">
-<h3 data-number="4.5.1" class="anchored" data-anchor-id="bootstrapping"><span class="header-section-number">4.5.1</span> Bootstrapping</h3>
-<p><strong>Example</strong></p>
+<section id="bootstrap-standard-errors-and-confidence-intervals" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="bootstrap-standard-errors-and-confidence-intervals"><span class="header-section-number">4.4</span> Bootstrap standard errors and Confidence Intervals</h2>
+<p>Another class of non-parametric methods, known as re-sampling methods, are based on drawing random samples from the given sample to make inferences about the population. An example of this is the bootstrap method, which is useful to calculate the accuracy of the sample parameter estimates and confidence intervals of the true parameter values. Usually these accuracy estimates are measured through the standard errors. Standard errors also provide a measure of the uncertainty of the estimates from the sample as well as the confidence intervals.</p>
+<p>If we have a sample <span class="math inline">\(x_1,x_2,\ldots,x_n\)</span> from a normal distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, we can estimate <span class="math inline">\(\mu\)</span> as <span class="math inline">\(\hat{\mu}=\bar{x}\)</span>. A measure of uncertainty of this estimate is given by the standard error of <span class="math inline">\(\bar{x}\)</span> which is calculated as <span class="math inline">\(se(\bar{x})=s/\sqrt{n}\)</span> where <span class="math inline">\(s\)</span> is the sample standard deviation. Knowing the <code>se</code> allows us to confirm that the sample estimate ($\bar{x}$) is going to be one <code>se</code> away from its true value 68\% of the times, two <code>se</code> away from its true value, 95\% of the times.</p>
+<p>For many estimates we can calculate the standard errors exactly, but there are many model parameter estimates for which their standard error is more difficult to obtain. Bootstrap methods are a great alternative in these cases.</p>
+<p><strong>Example: Calculate the standard error of the sample median using Bootstrap</strong></p>
+<p>In order to calculate the standard error of the sample median of a given sample, we do not require to know the probability distribution of the sample. We can use bootstrap to re-sample several times from the original sample. We can calculate the median for each sample and estimate the standard deviation of all meadian estimates. This standard deviation is a bootstrap estimator of the standard error of the sample median.</p>
+<p>We can demonstrate this procedure using the following R code. Suppose that your data is stored in a vector <span class="math inline">\(x\)</span>. We can re-sample <code>x</code> 5,000 times with replacement, and obtain the median for each sample:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Original data</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">15</span>, <span class="dv">18</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">24</span>, <span class="dv">30</span>, <span class="dv">35</span>, <span class="dv">40</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of bootstrap samples</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap medians</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>boot.medians <span class="ot">&lt;-</span> <span class="fu">replicate</span>(B,<span class="fu">median</span>(<span class="fu">sample</span>(x, <span class="at">size =</span> <span class="fu">length</span>(x), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap estimate of SE(median)</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>se.median <span class="ot">&lt;-</span> <span class="fu">sd</span>(boot.medians)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>se.median</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.198675</code></pre>
+</div>
+</div>
+<p>We can use a simulated data set:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample from a skewed distribution</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">100</span>, <span class="at">rate =</span> <span class="fl">0.2</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample median</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.23877</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap SE</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>boot.medians <span class="ot">&lt;-</span> <span class="fu">replicate</span>(B,<span class="fu">median</span>(<span class="fu">sample</span>(x, <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>se.median <span class="ot">&lt;-</span> <span class="fu">sd</span>(boot.medians)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Median ="</span>, <span class="fu">median</span>(x), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Median = 4.23877 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Bootstrap SE ="</span>, se.median, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Bootstrap SE = 0.6876799 </code></pre>
+</div>
+</div>
+<p>The library <code>boot</code> is a more general library:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(boot)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'boot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:lattice':
+
+    melanoma</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Statistic of interest</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>median.fun <span class="ot">&lt;-</span> <span class="cf">function</span>(data, indices) {</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">median</span>(data[indices])</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">boot</span>(<span class="at">data =</span> x,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">statistic =</span> median.fun,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">R =</span> <span class="dv">5000</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap SE</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>t0 <span class="co"># original median</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.23877</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(results<span class="sc">$</span>t) <span class="co"># bootstrap SE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6864157</code></pre>
+</div>
+</div>
+<p><strong>Confidence interval for the median</strong></p>
+<p>Once the standard error is estimated, we can calculate the confidence interval for the median. A <code>percentile</code> confidence interval is calculated using the option <code>perc</code> of the function <code>boot.ci</code> from the <code>boot</code> library. This function generate different types of nonparametric confidence intervals, including the studentized bootstrap interval, the bootstrap percentile interval, and the adjusted bootstrap percentile (BCa) interval.</p>
+<p>The types of confidence intervals to be calculated can be defined with argument <code>type</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boot.ci</span>(results, <span class="at">type =</span> <span class="st">"perc"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+Based on 5000 bootstrap replicates
+
+CALL : 
+boot.ci(boot.out = results, type = "perc")
+
+Intervals : 
+Level     Percentile     
+95%   ( 2.913,  5.336 )  
+Calculations and Intervals on Original Scale</code></pre>
+</div>
+</div>
+<p>The probability distribution of the bootstrap sample estimates is an approximation of the sampling distribution of the estimate.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kernel density estimate</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>kd <span class="ot">&lt;-</span> <span class="fu">density</span>(results<span class="sc">$</span>t)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram as density</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(results<span class="sc">$</span>t,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">probability =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="dv">30</span>,</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"lightgray"</span>,</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Bootstrap Distribution of the Sample Median"</span>,<span class="at">xlab =</span> <span class="st">"Bootstrap Median"</span>)</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add kernel density estimate</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(kd,<span class="at">col =</span> <span class="st">"blue"</span>,<span class="at">lwd =</span> <span class="dv">3</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Add asymptotic normal approximation</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>x.grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span>(results<span class="sc">$</span>t),</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(results<span class="sc">$</span>t),</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">length.out =</span> <span class="dv">500</span></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x.grid,<span class="fu">dnorm</span>(x.grid,<span class="at">mean =</span> <span class="fu">median</span>(x),<span class="at">sd =</span> <span class="fu">sd</span>(results<span class="sc">$</span>t)),<span class="at">col =</span> <span class="st">"red"</span>,<span class="at">lwd =</span> <span class="dv">3</span>,<span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Add vertical line at sample median</span></span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">median</span>(x),<span class="at">col =</span> <span class="st">"darkgreen"</span>,<span class="at">lwd =</span> <span class="dv">2</span></span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>,</span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(</span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Kernel density estimate"</span>,</span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Normal approximation"</span>,</span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sample median"</span>),</span>
+<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>, <span class="st">"darkgreen"</span>),</span>
+<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>),</span>
+<span id="cb42-36"><a href="#cb42-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>),</span>
+<span id="cb42-37"><a href="#cb42-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span></span>
+<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter3_Non_Para_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Bootstrap SE of median ="</span>, <span class="fu">round</span>(<span class="fu">sd</span>(results<span class="sc">$</span>t), <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Bootstrap SE of median = 0.6864 </code></pre>
+</div>
+</div>
+<p>We can also calculate the bias between the bootstrap estimate and the original sample estimate.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
