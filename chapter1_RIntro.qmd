@@ -313,7 +313,7 @@ print(thislist[1:2])
 
 - Matrix
 
-  Matrix is 2-D
+A Matrix is 2-D
 
 ```{r}
   # Create a matrix
@@ -325,7 +325,7 @@ print(thislist[1:2])
 
 - Array
 
-  Array can be more than 2-D
+  An Array can be more than 2-D
 
 ```{r}
   # create a 3-dimensional array
@@ -384,9 +384,9 @@ You can access, edit, do operations and even combine matrices and arrays using t
   print(cbind(mat1,mat2))
 ```
 
-### Dataframes
+### Data frames
 
-Dataframe is a powerful object that allows you to perform all kinds of operations on your data
+Data frame is a powerful object that combines different kinds of variables and allows you to perform all kinds of operations on your data
 
 ```{r}
 # create a dataframe
@@ -454,16 +454,13 @@ library(readr)
                                     avg_air_temp_f = col_double(),
                                     avg_air_temp_c = col_double(),
                                     date_string = col_character(),
-                                    date = col_date(format = "%m/%d/%Y") # be sure this format matches the one in your data
+                                    date = col_date(format = "%Y-%m-%d") # be sure this format matches the one in your data
                                     )
                    )
+  data<-data[,-1]
 ```
 
-Now the "date" column in your dataset has the date type
-
-## Working with Dataframes
-
-Dataframe is powerful with geostatistical data analysis.
+Now the "date" column in your data set has the date type
 
 ### Manipulate Data
 
@@ -484,7 +481,7 @@ Dataframe is powerful with geostatistical data analysis.
 - Add a new column
 
 ```{r}
-    # Remember this dataset we used?
+    # Remember this data set we used?
     head(Data_Frame)
 ```
 
@@ -634,6 +631,7 @@ The built-in `plot` function in R allows you to create scatter plots, line chart
   library(tidyverse)
   library(dplyr)
   library(magrittr)
+  library(lubridate)
 
   # Select average humidity and date
   data_between_2010_2012 <- data %>%
@@ -753,6 +751,7 @@ library(ggplot2)
   You can also plot multiple in one chart
 
 ```{r}
+library(lubridate)
   data %>%
     filter(year(date) == 2012) %>% 
     ggplot(aes(x=date, y=avg_air_temp_f, group=month(date), fill=month(date))) +
@@ -764,35 +763,3 @@ library(ggplot2)
       facet_wrap(~month(date), scale="free_x") + 
       scale_fill_gradient(low = "green", high = "darkgreen")
 ```
-
-<!-- -   **Using geospatial data** -->
-
-<!--     gglot2 allows coordinated data. -->
-
-<!--     ```{r} -->
-
-<!--     # Create a heat map with coordinated data -->
-
-<!--     census_data <- read.csv("data/us2021census.csv") -->
-
-<!--     head(census_data) -->
-
-<!--     ``` -->
-
-<!--     ```{r} -->
-
-<!--     # Create a clustered bar plot -->
-
-<!--     census_data %>%  -->
-
-<!--     filter(State=='WY') %>%  -->
-
-<!--     ggplot(aes(x = City, y = Population)) + -->
-
-<!--       geom_bar(stat = "identity", position = "dodge") + -->
-
-<!--       labs(title = "City Population by State") + -->
-
-<!--       theme_minimal() -->
-
-<!--     ``` -->

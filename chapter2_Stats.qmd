@@ -79,7 +79,7 @@ The specification of a statistical model implies the proposal of a probability d
 
 You can generate samples from different probability models in R using the `r_distribution` operation. You can specify the distribution parameters and the number of samples to be generated.
 
--   **Normal Distribution**
+- **Normal Distribution**
 
 The normal distribution, also known as the Gaussian distribution, is a symmetric bell-shaped curve commonly used to model continuous data with mean ($\mu$) and standard deviation ($\sigma$) parameters. A random variable $X$ has a Normal distribution if its probability density function (pdf) is of the form:
 
@@ -99,102 +99,102 @@ plot(x, density, type = "l", lwd = 2, col = "black",
      xlab = "x", ylab = "Density", main = "Normal Distribution Probability Density Function")
 ```
 
--   **You can sample from any known distribution using the `r+distribution()` function in r:**
+- **You can sample from any known distribution using the `r+distribution()` function in r:**
 
-    ```{r}
-    # Sample 250 values from a normal distribution with mean=5 and standard deviation of 2 
-    norm_a <- rnorm(n = 500, mean = 5, sd = 2)
+  ```{r}
+  # Sample 500 values from a normal distribution with mean=5 and standard deviation of 2 
+  norm_a <- rnorm(n = 500, mean = 5, sd = 2)
 
-    # Create a histogram without plotting it
-    hist_data <- hist(norm_a, breaks = 20, plot = FALSE)
+  # Create a histogram without plotting it
+  hist_data <- hist(norm_a, breaks = 20, plot = FALSE)
 
-    # Create a histogram
-    hist(norm_a, breaks = 20, col = "cyan", main = "Sampled Data with a Normal Curve", xlab = "Values", ylab = "Frequency")
+  # Create a histogram
+  hist(norm_a, breaks = 20, col = "cyan", main = "Sampled Data with a Normal Curve", xlab = "Values", ylab = "Frequency")
 
-    # Add a normalized normal curve
-    curve(dnorm(x, mean = mean(norm_a), sd = sd(norm_a)) * diff(hist_data$breaks)[1] * length(norm_a), 
-          add = TRUE, col = "red", lwd = 2)
+  # Add a normalized normal curve
+  curve(dnorm(x, mean = mean(norm_a), sd = sd(norm_a)) * diff(hist_data$breaks)[1] * length(norm_a), 
+        add = TRUE, col = "red", lwd = 2)
 
-    # Set the width and height of the plot
-    options(repr.plot.width = 6, repr.plot.height = 4)
-    ```
+  # Set the width and height of the plot
+  options(repr.plot.width = 6, repr.plot.height = 4)
+  ```
 
-    The symmetric bell curve can be observed from the histogram, which is symmetric about $\mu$.
+  The symmetric bell curve can be observed from the histogram, which is symmetric about $\mu$.
 
-    You can also plot the density curves using ggplot for sampled points using the function `geom_density`:
+  You can also plot the density curves using ggplot for sampled points using the function `geom_density`:
 
-    ```{r example_normal, fig.width=6, fig.height=4, echo=T}
-    # Create a data frame of several normal variables with different parameters
-    df <- data.frame(category = factor(rep(c("sample1", "sample2", "sample3"), each = 500)),
-                     value = round(c(rnorm(500, mean = 100, sd = 5),
-                                     rnorm(500, mean = 95, sd = 10),
-                                     rnorm(500, mean = 105, sd = 20))))
+  ```{r example_normal, fig.width=6, fig.height=4, echo=T}
+  # Create a data frame of several normal variables with different parameters
+  df <- data.frame(category = factor(rep(c("sample1", "sample2", "sample3"), each = 500)),
+                   value = round(c(rnorm(500, mean = 100, sd = 5),
+                                   rnorm(500, mean = 95, sd = 10),
+                                   rnorm(500, mean = 105, sd = 20))))
 
-    # Remember to load the library
-    library(ggplot2)
-    # Customize density plot
-    ggplot(df, aes(x = value, fill = category)) +
-      geom_density(alpha = 0.5, color = "black", linewdth = 0.5) +
-      scale_fill_manual(values = c("sample1" = "orange", "sample2" = "green", "sample3" = "cyan")) +
-      labs(x = "Value", y = "Density", title = "Density Plot by Category") +
-      theme_minimal() 
-    ```
+  # Remember to load the library
+  library(ggplot2)
+  # Customize density plot
+  ggplot(df, aes(x = value, fill = category)) +
+    geom_density(alpha = 0.5, color = "black", linewdth = 0.5) +
+    scale_fill_manual(values = c("sample1" = "orange", "sample2" = "green", "sample3" = "cyan")) +
+    labs(x = "Value", y = "Density", title = "Density Plot by Category") +
+    theme_minimal() 
+  ```
 
--   **Poisson Distribution**
+- **Poisson Distribution**
 
-    The Poisson distribution describes the number of events occurring in a fixed interval of time or space, or a given area. It is often used for counting rare events with a known average rate $\lambda$. Note that a poisson random variable can only take positive integer values.
+  The Poisson distribution describes the number of events occurring in a fixed interval of time or space, or a given area. It is often used for counting rare events with a known average rate $\lambda$. Note that a poisson random variable can only take positive integer values.
 
-    $$P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}\;\;, k=0,1,2,\ldots$$
+  $$P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}\;\;, k=0,1,2,\ldots$$
 
-    ```{r poisson_curve, fig.width=6, fig.height=4, echo=F}
-    # Generate density values for a poisson distribution
-    x <- seq(0, 20)  # Specify the range of x values
-    density <- dpois(x, lambda = 5)  # lambda = 5
+  ```{r poisson_curve, fig.width=6, fig.height=4, echo=F}
+  # Generate density values for a poisson distribution
+  x <- seq(0, 20)  # Specify the range of x values
+  density <- dpois(x, lambda = 5)  # lambda = 5
 
-    # Plot the Poisson density
-    plot(x, density, type = "h", lwd = 2, col = "black", 
-         xlab = "x", ylab = "Density", main = "Poisson Probability Density Function")
-    ```
+  # Plot the Poisson density
+  plot(x, density, type = "h", lwd = 2, col = "black", 
+       xlab = "x", ylab = "Density", main = "Poisson Probability Density Function")
+  ```
 
-    **You can sample from Poisson distribution using the function `rpois`:**
+  **You can sample from Poisson distribution using the function `rpois`:**
 
-    ```{r, cache=F, fig.width=6, fig.height=4}
-    pois_a <- rpois(n = 250, lambda = 5)
-    hist(pois_a, breaks = 20, col = "cyan", main = "Density Plot of Sampled Poisson Data")
-    ```
+  ```{r, cache=F, fig.width=6, fig.height=4}
+  pois_a <- rpois(n = 250, lambda = 5)
+  hist(pois_a, breaks = 20, col = "cyan", main = "Density Plot of Sampled Poisson Data")
+  ```
 
-    -   **Exponential Distribution**
+  - **Exponential Distribution**
 
-    The exponential distribution models the time between events in a Poisson process, describing the probability of waiting a certain amount of time until an event occurs. It's often used for survival analysis and reliability studies.
+  The exponential distribution models the time between events in a Poisson process, describing the probability of waiting a certain amount of time until an event occurs. It's often used for survival analysis and reliability studies.
 
-    $$f(x; \lambda) = \lambda e^{-\lambda x}, \quad x \geq 0$$
+  $$f(x; \lambda) = \lambda e^{-\lambda x}, \quad x \geq 0$$
 
-    ```{r, cache=F, fig.width=6, fig.height=4}
-    exp_a <- rexp(n = 250, rate = 0.5)
-    hist(exp_a, breaks = 20, col = "cyan", main = "Density Plot of Sampled Exponential Data")
-    ```
+  ```{r, cache=F, fig.width=6, fig.height=4}
+  exp_a <- rexp(n = 250, rate = 0.5)
+  hist(exp_a, breaks = 20, col = "cyan", main = "Density Plot of Sampled Exponential Data")
+  ```
 
-    -   **Beta Distribution**
+  - **Beta Distribution**
 
-    The beta distribution is versatile and used to model data between 0 and 1, often representing proportions, probabilities, or proportions of successes in a sequence of independent Bernoulli trials.
+  The beta distribution is versatile and used to model data between 0 and 1, often representing proportions, probabilities, or proportions of successes in a sequence of independent Bernoulli trials.
 
-    $$f(x;\alpha,\beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \cdot \Gamma(\beta)} x^{\alpha - 1} (1 - x)^{\beta - 1}$$
+  $$f(x;\alpha,\beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \cdot \Gamma(\beta)} x^{\alpha - 1} (1 - x)^{\beta - 1}$$
 
-    ```{r, cache=F, fig.width=6, fig.height=4}
-    beta_a <- rbeta(n = 250, shape1 = 2, shape2 = 5)
-    hist(beta_a, breaks = 20, col = "cyan", main = "Density Plot of Sampled Beta Data")
-    ```
+  ```{r, cache=F, fig.width=6, fig.height=4}
+  beta_a <- rbeta(n = 250, shape1 = 2, shape2 = 5)
+  hist(beta_a, breaks = 20, col = "cyan", main = "Density Plot of Sampled Beta Data")
+  ```
 
-    -   **Gamma Distribution**
+  - **Gamma Distribution**
 
-    The gamma distribution is flexible and suitable for different variables, including modeling time to events, environmental data, and more. It is characterized by the shape ($\alpha$) and scale ($\beta$) parameters and it is defined for non-negative random variables.
+  The gamma distribution is flexible and suitable for different variables, including modeling time to events, environmental data, and more. It is characterized by the shape ($\alpha$) and scale ($\beta$) parameters and it is defined for non-negative random variables.
 
-    $$f(x;\alpha,\beta) = \frac{\beta^\alpha x^{\alpha - 1} e^{-\beta x}}{\Gamma(\alpha)}$$
+  $$f(x;\alpha,\beta) = \frac{\beta^\alpha x^{\alpha - 1} e^{-\beta x}}{\Gamma(\alpha)}$$
 
-    ```{r, cache=F, fig.width=6, fig.height=4}
-    gamma_a <- rgamma(n = 250, shape = 1, rate = 2)
-    hist(gamma_a, breaks = 20, col = "cyan", main = "Density Plot of Sampled Gamma Data")
-    ```
+  ```{r, cache=F, fig.width=6, fig.height=4}
+  gamma_a <- rgamma(n = 250, shape = 1, rate = 2)
+  hist(gamma_a, breaks = 20, col = "cyan", main = "Density Plot of Sampled Gamma Data")
+  ```
 
 ### The Normal Model
 
@@ -204,9 +204,9 @@ $$f(x|\mu,\sigma^2)= \frac{1}{\sqrt{2\pi}\sigma} \exp(-(x-\mu)^2/2\sigma^2)$$
 
 where $\mu=E[X]$ and $\sigma^2=Var[X]$ are the mean and variance of the pdf, and the random variable $X$ can take values in the interval $(-\infty,\infty)$.
 
--   For many applications we assume that a sample from an environmental continuous random variable $x_1,x_2,\ldots,x_n$ has a Normal distribution if its empirical cumulative distribution function does not differ too much from the theoretical Cumulative Normal Distribution function $F(x)=P(X\leq x)$.
+- For many applications we assume that a sample from an environmental continuous random variable $x_1,x_2,\ldots,x_n$ has a Normal distribution if its empirical cumulative distribution function does not differ too much from the theoretical Cumulative Normal Distribution function $F(x)=P(X\leq x)$.
 
--   Usually environmental variables are positive variables and are skewed (distribution is non-symmetric). Working with a transformed variable of the original variable $X$, as for example, $Y=\log(X)$ can solve the lack of normality, and $Y$ will have a range in the interval $(-\infty, \infty)$. If $Y$ is normally distributed, the variable $X$ will be log-normally distributed.
+- Usually environmental variables are positive variables and are skewed (distribution is non-symmetric). Working with a transformed variable of the original variable $X$, as for example, $Y=\log(X)$ can solve the lack of normality, and $Y$ will have a range in the interval $(-\infty, \infty)$. If $Y$ is normally distributed, the variable $X$ will be log-normally distributed.
 
 #### Histograms, QQ-plots and PP-plots
 
@@ -220,12 +220,11 @@ Recall that a histogram is a graphical representation of the frequency distribut
 # Load weather data
 data_cmi <- read.csv("data/CMI_TRH.csv")
 # Do this to convert string to date format
-data_cmi$date <- as.Date(data_cmi$date, format = "%m/%d/%Y")
+data_cmi$date <- as.Date(data_cmi$date, format = "%Y-%m-%d")
 # Subset the data for month 3
 data_cmi_month3 <- subset(data_cmi, format(date, "%m") == "03")
 # Create a histogram for average air temperature
 hist(data_cmi_month3$avg_air_temp_c,
-
      main = "AVG Air Temperature in March",
      breaks = 20,
      xlab = "Value",
@@ -297,13 +296,13 @@ The construction of a QQ-plot does not require the specification of the location
 
 #### Sampling Distribution
 
--   A statistic is a function of a sample, and since the sample values are the outcomes of a random variable, the statistic is also a random variable, for example: the sample mean ($\bar{x}=\frac{\sum_{i=1^n}}{x_i{n}}$).
+- A statistic is a function of a sample, and since the sample values are the outcomes of a random variable, the statistic is also a random variable, for example: the sample mean ($\bar{x}=\frac{\sum_{i=1^n}}{x_i{n}}$).
 
--   Other statistics as the sample median of a sample are a function of the sample and they are considered random variables. We can talk about the sampling distribution of the sample median or any other statistic.
+- Other statistics as the sample median of a sample are a function of the sample and they are considered random variables. We can talk about the sampling distribution of the sample median or any other statistic.
 
--   According to the Central Limit Theorem, the sampling distribution of the sample mean is a Normal distribution $N(\mu, \sigma^2/n)$.
+- According to the Central Limit Theorem, the sampling distribution of the sample mean is a Normal distribution $N(\mu, \sigma^2/n)$.
 
--   Sampling distributions are important for statistical inference since they are used in hypothesis testing and for building confidence intervals.
+- Sampling distributions are important for statistical inference since they are used in hypothesis testing and for building confidence intervals.
 
 The normal distribution is very important in many applications due to the Central Limit Theorem.
 
@@ -365,11 +364,11 @@ The standard error of the sample mean is the standard deviation of the sample me
 
 We normally assume that the Null Hypothesis is correct before making the test, and fix a small type I error which is the Probability of Rejecting the Null hypothesis assuming that $H_0$ is correct:
 
--   Type I error (false positive): \$ P(Rejecting; H_0\| H_0; is; True)=\alpha\$
+- Type I error (false positive): \$ P(Rejecting; H_0\| H_0; is; True)=\alpha\$
 
--   Type II error (false negative): $P(Not\;Rejecting\; H_0| H_0\; is\; False)=\beta$
+- Type II error (false negative): $P(Not\;Rejecting\; H_0| H_0\; is\; False)=\beta$
 
--   We normally control $\alpha$, which is the level of significance of the test
+- We normally control $\alpha$, which is the level of significance of the test
 
 #### P-value
 
@@ -501,7 +500,7 @@ $$
 
 ##### Goodness for Fit tests for the Normal Distribution
 
--   Shapiro-Wilks: The statistic $W_n$ is the ratio of the best estimator of the variance (based on the square of a linear combination of the order statistics) to the corrected sum of squares estimator of the variance. Values of $W_n$ are between 0 and 1.
+- Shapiro-Wilks: The statistic $W_n$ is the ratio of the best estimator of the variance (based on the square of a linear combination of the order statistics) to the corrected sum of squares estimator of the variance. Values of $W_n$ are between 0 and 1.
 
 $$W_n=\frac{(\sum_{i=1}^n a_i x_{(i)})^2}{\sum_{i=1}^n (x_i -\bar{x})^2}$$
 
@@ -511,9 +510,9 @@ Small values of the statistics lead to a rejection of the null hypothesis.
 
 These tests measure the discrepancy between $F(t)$ and $\hat{F}(t)$.
 
--   Kolmogorov-Smirnoff ($D$)
--   Anderson Darling ($Q$)
--   Cram'er von-Mises ($W^2$)
+- Kolmogorov-Smirnoff ($D$)
+- Anderson Darling ($Q$)
+- Cram'er von-Mises ($W^2$)
 
 All these statistics measure the departures of the ECDF from the theoretical CDF. Large values of these statistics would lead to the rejection of the Null hypothesis.
 
@@ -537,9 +536,9 @@ We assume that we have independent samples from a normal population with mean $\
 
 The alternative hypothesis can be:
 
--   $H_a: \mu \neq \mu\_0$ (Two-tailed test)
--   $H_a: \mu > \mu\_0$ (Right-tailed test)
--   $H_a: \mu < \mu\_0$ (Left-tailed test)
+- $H_a: \mu \neq \mu\_0$ (Two-tailed test)
+- $H_a: \mu > \mu\_0$ (Right-tailed test)
+- $H_a: \mu < \mu\_0$ (Left-tailed test)
 
 If the standard deviation $\sigma$ is unknown we use the t-statistic:
 
@@ -549,9 +548,9 @@ Under the normality and independence assumptions $T\sim \mbox{t-student}$ distri
 
 Given a significance level $\alpha$ we reject the null hypothesis if:
 
--   P-value: $P(|t| \geq |T||H_0) < \alpha$ (two-tail test)
--   P-value: $P(t \geq T|H_0) <\alpha$ (right-tail test)
--   P-Value: $P(t \leq T|H_0) <\alpha$ (left-tail test)
+- P-value: $P(|t| \geq |T||H_0) < \alpha$ (two-tail test)
+- P-value: $P(t \geq T|H_0) <\alpha$ (right-tail test)
+- P-Value: $P(t \leq T|H_0) <\alpha$ (left-tail test)
 
 where $t \sim \mbox{t-student} (n-1)$
 
@@ -596,9 +595,9 @@ A common hypothesis is $H_0: \mu_1 = \mu_2$.
 
 The alternative hypothesis can be:
 
--   $H_a: \mu_1 \neq \mu_2$ (Two-tail tests)
--   $H_a: \mu_1 > \mu_2$ (Right-tail test)
--   $H_a: \mu_1 < \mu_2$ (Left-tail test)
+- $H_a: \mu_1 \neq \mu_2$ (Two-tail tests)
+- $H_a: \mu_1 > \mu_2$ (Right-tail test)
+- $H_a: \mu_1 < \mu_2$ (Left-tail test)
 
 Assuming that the we have two iid samples from populations 1 and 2 with unknown variances $\sigma_1^2$ and $\sigma_2^2$; and sample means $\bar{x}_1$ and $\bar{x}_2$ and sample variances $s_1^2$ and $s_2^2$, the following test statistics can be used:
 
