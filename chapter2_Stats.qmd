@@ -640,7 +640,7 @@ In climate data analysis, we frequently need to check whether two continuous var
 
 The Pearson correlation coefficient $\rho$ is a simple and straight-forward indicator of the linear association between two variables. The magnitude of the correlation is proportional to the strength of linear dependence. This dependence can be positive or negative. Recall the expression for the sample estimate of the Pearson correlation coefficient between $X$ and $Y$ is:
 
-$$\hat{\rho}^2 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2}\sqrt{\sum_{i=1}^n (Y_i - \bar{Y})^2}}$$ Assuming that the two variables $X$ and $Y$ have a Normal distribution, we can test the hypothesis of no significant linear association between $X$ and $Y$, that is $H_o: \rho=0$. Assuming that the null hypothesis is correct, the following test statistic follows a t-distribution with $n-2$ degrees of freedom:
+$$\hat{\rho} = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2}\sqrt{\sum_{i=1}^n (Y_i - \bar{Y})^2}}$$ Assuming that the two variables $X$ and $Y$ have a Normal distribution, we can test the hypothesis of no significant linear association between $X$ and $Y$, that is $H_o: \rho=0$. Assuming that the null hypothesis is correct, the following test statistic follows a t-distribution with $n-2$ degrees of freedom:
 
 $$T = \frac{\hat{\rho} \sqrt{n - 2}}{\sqrt{1 - \hat{\rho}^2}}$$ We would normally perform a 2-sided t-test, which means we should reject the null hypothesis of linear association if
 
