@@ -22,7 +22,7 @@ $$
 
 The data can be summarized in an $I \times J$ **contingency table**, where each cell contains a count.
 
-|          | $Y=1$    | $\cdots$ | $Y=J$    |
+|          |  $Y=1$   | $\cdots$ |  $Y=J$   |
 |:---------|:--------:|:--------:|:--------:|
 | $X=1$    | $n_{11}$ | $\cdots$ | $n_{1J}$ |
 | $\vdots$ | $\vdots$ | $\ddots$ | $\vdots$ |
@@ -219,39 +219,39 @@ and is estimated from the marginal table.
 
 Several counterintuitive but possible situations can occur:
 
--   There may be conditional associations, with $\theta_{XY(k)} \neq 1$, but no marginal association, with $\theta_{XY}=1$.
+- There may be conditional associations, with $\theta_{XY(k)} \neq 1$, but no marginal association, with $\theta_{XY}=1$.
 
-    For example:
+  For example:
 
-    $$
-    \begin{aligned}
-    X &= \text{gene allele from mother}, \\
-    Y &= \text{gene allele from father}, \\
-    Z &= \text{phenotype}.
-    \end{aligned}
-    $$
+  $$
+  \begin{aligned}
+  X &= \text{gene allele from mother}, \\
+  Y &= \text{gene allele from father}, \\
+  Z &= \text{phenotype}.
+  \end{aligned}
+  $$
 
--   There may be a marginal association, with $\theta_{XY} \neq 1$, but no conditional associations, with $\theta_{XY(k)}=1$.
+- There may be a marginal association, with $\theta_{XY} \neq 1$, but no conditional associations, with $\theta_{XY(k)}=1$.
 
-    For example, this pattern appears in the UC Berkeley graduate school admissions data discussed in Agresti, Problem 2.15.
+  For example, this pattern appears in the UC Berkeley graduate school admissions data discussed in Agresti, Problem 2.15.
 
--   **Simpson's paradox** occurs when the conditional associations are in the opposite direction from the marginal association. For example,
+- **Simpson's paradox** occurs when the conditional associations are in the opposite direction from the marginal association. For example,
 
-    $$
-    \theta_{XY(k)} > 1
-    \qquad\qquad
-    \theta_{XY} < 1.
-    $$
+  $$
+  \theta_{XY(k)} > 1
+  \qquad\qquad
+  \theta_{XY} < 1.
+  $$
 
-    One example is the Florida multiple murder cases death penalty data:
+  One example is the Florida multiple murder cases death penalty data:
 
-    $$
-    \begin{aligned}
-    X &= \text{defendant's race: white or black}, \\
-    Y &= \text{death penalty: yes or no}, \\
-    Z &= \text{victims' race: white or black}.
-    \end{aligned}
-    $$
+  $$
+  \begin{aligned}
+  X &= \text{defendant's race: white or black}, \\
+  Y &= \text{death penalty: yes or no}, \\
+  Z &= \text{victims' race: white or black}.
+  \end{aligned}
+  $$
 
 The variables $X$ and $Y$ are **conditionally independent given** $Z=k$ if
 
