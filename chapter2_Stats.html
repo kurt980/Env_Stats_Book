@@ -207,6 +207,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Non-Parametric Methods for Statistical Inference</strong></span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter5_LinearI.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Models I</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -357,21 +363,20 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<ul>
-<li><p><strong>You can sample from any known distribution using the <code>r+distribution()</code> function in r:</strong></p>
+<p>You can sample from any known distribution using the <code>r+distribution()</code> function in r:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample 500 values from a normal distribution with mean=5 and standard deviation of 2 </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>norm_a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">2</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Sample 500 values from a normal distribution with mean=5 and standard deviation of 2 </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a> norm_a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">2</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a histogram without plotting it</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>hist_data <span class="ot">&lt;-</span> <span class="fu">hist</span>(norm_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a> <span class="co"># Create a histogram without plotting it</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a> hist_data <span class="ot">&lt;-</span> <span class="fu">hist</span>(norm_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a histogram</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(norm_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"cyan"</span>, <span class="at">main =</span> <span class="st">"Sampled Data with a Normal Curve"</span>, <span class="at">xlab =</span> <span class="st">"Values"</span>, <span class="at">ylab =</span> <span class="st">"Frequency"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a> <span class="co"># Create a histogram</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a> <span class="fu">hist</span>(norm_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"cyan"</span>, <span class="at">main =</span> <span class="st">"Sampled Data with a Normal Curve"</span>, <span class="at">xlab =</span> <span class="st">"Values"</span>, <span class="at">ylab =</span> <span class="st">"Frequency"</span>)</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a normalized normal curve</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="fu">mean</span>(norm_a), <span class="at">sd =</span> <span class="fu">sd</span>(norm_a)) <span class="sc">*</span> <span class="fu">diff</span>(hist_data<span class="sc">$</span>breaks)[<span class="dv">1</span>] <span class="sc">*</span> <span class="fu">length</span>(norm_a), </span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a> <span class="co"># Add a normalized normal curve</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a> <span class="fu">curve</span>(<span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="fu">mean</span>(norm_a), <span class="at">sd =</span> <span class="fu">sd</span>(norm_a)) <span class="sc">*</span> <span class="fu">diff</span>(hist_data<span class="sc">$</span>breaks)[<span class="dv">1</span>] <span class="sc">*</span> <span class="fu">length</span>(norm_a), </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -379,8 +384,8 @@ window.Quarto = {
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the width and height of the plot</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">6</span>, <span class="at">repr.plot.height =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Set the width and height of the plot</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">6</span>, <span class="at">repr.plot.height =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The symmetric bell curve can be observed from the histogram, which is symmetric about <span class="math inline">\(\mu\)</span>.</p>
 <p>You can also plot the density curves using ggplot for sampled points using the function <code>geom_density</code>:</p>
@@ -410,10 +415,12 @@ unknown parameters: `linewdth`</code></pre>
 </figure>
 </div>
 </div>
-</div></li>
-<li><p><strong>Poisson Distribution</strong></p>
+</div>
+<ul>
+<li><strong>Poisson Distribution</strong></li>
+</ul>
 <p>The Poisson distribution describes the number of events occurring in a fixed interval of time or space, or a given area. It is often used for counting rare events with a known average rate <span class="math inline">\(\lambda\)</span>. Note that a poisson random variable can only take positive integer values.</p>
-<p><span class="math display">\[P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}\;\;, k=0,1,2,\ldots\]</span></p>
+<p><span class="math display">\[P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!}\;\; k=0,1,2,\ldots\]</span></p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -423,7 +430,7 @@ unknown parameters: `linewdth`</code></pre>
 </div>
 </div>
 </div>
-<p><strong>You can sample from Poisson distribution using the function <code>rpois</code>:</strong></p>
+<p>You can sample from Poisson distribution using the function <code>rpois</code>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pois_a <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> <span class="dv">250</span>, <span class="at">lambda =</span> <span class="dv">5</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pois_a, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col =</span> <span class="st">"cyan"</span>, <span class="at">main =</span> <span class="st">"Density Plot of Sampled Poisson Data"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -482,8 +489,7 @@ unknown parameters: `linewdth`</code></pre>
 </figure>
 </div>
 </div>
-</div></li>
-</ul>
+</div>
 </section>
 <section id="the-normal-model" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="the-normal-model"><span class="header-section-number">3.2.2</span> The Normal Model</h3>
@@ -978,7 +984,6 @@ X-squared = 0.71804, df = 1, p-value = 0.3968</code></pre>
 </div>
 </div>
 <p>We can see that because of the high p-value we don’t reject the null hypothesis and we should claim that there is no significant association between gender and types of cars they drive.</p>
-<!--## Chapter 2 Summary-->
 
 
 </section>

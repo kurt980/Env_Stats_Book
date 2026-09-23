@@ -178,6 +178,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Non-Parametric Methods for Statistical Inference</strong></span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter5_LinearI.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Models I</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -960,18 +966,18 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>), <span class="at">ncol =</span> <span class="dv">5</span>) <span class="co"># 100 random variables organzied into 5 columns</span></span>
 <span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           [,1]       [,2]       [,3]        [,4]       [,5]
-[1,] -0.8467273 -0.1727256  1.5174129 -1.24974097  0.1549101
-[2,]  0.3345930 -1.3904993 -0.1107627 -0.02066024  1.4540352
-[3,]  0.8627389  0.6370611  1.9306010 -0.15744023 -1.2756960
-[4,] -0.7467990 -0.2080957  2.6182794  0.02956719 -0.8087846
-[5,]  0.1957612  1.7823544 -1.1996679 -0.78230083  1.6612667</code></pre>
+<pre><code>           [,1]       [,2]        [,3]       [,4]       [,5]
+[1,] -0.2784229 -0.8186204  1.19686196 -0.6638230 -0.5918931
+[2,]  0.9448879  0.2194530  0.04891053  0.7685279  1.7089392
+[3,] -2.8427826  0.1822244  1.53352853  0.6600075  0.6784361
+[4,] -0.2863481 -0.3981562 -1.79210430 -2.1191045  2.5774242
+[5,] -0.7691427  0.6470781 -0.23692578 -0.3049570 -0.2131939</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">apply</span>(df, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="at">mean=</span><span class="fu">mean</span>(x), <span class="at">sd=</span><span class="fu">sd</span>(x)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            [,1]     [,2]      [,3]       [,4]      [,5]
-mean -0.04008664 0.129619 0.9511725 -0.4361150 0.2371463
-sd    0.73505349 1.173164 1.5662834  0.5587831 1.3132368</code></pre>
+<pre><code>           [,1]        [,2]      [,3]       [,4]      [,5]
+mean -0.6463617 -0.03360422 0.1500542 -0.3318698 0.8319425
+sd    1.3817022  0.57512976 1.3173620  1.1725848 1.3189969</code></pre>
 </div>
 </div>
 <ul>

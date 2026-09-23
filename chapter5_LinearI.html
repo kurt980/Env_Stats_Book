@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Linear Models I – Environmental Statistics Book (Draft)</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter3_Non_Para.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d3f7f8e73c8d287b30bcf59c2b563615.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter5_LinearI.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Models I</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Environmental Statistics Book (Draft)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter0_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title"><strong>Introduction</strong></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter1_RIntro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Introduction to R</strong></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter2_Stats.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Exploratory Data Analysis, Probability Models and Basic Inference</strong></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter3_Non_Para.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Non-Parametric Methods for Statistical Inference</strong></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter5_LinearI.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Models I</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">5.1</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#model-types" id="toc-model-types" class="nav-link" data-scroll-target="#model-types"><span class="header-section-number">5.1.1</span> Model Types</a></li>
+  </ul></li>
+  <li><a href="#linear-regression-models" id="toc-linear-regression-models" class="nav-link" data-scroll-target="#linear-regression-models"><span class="header-section-number">5.2</span> Linear Regression Models</a>
+  <ul class="collapse">
+  <li><a href="#regression-objectives" id="toc-regression-objectives" class="nav-link" data-scroll-target="#regression-objectives"><span class="header-section-number">5.2.1</span> Regression Objectives</a></li>
+  <li><a href="#theory" id="toc-theory" class="nav-link" data-scroll-target="#theory"><span class="header-section-number">5.2.2</span> Theory</a></li>
+  <li><a href="#example-multivariate-linear-regression" id="toc-example-multivariate-linear-regression" class="nav-link" data-scroll-target="#example-multivariate-linear-regression"><span class="header-section-number">5.2.3</span> Example: Multivariate Linear Regression</a></li>
+  </ul></li>
+  <li><a href="#anova-models" id="toc-anova-models" class="nav-link" data-scroll-target="#anova-models"><span class="header-section-number">5.3</span> ANOVA Models</a>
+  <ul class="collapse">
+  <li><a href="#theory-1" id="toc-theory-1" class="nav-link" data-scroll-target="#theory-1"><span class="header-section-number">5.3.1</span> Theory</a></li>
+  <li><a href="#one-way-anova-models" id="toc-one-way-anova-models" class="nav-link" data-scroll-target="#one-way-anova-models"><span class="header-section-number">5.3.2</span> One-Way ANOVA Models</a></li>
+  <li><a href="#anova-model-diagnostics" id="toc-anova-model-diagnostics" class="nav-link" data-scroll-target="#anova-model-diagnostics"><span class="header-section-number">5.3.3</span> ANOVA Model Diagnostics</a></li>
+  <li><a href="#comparing-factor-level-means" id="toc-comparing-factor-level-means" class="nav-link" data-scroll-target="#comparing-factor-level-means"><span class="header-section-number">5.3.4</span> Comparing Factor-Level Means</a></li>
+  <li><a href="#two-way-anova-models" id="toc-two-way-anova-models" class="nav-link" data-scroll-target="#two-way-anova-models"><span class="header-section-number">5.3.5</span> Two-Way ANOVA Models</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">5.4</span> Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="ch5" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Models I</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">5.1</span> Introduction</h2>
+<p>Linear models, a fundamental class of statistical models, provide a powerful framework for understanding and quantifying relationships between variables. At their core, linear models assume that the relationship between the dependent variable and one or more independent variables is linear, meaning that a change in the independent variable(s) corresponds to a proportional change in the dependent variable. These models are widely employed in various fields, such as economics, biology, and engineering, for tasks ranging from predicting future outcomes to uncovering associations between variables. Linear models encompass a range of techniques, including simple linear regression for two-variable relationships, multiple linear regression for more complex interactions, and extensions like logistic regression for modeling binary outcomes. Their versatility and interpretability make linear models an indispensable tool in statistical analysis and hypothesis testing, offering insights into the influence of different factors on the phenomenon of interest.</p>
+<ul>
+<li>Which of your variables is the response variable?</li>
+<li>Which variables are the explanatory variables?</li>
+<li>Are the explanatory variables continuous or categorical, or a mixture of both?</li>
+<li>What kind of response variable do you have: is it a continuous measurement, a count, a proportion, a time at death or events, or a category?</li>
+</ul>
+<section id="model-types" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="model-types"><span class="header-section-number">5.1.1</span> Model Types</h3>
+<p>We can categorize linear models in several ways based on the problems we try to solve:</p>
+<ul>
+<li>Simple regression: <span class="math inline">\(p=1\)</span>.</li>
+<li>Multiple regression: <span class="math inline">\(p&gt;1\)</span>.</li>
+<li>Multivariate multiple regression: more than one response variable. This is not covered in this class.</li>
+<li>Mixture of quantitative and qualitative explanatory variables: analysis of covariance (ANCOVA).</li>
+<li>Qualitative explanatory variables: analysis of variance (ANOVA).</li>
+</ul>
+<p><strong>Explanatory variables</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 81%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Explanatory-variable structure</th>
+<th style="text-align: left;">Model class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">All explanatory variables are continuous</td>
+<td style="text-align: left;">Regression</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All explanatory variables are categorical</td>
+<td style="text-align: left;">ANOVA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Explanatory variables are both continuous and categorical</td>
+<td style="text-align: left;">ANCOVA</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response variable</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Response-variable type</th>
+<th style="text-align: left;">Model class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Continuous</td>
+<td style="text-align: left;">Normal regression, ANOVA, or ANCOVA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Proportion</td>
+<td style="text-align: left;">Logistic regression</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Count</td>
+<td style="text-align: left;">Log-linear models</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">Binary logistic regression</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ordinal or nominal</td>
+<td style="text-align: left;">Multinomial logistic regression</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Time at death or at event</td>
+<td style="text-align: left;">Survival analysis</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="linear-regression-models" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="linear-regression-models"><span class="header-section-number">5.2</span> Linear Regression Models</h2>
+<section id="regression-objectives" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="regression-objectives"><span class="header-section-number">5.2.1</span> Regression Objectives</h3>
+<ul>
+<li>Prediction of future values of the response for specified values of the predictors.</li>
+<li>Assessment of the relationship between the explanatory variables and the response. Is there a causal relationship?</li>
+<li>Summary of the relationship between variables.</li>
+</ul>
+</section>
+<section id="theory" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="theory"><span class="header-section-number">5.2.2</span> Theory</h3>
+<ul>
+<li>In most applications, several predictors are used instead of a single predictor as in simple linear regression (SLR).</li>
+<li>The data have the form <span class="math inline">\((y_i, \mathbf{x}_i)_{i=1}^n\)</span>, where <span class="math inline">\(\mathbf{x}_i=(x_{i1},\ldots,x_{ip})^t\)</span> with <span class="math inline">\(x_{i1}=1\)</span>.</li>
+<li>Assume the model</li>
+</ul>
+<p><span class="math display">\[
+y_i=x_{i1}\beta_1 + x_{i2}\beta_2+\ldots+x_{ip}\beta_p+e_i.
+\]</span></p>
+<p>Here, <span class="math inline">\((\beta_1,\ldots,\beta_p,\sigma^2)\)</span> are the unknown but true parameters, and the <span class="math inline">\(e_i\)</span>’s are random errors.</p>
+<section id="main-model-assumptions" class="level4" data-number="5.2.2.1">
+<h4 data-number="5.2.2.1" class="anchored" data-anchor-id="main-model-assumptions"><span class="header-section-number">5.2.2.1</span> Main model assumptions</h4>
+<ol type="1">
+<li>The mean function <span class="math inline">\(E[y_i]=x_{i1}\beta_1+x_{i2}\beta_2\ldots+x_{ip}\beta_p\)</span> is linear in the <span class="math inline">\(p\)</span> predictors.</li>
+<li>The errors <span class="math inline">\(e_i\)</span>’s are uncorrelated with mean <span class="math inline">\(0\)</span> and constant variance <span class="math inline">\(\sigma^2\)</span>. This is equivalent to <span class="math inline">\(E[e_i]=0\)</span> and <span class="math inline">\(\operatorname{Cov}(e_i,e_j)=\sigma^2 \delta_{ij}\)</span>, with <span class="math inline">\(\delta_{ij}=0\)</span> if <span class="math inline">\(i \neq j\)</span> and <span class="math inline">\(\delta_{ij}=1\)</span> if <span class="math inline">\(i=j\)</span>.</li>
+<li>For hypothesis testing, we further assume that the <span class="math inline">\(e_i\)</span>’s are i.i.d. and <span class="math inline">\(e_i\sim N(0,\sigma^2)\)</span>.</li>
+</ol>
+</section>
+<section id="matrix-representation-of-the-mlr" class="level4" data-number="5.2.2.2">
+<h4 data-number="5.2.2.2" class="anchored" data-anchor-id="matrix-representation-of-the-mlr"><span class="header-section-number">5.2.2.2</span> Matrix representation of the MLR</h4>
+<p>Suppose MLR is valid for all observations <span class="math inline">\(i=1,\ldots,n\)</span>. We can write:</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+y_1\\
+y_2\\
+\vdots\\
+y_n
+\end{pmatrix}
+=
+\begin{pmatrix}
+x_{11}\beta_1 + x_{12}\beta_2+\ldots+x_{1p}\beta_p+e_1\\
+x_{21}\beta_1 + x_{22}\beta_2+\ldots+x_{2p}\beta_p+e_2\\
+\vdots\\
+x_{n1}\beta_1 + x_{n2}\beta_2+\ldots+x_{np}\beta_p+e_n
+\end{pmatrix}.
+\]</span></p>
+<p>Equivalently,</p>
+<p><span class="math display">\[
+\mathbf{y}_{n\times 1}
+=
+\mathbf{X}_{n\times p}\boldsymbol{\beta}_{p\times 1}
++
+\mathbf{e}_{n\times 1},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\mathbf{X}=
+\begin{pmatrix}
+x_{11} &amp; x_{12} &amp; \ldots &amp; x_{1p}\\
+x_{21} &amp; x_{22} &amp; \ldots &amp; x_{2p}\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+x_{n1} &amp; x_{n2} &amp; \ldots &amp; x_{np}
+\end{pmatrix},
+\quad
+\boldsymbol{\beta}=
+\begin{pmatrix}
+\beta_1\\
+\beta_2\\
+\vdots\\
+\beta_p
+\end{pmatrix},
+\quad
+\mathbf{e}=
+\begin{pmatrix}
+e_1\\
+e_2\\
+\vdots\\
+e_n
+\end{pmatrix}.
+\]</span></p>
+<p>Matrix <span class="math inline">\(\mathbf{X}\)</span> is normally called the <strong>design matrix</strong>.</p>
+</section>
+<section id="least-squares-estimation" class="level4" data-number="5.2.2.3">
+<h4 data-number="5.2.2.3" class="anchored" data-anchor-id="least-squares-estimation"><span class="header-section-number">5.2.2.3</span> Least-Squares Estimation</h4>
+<p>Using matrix representation, the MLR model can be expressed as<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p><span class="math display">\[
+\mathbf{y}_{n\times 1}
+=
+\mathbf{X}_{n\times p}\boldsymbol{\beta}_{p\times 1}
++
+\mathbf{e}_{n\times 1},
+\qquad
+\mathbf{e}\sim N_n(\mathbf{0},\sigma^2 \mathbf{I}_n).
+\]</span></p>
+<p>The least-squares estimate of <span class="math inline">\(\boldsymbol{\beta}\)</span> is the vector that minimizes the residual sum of squares (RSS):</p>
+<p><span class="math display">\[
+RSS=\|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|^2
+=(\mathbf{y}-\mathbf{X}\boldsymbol{\beta})^t(\mathbf{y}-\mathbf{X}\boldsymbol{\beta}).
+\]</span></p>
+<p>Differentiating <span class="math inline">\(RSS\)</span> with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span> and setting this equation to zero gives the least-squares estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span>:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}=(X^T X)^{-1}X^T\mathbf{y}.
+\]</span></p>
+</section>
+</section>
+<section id="example-multivariate-linear-regression" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="example-multivariate-linear-regression"><span class="header-section-number">5.2.3</span> Example: Multivariate Linear Regression</h3>
+<p>NEED TO ADD EXAMPLES</p>
+</section>
+</section>
+<section id="anova-models" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="anova-models"><span class="header-section-number">5.3</span> ANOVA Models</h2>
+<ul>
+<li>There are many questions we can investigate.</li>
+<li>Are all models predicting the same average precipitation during summer? During winter?</li>
+<li>Are precipitation extremes behaving equally among models?</li>
+<li>Are the seasonal patterns/trends equal among models?</li>
+</ul>
+<p><strong>Example</strong></p>
+<p><strong>Mean precipitation during summer</strong></p>
+<p>Investigate whether the mean precipitation during the summer months is significantly different among models.</p>
+<p>We want to test the hypothesis:</p>
+<p><span class="math display">\[
+H_0: \mu_1=\mu_2=\mu_3=\mu_4.
+\]</span></p>
+<p>In this case, the t-test is not efficient because we would need to make multiple comparisons, <span class="math inline">\(g(g-1)/2\)</span>, and the probability of Type I error will increase. Here, <span class="math inline">\(g\)</span> is the number of groups.</p>
+<p><strong>Type I error for multiple tests</strong></p>
+<p>If <span class="math inline">\(1-\alpha\)</span> is the probability of not making a Type I error in one mean comparison, <span class="math inline">\((1-\alpha)^C\)</span> is the probability of not making a Type I error in <span class="math inline">\(C\)</span> mean-comparison tests. The probability of making a Type I error in <span class="math inline">\(C\)</span> comparisons is <span class="math inline">\(1-(1-\alpha)^C\)</span>.</p>
+<p>In our case, we have <span class="math inline">\(4\times 3/2=6\)</span> comparisons. If we assume 6 independent comparisons, the Type I error will be:</p>
+<p><span class="math display">\[
+1-(1-0.05)^6=0.2649,
+\]</span></p>
+<p>which is much larger than 0.05. This is called the family-wise Type I error <span class="math inline">\(\alpha_f\)</span>.</p>
+<p><strong>Bonferroni correction</strong></p>
+<ul>
+<li>If we want the family-wise error rate to be 0.05, for example, we should adjust the level of significance for the pairwise tests.</li>
+<li>The family-wise Type I error test is adjusted using a level of significance for the pairwise tests equal to <span class="math inline">\(\alpha/C\)</span>, where <span class="math inline">\(C\)</span> is the total number of comparisons we need to make.</li>
+</ul>
+<p><strong>Why?</strong></p>
+<p><span class="math display">\[
+\Pr(\text{Type I error for all tests})
+=1-\Pr(\text{No Type I error for all tests}).
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\Pr(\text{No Type I error for all tests})=1-\Pr(\text{At least 1 Type I error}) \geq 1-\sum_{i=1}^C \Pr(\text{Type I error for test } i)=1-C\alpha\)</span>.</li>
+<li>If we want <span class="math inline">\(\Pr(\text{Overall Type I error})\leq \alpha\)</span>, we should use a level of significance equal to <span class="math inline">\(\alpha/C\)</span> for the pairwise tests.</li>
+</ul>
+<section id="theory-1" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="theory-1"><span class="header-section-number">5.3.1</span> Theory</h3>
+<ul>
+<li><strong>Model parameterization</strong></li>
+<li><strong>Parameter interpretation</strong></li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 41%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Test</th>
+<th style="text-align: left;">Population assumption</th>
+<th style="text-align: left;">Location parameter <span class="math inline">\(\mu_0\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Student’s <em>t</em></td>
+<td style="text-align: left;"><em>iid</em> <span class="math inline">\(N(\mu,\sigma^2)\)</span></td>
+<td style="text-align: left;">Mean (same as median)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Signed rank</td>
+<td style="text-align: left;"><em>iid</em> symmetric distribution</td>
+<td style="text-align: left;">Median</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sign</td>
+<td style="text-align: left;"><em>iid</em></td>
+<td style="text-align: left;">Median</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Model properties</strong></li>
+<li><strong>Fitting of ANOVA model</strong></li>
+<li><strong>Fitted values and residuals</strong></li>
+<li><strong>ANOVA table</strong></li>
+<li><span class="math inline">\(F\)</span>-test</li>
+</ul>
+<p>We want to test whether the means of the groups are really different. We can express this as</p>
+<p><span class="math display">\[
+\begin{cases}
+H_0: \mu_1 = \mu_2 = \ldots = \mu_r,\\
+H_{\alpha}: \text{not all } \mu_i,\; i=1,\ldots,r \text{ are equal}.
+\end{cases}
+\]</span></p>
+<p>Or, in terms of models,</p>
+<p><span class="math display">\[
+\begin{cases}
+H_0: y_{ij} = \mu + e_{ij},\\
+H_a: y_{ij} = \mu + \alpha_i + e_{ij}.
+\end{cases}
+\]</span></p>
+<p>These are two nested models, so we can use the partial <span class="math inline">\(F\)</span>-test:</p>
+<p><span class="math display">\[
+\frac{(RSS_0 - RSS_a)/(r-1)}{RSS_a/(n-r)} \sim F_{r-1,n-r},
+\]</span></p>
+<p>under <span class="math inline">\(H_0\)</span>.</p>
+<p>The test statistic can also be written as</p>
+<p><span class="math display">\[
+\frac{FSS/(r-1)}{RSS/(n-r)}
+= \frac{\text{Between-group Variation}/(r-1)}{\text{Within-group Variation}/(n-r)},
+\]</span></p>
+<p>where <span class="math inline">\(FSS\)</span> and <span class="math inline">\(RSS\)</span> are defined in the ANOVA table.</p>
+</section>
+<section id="one-way-anova-models" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="one-way-anova-models"><span class="header-section-number">5.3.2</span> One-Way ANOVA Models</h3>
+<p>Data:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 14%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Group</th>
+<th style="text-align: left;">Observation 1</th>
+<th style="text-align: left;">Observation 2</th>
+<th style="text-align: left;"><span class="math inline">\(\ldots\)</span></th>
+<th style="text-align: left;">Last observation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">group 1</td>
+<td style="text-align: left;"><span class="math inline">\(y_{11}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{12}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\ldots\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{1n_1}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">group 2</td>
+<td style="text-align: left;"><span class="math inline">\(y_{21}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{22}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\ldots\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{2n_2}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\vdots\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\vdots\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\vdots\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\vdots\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\vdots\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">group <span class="math inline">\(r\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{r1}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{r2}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\ldots\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{rn_r}\)</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><span class="math inline">\(r\)</span> is the number of groups.</li>
+<li><span class="math inline">\(n_i\)</span> denotes the number of observations in the <span class="math inline">\(i\)</span>th group.</li>
+<li><span class="math inline">\(n=\sum_{i=1}^{r} n_i\)</span> is the total sample size.</li>
+<li><span class="math inline">\(y_{ij}\)</span> is observation <span class="math inline">\(j\)</span> for the <span class="math inline">\(i\)</span>th group or factor.</li>
+</ul>
+<p><strong>ANOVA model representations</strong></p>
+<section id="paragraph-1" class="level4" data-number="5.3.2.1">
+<h4 data-number="5.3.2.1" class="anchored" data-anchor-id="paragraph-1"><span class="header-section-number">5.3.2.1</span> Paragraph 1</h4>
+<ul>
+<li>item 1</li>
+</ul>
+<p><span class="math display">\[
+W_n=\frac{\left(\sum_{i=1}^n a_i x^{(i)}\right)^2}{\sum_{i=1}^n (x_i -\bar{x})^2}.
+\]</span></p>
+<p>some texts</p>
+</section>
+<section id="paragraph-2" class="level4" data-number="5.3.2.2">
+<h4 data-number="5.3.2.2" class="anchored" data-anchor-id="paragraph-2"><span class="header-section-number">5.3.2.2</span> Paragraph 2</h4>
+</section>
+</section>
+<section id="anova-model-diagnostics" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="anova-model-diagnostics"><span class="header-section-number">5.3.3</span> ANOVA Model Diagnostics</h3>
+<p><strong>Objectives</strong></p>
+<ul>
+<li>Check for outliers or unusual observations.</li>
+<li>Check the residuals vs.&nbsp;fitted values plot for departures from the constant variance assumption.</li>
+<li>Check the Q-Q plot for departures from the normality assumption.</li>
+</ul>
+<p><strong>Methods</strong></p>
+<ul>
+<li><strong>Box-Cox transformation of the</strong> <span class="math inline">\(Y\)</span> variable
+<ul>
+<li>Box and Cox (1964) suggested a family of transformations for positive responses designed to reduce non-normality of the errors. It turns out that in doing this, it often reduces non-linearity as well.</li>
+<li>Suppose each <span class="math inline">\(y_i&gt;0\)</span>, and consider the following transformation:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+g_{\lambda}(y)=
+\begin{cases}
+\frac{y^{\lambda} - 1}{\lambda}, &amp; \lambda\neq 0,\\
+\log(y), &amp; \lambda=0.
+\end{cases}
+\]</span></p>
+<p>The aim is to choose <span class="math inline">\(\lambda\)</span> that maximizes the likelihood of the data, under the normal assumption that the transformed data <span class="math inline">\(g_{\lambda}(\mathbf{y})\)</span> has a normal distribution:</p>
+<p><span class="math display">\[
+g_{\lambda}(\mathbf{y})=\mathbf{X}\boldsymbol{\beta} + \mathbf{e},
+\qquad
+\mathbf{e} \sim N_n(\mathbf{0},\sigma^2 \mathbf{I}).
+\]</span></p>
+<ul>
+<li>Note that it does not make sense to simply pick <span class="math inline">\(\lambda\)</span> that minimizes <span class="math inline">\(RSS_{\lambda}\)</span> since, for each <span class="math inline">\(\lambda\)</span>, the residual sum of squares is measured on a different scale.</li>
+<li>In <strong>R</strong>, we can graph the log-likelihood as a function of <span class="math inline">\(\lambda\)</span>, <span class="math inline">\(L(\lambda)\)</span>, versus <span class="math inline">\(\lambda \in (-2,2)\)</span><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> and then pick the maximizer <span class="math inline">\(\hat{\lambda}\)</span>.</li>
+<li>It is common to round <span class="math inline">\(\hat{\lambda}\)</span> to a nearby value, such as</li>
+</ul>
+<p><span class="math display">\[
+-1,-0.5,0,0.5,\quad \text{or}\quad 1,
+\]</span></p>
+<p>so the transformation defined by <span class="math inline">\(\hat{\lambda}\)</span> is easier to interpret.</p>
+<ul>
+<li><p>To answer whether we really need the transformation <span class="math inline">\(g_{\lambda}\)</span>, we can do hypothesis testing with <span class="math inline">\(H_0:\lambda=1\)</span>, or equivalently construct a confidence interval for <span class="math inline">\(\lambda\)</span>.</p></li>
+<li><p><strong>Levene’s test for equality of variances</strong></p>
+<ul>
+<li>Run a regression with <span class="math inline">\(|\text{residuals}|\sim X\)</span>, i.e., use the absolute residuals as the response in a new one-way ANOVA.</li>
+<li>If the <span class="math inline">\(p\)</span>-value for the <span class="math inline">\(F\)</span>-test is greater than the 1% level, then we conclude that there is no evidence of non-constant variance.</li>
+</ul></li>
+</ul>
+</section>
+<section id="comparing-factor-level-means" class="level3" data-number="5.3.4">
+<h3 data-number="5.3.4" class="anchored" data-anchor-id="comparing-factor-level-means"><span class="header-section-number">5.3.4</span> Comparing Factor-Level Means</h3>
+<p><strong>Objectives</strong></p>
+<p>What happens when the <span class="math inline">\(F\)</span>-test leads to the conclusion that the factor-level means <span class="math inline">\(\mu_i\)</span> differ?</p>
+<ul>
+<li>Analysis of the factor-level means of interest using <em>estimation</em> techniques.</li>
+<li>Statistical <em>tests</em> concerning the factor-level means of interest.</li>
+</ul>
+<p><strong>Inference for factor-level means</strong></p>
+<ol type="1">
+<li>A single factor-level mean.</li>
+<li>A difference between two factor-level means.</li>
+<li>A contrast among factor-level means.</li>
+<li>A linear combination of factor-level means.</li>
+</ol>
+</section>
+<section id="two-way-anova-models" class="level3" data-number="5.3.5">
+<h3 data-number="5.3.5" class="anchored" data-anchor-id="two-way-anova-models"><span class="header-section-number">5.3.5</span> Two-Way ANOVA Models</h3>
+<p><strong>GCMs simulations example</strong></p>
+<p>Consider variables <code>model</code> and <code>month</code> as two potential predictor factors for precipitation projections. Main questions include:</p>
+<ul>
+<li><p>Are model simulations different among the summer months?</p></li>
+<li><p>Are model simulations different among models?</p></li>
+<li><p>Are model simulations for each month varying for each model?</p></li>
+<li><p><strong>Single-factor</strong></p>
+<ol type="1">
+<li>Do not explore the entire space of factor combinations.</li>
+<li>Interactions cannot be estimated.</li>
+<li>Full randomization is not possible.</li>
+<li>Multiple stages increase the complexity of the analysis.</li>
+</ol></li>
+<li><p><strong>Multifactor</strong></p>
+<ol type="1">
+<li>Efficient replication.</li>
+<li>Assessment of interactions.</li>
+<li>Validity of findings.</li>
+</ol></li>
+</ul>
+<p><strong>Equal sample sizes for all treatment means</strong></p>
+<p><span class="math display">\[
+y_{ijk} = \mu_{ij} + e_{ijk}.
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\mu_{ij}\)</span> is the mean of the <span class="math inline">\(i\)</span>th level of factor A and the <span class="math inline">\(j\)</span>th level of factor B.</li>
+<li><span class="math inline">\(e_{ijk}\)</span> are independent <span class="math inline">\(\mathcal{N}(0, \sigma^2)\)</span>.</li>
+<li><span class="math inline">\(i=1,\ldots,a\)</span>.</li>
+<li><span class="math inline">\(j=1,\ldots,b\)</span>.</li>
+<li><span class="math inline">\(k=1,\ldots,n\)</span>, where <span class="math inline">\(n&gt;1\)</span>.</li>
+<li><span class="math inline">\(n_T = nab\)</span> is the total sample size.</li>
+</ul>
+<p>Usually, the means <span class="math inline">\(\mu_{ij}\)</span> are decomposed as follows:</p>
+<p><span class="math display">\[
+\mu_{ij} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij},
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(\mu\)</span> is the overall mean.</li>
+<li><span class="math inline">\(\alpha_i\)</span> are the factor A, <code>model</code>, effects (fixed).</li>
+<li><span class="math inline">\(\beta_j\)</span> are the factor B, <code>month</code>, effects (fixed).</li>
+<li><span class="math inline">\((\alpha\beta)_{ij}\)</span> are the interaction effects (fixed).</li>
+</ul>
+<p>In this example:</p>
+<ul>
+<li><span class="math inline">\(a\)</span> is the total number of models (4).</li>
+<li><span class="math inline">\(b\)</span> is the total number of months (3).</li>
+<li><span class="math inline">\(n\)</span> is the total number of years (30).</li>
+<li><span class="math inline">\(n_T=360\)</span>.</li>
+</ul>
+<p><strong>Factor effects model for two factors</strong></p>
+<p><span class="math display">\[
+y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha \beta)_{ij} + e_{ijk}.
+\]</span></p>
+<ul>
+<li><span class="math inline">\(e_{ijk}\)</span> are independent <span class="math inline">\(\mathcal{N}(0, \sigma^2)\)</span>.</li>
+<li>This model is equivalent to the cell-means model, but it is more useful when we want to understand the significance of each term in software like R.</li>
+<li>Here again, we need to impose constraints to ensure that the estimators for the effects are unique.</li>
+</ul>
+<p><strong>Notation</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: left;">Sum</th>
+<th style="text-align: left;">Average</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Cell <span class="math inline">\((i,j)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{ij\cdot} = \sum_{k=1}^{n} y_{ijk}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{y}_{ij\cdot} = \frac{y_{ij\cdot}}{n}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Row <span class="math inline">\(i\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{i \cdot \cdot} = \sum_{j=1}^{b} \sum_{k=1}^{n} y_{ijk}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{y}_{i \cdot \cdot} = \frac{y_{i \cdot \cdot}}{bn}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column <span class="math inline">\(j\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(y_{ \cdot j \cdot} = \sum_{i=1}^{a} \sum_{k=1}^{n} y_{ijk}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{y}_{ \cdot j \cdot} = \frac{y_{ \cdot j \cdot}}{an}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Overall</td>
+<td style="text-align: left;"><span class="math inline">\(y_{\cdot \cdot \cdot} = \sum_{i=1}^{a} \sum_{j=1}^{b} \sum_{k=1}^{n} y_{ijk}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{y}_{\cdot \cdot \cdot} = \frac{y_{\cdot \cdot \cdot}}{nab}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fitting of ANOVA</strong></p>
+<ul>
+<li>Using the least-squares method, the estimated treatment means are</li>
+</ul>
+<p><span class="math display">\[
+\hat{\mu}_{ij} = \bar{y}_{ij\cdot}.
+\]</span></p>
+<ul>
+<li>The factor effects estimators depend on the constraints that we impose. For example, under the <em>sum constraints</em>, we have</li>
+</ul>
+<p><span class="math display">\[
+\hat{\alpha}_{i} = \bar{y}_{i \cdot \cdot} - \bar{y}_{\cdot \cdot \cdot},
+\qquad
+\hat{\beta}_{j} = \bar{y}_{\cdot j \cdot} - \bar{y}_{\cdot \cdot \cdot}.
+\]</span></p>
+<p><span class="math display">\[
+(\hat{\alpha \beta})_{ij}
+= \bar{y}_{ij \cdot} - \bar{y}_{i\cdot \cdot} - \bar{y}_{\cdot j \cdot} + \bar{y}_{\cdot \cdot \cdot}.
+\]</span></p>
+<ul>
+<li>The fitted values and residuals are computed as usual:</li>
+</ul>
+<p><span class="math display">\[
+\hat{y}_{ijk} = \bar{y}_{ij\cdot},
+\qquad
+r_{ij} = y_{ijk} - \hat{y}_{ijk}.
+\]</span></p>
+<p><strong>Model diagnostics</strong></p>
+<ul>
+<li>Model diagnostic plots suggest a transformation is needed.</li>
+<li>The cubic-root transformation is applied to precipitation.</li>
+<li>Diagnostic plots are reproduced after transformation to check model assumptions again.</li>
+</ul>
+<p>Diagnostic plots after the cubic-root transformation is applied:</p>
+<p><img src="figures/chapter5_LinearI/2anova_diag1.png" class="img-fluid" data-fig-width="75%"></p>
+<ul>
+<li>The diagnostics for the transformed model look good.</li>
+<li>The next goal is to understand the effects: main effects and interaction effects.</li>
+<li>We start by creating an <em>interaction plot</em>, that is, the plot of the response against the factor-level combinations.</li>
+<li>This plot will help us visually inspect the presence or absence of interactions and the nature of the main effects.</li>
+</ul>
+<p><strong>Partitioning of total sum of squares</strong></p>
+<p><span class="math display">\[
+\underbrace{y_{ijk} - \bar{y}_{\cdot \cdot \cdot}}_{\text{Total Deviation}}
+=
+\underbrace{\bar{y}_{ij\cdot}-\bar{y}_{\cdot \cdot \cdot}}_{\substack{\text{Deviation of estimated}\\\text{treatment mean around}\\\text{overall mean}}}
++
+\underbrace{y_{ijk} - \bar{y}_{ij\cdot}}_{\substack{\text{Deviation}\\\text{around estimated}\\\text{treatment mean}}}.
+\]</span></p>
+<p><span class="math display">\[
+TSS = FSS + RSS,
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\begin{aligned}
+TSS &amp;= \sum_i \sum_j \sum_k (y_{ijk} - \bar{y}_{\cdot \cdot \cdot})^2,\\
+FSS &amp;= n \sum_{i} \sum_{j} (\bar{y}_{ij\cdot} - \bar{y}_{\cdot \cdot \cdot})^2,\\
+RSS &amp;= \sum_i \sum_j \sum_k (y_{ijk} - \bar{y}_{ij \cdot})^2
+=  \sum_i \sum_j \sum_k r_{ijk}^{2}.
+\end{aligned}
+\]</span></p>
+<p><strong>Partitioning of treatment sum of squares</strong></p>
+<p><span class="math display">\[
+\underbrace{\bar{y}_{ij\cdot} - \bar{y}_{\cdot \cdot \cdot}}_{\substack{\text{Deviation of estimated}\\\text{treatment mean around}\\\text{overall mean}}}
+=
+\underbrace{\bar{y}_{i \cdot \cdot}-\bar{y}_{\cdot \cdot \cdot}}_{\substack{\text{A main}\\\text{effect}}}
++
+\underbrace{\bar{y}_{\cdot j \cdot} - \bar{y}_{\cdot \cdot\cdot}}_{\substack{\text{B main}\\\text{effect}}}
++
+\underbrace{\bar{y}_{ij\cdot} - \bar{y}_{i\cdot \cdot} - \bar{y}_{\cdot j \cdot} + \bar{y}_{\cdot \cdot \cdot}}_{\substack{\text{AB interaction}\\\text{effect}}}.
+\]</span></p>
+<p><span class="math display">\[
+FSS = SSA + SSB + SSAB \quad \text{(orthogonal decomposition)},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\begin{aligned}
+SSA &amp;= nb \sum_i  (\bar{y}_{i \cdot \cdot}-\bar{y}_{\cdot \cdot \cdot})^2,\\
+SSB &amp;= na \sum_{j} (\bar{y}_{\cdot j \cdot} - \bar{y}_{\cdot \cdot\cdot})^2,\\
+SSAB &amp;= n\sum_i \sum_j  (\bar{y}_{ij\cdot} - \bar{y}_{i\cdot \cdot} - \bar{y}_{\cdot j \cdot} + \bar{y}_{\cdot \cdot \cdot})^2.
+\end{aligned}
+\]</span></p>
+<p><strong>ANOVA table</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Source of variation</th>
+<th style="text-align: left;">SS</th>
+<th style="text-align: left;">df</th>
+<th style="text-align: left;">MS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Factor A</td>
+<td style="text-align: left;"><span class="math inline">\(SSA\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(a-1\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(MSA = \frac{SSA}{a-1}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Factor B</td>
+<td style="text-align: left;"><span class="math inline">\(SSB\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(b-1\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(MSB = \frac{SSB}{b-1}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AB interactions</td>
+<td style="text-align: left;"><span class="math inline">\(SSAB\)</span></td>
+<td style="text-align: left;"><span class="math inline">\((a-1)(b-1)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(MSAB = \frac{SSAB}{(a-1)(b-1)}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Error</td>
+<td style="text-align: left;"><span class="math inline">\(RSS\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(ab(n-1)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(MSE = \frac{RSS}{ab(n-1)}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: left;"><span class="math inline">\(TSS\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(nab-1\)</span></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(F\)</span> tests</p>
+<ul>
+<li>In order to test for the statistical significance of the interaction terms, we use partial <span class="math inline">\(F\)</span>-tests. So, we fit a main-effects model, i.e., no interactions:</li>
+</ul>
+<p><span class="math display">\[
+y_{ijk} = \mu + \alpha_i + \beta_j + e_{ijk}.
+\]</span></p>
+<ul>
+<li>Then, we compare the two nested models:</li>
+</ul>
+<p><span class="math display">\[
+\begin{cases}
+H_0: \text{smaller model with } p_0 \text{ coefficients},\\
+H_{\alpha}: \text{larger model with } p_{\alpha} \text{ coefficients}.
+\end{cases}
+\]</span></p>
+<p>The <span class="math inline">\(F\)</span>-test is formulated as</p>
+<p><span class="math display">\[
+F=\frac{(RSS_0 - RSS_{\alpha})/(p_{\alpha}-p_0)}{MSE_{\alpha}}
+\sim F_{p_{\alpha}-p_0, n-p_{\alpha}}
+\quad \text{under } H_0.
+\]</span></p>
+<ul>
+<li>We can also perform <span class="math inline">\(F\)</span>-tests directly using the ANOVA table. For the interaction term, we have:</li>
+</ul>
+<p><span class="math display">\[
+F_{AB} = \frac{MSAB}{MSE} \sim F_{(a-1)(b-1), ab(n-1)}.
+\]</span></p>
+<p><img src="figures/chapter5_LinearI/2anova_anovaT.png" class="img-fluid" data-fig-width="70%"></p>
+<ul>
+<li><strong>Hierarchy principle:</strong> we test for main effects only if the interaction term is not statistically significant.</li>
+</ul>
+<p><strong>Strategy for analysis: two or more factor studies</strong></p>
+<p><img src="figures/chapter5_LinearI/strategy.jpg" class="img-fluid" data-fig-width="85%"></p>
+</section>
+</section>
+<section id="summary" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="summary"><span class="header-section-number">5.4</span> Summary</h2>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>By default, the intercept is included in the model, so the first column of the design matrix <span class="math inline">\(\mathbf{X}\)</span> is a vector of 1’s. We further assume that the rank of <span class="math inline">\(\mathbf{X}\)</span> is <span class="math inline">\(p\)</span>, i.e., no column of <span class="math inline">\(\mathbf{X}\)</span> is a linear combination of the other columns and <span class="math inline">\(\mathbf{X}\)</span> is a tall and skinny matrix (<span class="math inline">\(n&gt;p\)</span>).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The transformation for <span class="math inline">\(\lambda=0\)</span> is justified because <span class="math inline">\(\lim_{\lambda \rightarrow 0} \frac{y^{\lambda} -1}{\lambda}=\log(y)\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The method tends to work well for <span class="math inline">\(\lambda\)</span> in this range.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter3_Non_Para.html" class="pagination-link" aria-label="**Non-Parametric Methods for Statistical Inference**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Non-Parametric Methods for Statistical Inference</strong></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
