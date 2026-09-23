@@ -425,7 +425,7 @@ $$
 **Notation**
 
 | Quantity | Sum | Average |
-|:---|:---|:---|
+|:-----------------------|:-----------------------|:-----------------------|
 | Cell $(i,j)$ | $y_{ij\cdot} = \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{ij\cdot} = \frac{y_{ij\cdot}}{n}$ |
 | Row $i$ | $y_{i \cdot \cdot} = \sum_{j=1}^{b} \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{i \cdot \cdot} = \frac{y_{i \cdot \cdot}}{bn}$ |
 | Column $j$ | $y_{ \cdot j \cdot} = \sum_{i=1}^{a} \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{ \cdot j \cdot} = \frac{y_{ \cdot j \cdot}}{an}$ |
@@ -529,7 +529,7 @@ $$
 **ANOVA table**
 
 | Source of variation | SS     | df           | MS                               |
-|:--------------------|:-------|:-------------|:---------------------------------|
+|:-----------------|:-----------------|:-----------------|:-----------------|
 | Factor A            | $SSA$  | $a-1$        | $MSA = \frac{SSA}{a-1}$          |
 | Factor B            | $SSB$  | $b-1$        | $MSB = \frac{SSB}{b-1}$          |
 | AB interactions     | $SSAB$ | $(a-1)(b-1)$ | $MSAB = \frac{SSAB}{(a-1)(b-1)}$ |

@@ -12,6 +12,7 @@ book:
     - chapter1_RIntro.qmd
     - chapter2_Stats.qmd
     - chapter3_Non_Para.qmd
+    - chapter5_LinearI.qmd
 #    - summary.qmd
 #    - references.qmd
 
