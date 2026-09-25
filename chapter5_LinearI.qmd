@@ -4,6 +4,8 @@
 
 Linear models, a fundamental class of statistical models, provide a powerful framework for understanding and quantifying relationships between variables. At their core, linear models assume that the relationship between the dependent variable and one or more independent variables is linear, meaning that a change in the independent variable(s) corresponds to a proportional change in the dependent variable. These models are widely employed in various fields, such as economics, biology, and engineering, for tasks ranging from predicting future outcomes to uncovering associations between variables. Linear models encompass a range of techniques, including simple linear regression for two-variable relationships, multiple linear regression for more complex interactions, and extensions like logistic regression for modeling binary outcomes. Their versatility and interpretability make linear models an indispensable tool in statistical analysis and hypothesis testing, offering insights into the influence of different factors on the phenomenon of interest.
 
+The following questions should be answered before a model is fitted to a data set:
+
 - Which of your variables is the response variable?
 - Which variables are the explanatory variables?
 - Are the explanatory variables continuous or categorical, or a mixture of both?
@@ -11,11 +13,11 @@ Linear models, a fundamental class of statistical models, provide a powerful fra
 
 ### Model Types
 
-We can categorize linear models in several ways based on the problems we try to solve:
+We can categorize linear models in several ways based on the problems we try to solve. If $p$ is the total number of predictors, we can considered:
 
 - Simple regression: $p=1$.
 - Multiple regression: $p>1$.
-- Multivariate multiple regression: more than one response variable. This is not covered in this class.
+- Multivariate multiple regression: more than one response variable. This class of models is not covered in this book.
 - Mixture of quantitative and qualitative explanatory variables: analysis of covariance (ANCOVA).
 - Qualitative explanatory variables: analysis of variance (ANOVA).
 
@@ -42,15 +44,17 @@ We can categorize linear models in several ways based on the problems we try to 
 
 ### Regression Objectives
 
+The objectives of using a regression modeling approach can be summarized as follows:
+
 - Prediction of future values of the response for specified values of the predictors.
 - Assessment of the relationship between the explanatory variables and the response. Is there a causal relationship?
 - Summary of the relationship between variables.
 
-### Theory
+### Inference in the regression model
 
-- In most applications, several predictors are used instead of a single predictor as in simple linear regression (SLR).
-- The data have the form $(y_i, \mathbf{x}_i)_{i=1}^n$, where $\mathbf{x}_i=(x_{i1},\ldots,x_{ip})^t$ with $x_{i1}=1$.
-- Assume the model
+In most applications, several predictors are used instead of a single predictor as in simple linear regression (SLR). In this case, the data have the form: $$(y_i, \mathbf{x}_i)_{i=1}^n$$, where $\mathbf{x}_i=(x_{i1},\ldots,x_{ip})^t$ with $x_{i1}=1$.
+
+Assume the model:
 
 $$
 y_i=x_{i1}\beta_1 + x_{i2}\beta_2+\ldots+x_{ip}\beta_p+e_i.
@@ -159,22 +163,31 @@ NEED TO ADD EXAMPLES
 
 ## ANOVA Models
 
-- There are many questions we can investigate.
-- Are all models predicting the same average precipitation during summer? During winter?
-- Are precipitation extremes behaving equally among models?
-- Are the seasonal patterns/trends equal among models?
-
 **Example**
+
+This data set was downloaded from the NASA Earth Exchange (NEX) Downscaled Climate Projections (NEX-DCP30) data set for the conterminous U.S. CMIP5 project. The data set corresponds to monthly precipitation future projections (2070-2099) for the latitude and longitude where UIUC is located with a Representative Concentration Pathway (RCP) of 8.5 (Greenhouse gas concentration trajectory adopted by the IPCC).
+
+Four climate models: HadGEM2-CC,GFDL-ESM2G,MIROC-ESM-CHEM,CanESM2 were selected for model comparison.
+
+![](figures/chapter5_LinearI/gcm-pr-ts.png){fig-width="85%"}
 
 **Mean precipitation during summer**
 
-Investigate whether the mean precipitation during the summer months is significantly different among models.
+The aim of the analysis is to investigate whether the mean precipitation projections during the summer months is significantly different among different global climate models (GCMs) from the CMIP5 project.
+
+There are many questions we can investigate:
+
+- Are all models predicting the same average precipitation during summer? During winter?
+- Are precipitation extremes behaving equally among models?
+- Are the seasonal patterns/trends equal among models?
 
 We want to test the hypothesis:
 
 $$
 H_0: \mu_1=\mu_2=\mu_3=\mu_4.
-$$
+$$ The following figure suggests that not all models simulate similar mean precipitation values:
+
+![](figures/chapter5_LinearI/gcm-pr-boxplots.png){fig-width="85%"}
 
 In this case, the t-test is not efficient because we would need to make multiple comparisons, $g(g-1)/2$, and the probability of Type I error will increase. Here, $g$ is the number of groups.
 
@@ -273,17 +286,23 @@ Data:
 - $n=\sum_{i=1}^{r} n_i$ is the total sample size.
 - $y_{ij}$ is observation $j$ for the $i$th group or factor.
 
-**ANOVA model representations**
+**ANOVA model parameterizations**
 
-#### Paragraph 1
+Factor effects model:
 
-- item 1
+$$y_{ij} = \mu + \alpha_i + e_{ij}$$
 
-$$
-W_n=\frac{\left(\sum_{i=1}^n a_i x^{(i)}\right)^2}{\sum_{i=1}^n (x_i -\bar{x})^2}.
-$$
+- The factor effects model has $r+1$ model parameters, i.e. $(\mu, \alpha_1, \ldots, \alpha_r)$
+- In order for the $\alpha$'s to be (uniquely) estimated, we need to impose restrictions.
+- The restrictions on the $\alpha$'s depend on how $\mu$ is defined.
 
-some texts
+| Model | $\mu$ Definition | $\alpha$'s Restriction |
+|:---|:---|:---|
+| Reference Cell | $\mu = \mu_1$ | $\alpha_1 = 0$ |
+| Sum-to-Zero | $\mu = \frac{1}{r} \sum_i \mu_i$ | $\sum_{i} \alpha_i = 0$ |
+| Weighted Sum-to-Zero | $\mu = \frac{1}{n} \sum_i n_i \mu_i$ | $\sum_{i} n_i \alpha_i = 0$ |
+
+The default in R is the Reference Cell model. The function `contrast` in R can handle these parameterizations.
 
 #### Paragraph 2
 
@@ -373,7 +392,7 @@ Consider variables `model` and `month` as two potential predictor factors for pr
   3.  Full randomization is not possible.
   4.  Multiple stages increase the complexity of the analysis.
 
-- **Multifactor**
+- **Multi-factor**
 
   1.  Efficient replication.
   2.  Assessment of interactions.
@@ -425,7 +444,7 @@ $$
 **Notation**
 
 | Quantity | Sum | Average |
-|:-----------------------|:-----------------------|:-----------------------|
+|:---|:---|:---|
 | Cell $(i,j)$ | $y_{ij\cdot} = \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{ij\cdot} = \frac{y_{ij\cdot}}{n}$ |
 | Row $i$ | $y_{i \cdot \cdot} = \sum_{j=1}^{b} \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{i \cdot \cdot} = \frac{y_{i \cdot \cdot}}{bn}$ |
 | Column $j$ | $y_{ \cdot j \cdot} = \sum_{i=1}^{a} \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{ \cdot j \cdot} = \frac{y_{ \cdot j \cdot}}{an}$ |
@@ -529,7 +548,7 @@ $$
 **ANOVA table**
 
 | Source of variation | SS     | df           | MS                               |
-|:-----------------|:-----------------|:-----------------|:-----------------|
+|:--------------------|:-------|:-------------|:---------------------------------|
 | Factor A            | $SSA$  | $a-1$        | $MSA = \frac{SSA}{a-1}$          |
 | Factor B            | $SSB$  | $b-1$        | $MSB = \frac{SSB}{b-1}$          |
 | AB interactions     | $SSAB$ | $(a-1)(b-1)$ | $MSAB = \frac{SSAB}{(a-1)(b-1)}$ |
