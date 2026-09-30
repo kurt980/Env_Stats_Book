@@ -222,13 +222,6 @@ $$
 
 - **Model parameterization**
 - **Parameter interpretation**
-
-| Test          | Population assumption        | Location parameter $\mu_0$ |
-|:--------------|:-----------------------------|:---------------------------|
-| Student's *t* | *iid* $N(\mu,\sigma^2)$      | Mean (same as median)      |
-| Signed rank   | *iid* symmetric distribution | Median                     |
-| Sign          | *iid*                        | Median                     |
-
 - **Model properties**
 - **Fitting of ANOVA model**
 - **Fitted values and residuals**
@@ -297,14 +290,52 @@ $$y_{ij} = \mu + \alpha_i + e_{ij}$$
 - The restrictions on the $\alpha$'s depend on how $\mu$ is defined.
 
 | Model | $\mu$ Definition | $\alpha$'s Restriction |
-|:---|:---|:---|
+|:------------------|:------------------------------|:---------------------|
 | Reference Cell | $\mu = \mu_1$ | $\alpha_1 = 0$ |
 | Sum-to-Zero | $\mu = \frac{1}{r} \sum_i \mu_i$ | $\sum_{i} \alpha_i = 0$ |
 | Weighted Sum-to-Zero | $\mu = \frac{1}{n} \sum_i n_i \mu_i$ | $\sum_{i} n_i \alpha_i = 0$ |
 
 The default in R is the Reference Cell model. The function `contrast` in R can handle these parameterizations.
 
-#### Paragraph 2
+***Types of Models***
+
+- Means model: $\mu=0$}: Parameters are the estimated means for each group.  In R fit model with no intercept.
+- Reference Cell Model: $\mu=\mu_1$ and $\alpha_1=0$}.  R default fit (contr.treatment). First parameter is the estimated mean of the baseline group $\hat{\mu_1}$. Remaining parameters are changes from the baseline.
+- Sum-to-Zero: $\sum_{i=1}^r \alpha_i=0$}. Use option contr.sum. First parameter is the estimated mean of the group means $\hat{\mu}=\frac{1}{r} \sum_{i=1}^r \hat{\mu_i}$. Remaining parameters are changes with respect to this mean.   
+
+***Example: Models fitted to the GCMs data set***
+
+The following models were fitted to the GCMs data set, after selecting 4 climate models and precipitation data for the summer months:
+
+
+- `anova0`: Intercept only model $y_{ij}=\mu+e_{ij}$
+- `anova1`: ANOVA factor effects model with Reference cell $y_{ij}=\mu+\alpha_i+e_{ij}$ ($\mu=\mu_1$, $\alpha_1=0$)
+- `anova2`: ANOVA means model $y_{ij}=\mu_{i}+ e_{ij}$
+- `anova3`: ANOVA factor effects model with sum-to-zero parameterization $y_{ij}=\mu+\alpha_i+e_{ij}$, $\mu=\frac{1}{r}\sum_i \mu_i$, $\sum_i\alpha_i=0$
+
+```{r}
+RCP85<-read.csv("data/RCP8.5_raw.csv",header = TRUE) 
+RCP85$Date<-
+  as.yearmon(with(RCP85,paste(year,month,sep="-")))
+sec_Mod<-c("HadGEM2-CC_pr","GFDL-ESM2G_pr","MIROC-ESM-CHEM_pr","CanESM2_pr")
+RCP85_secmod<-RCP85[RCP85$model %in% sec_Mod,]
+RCP85_secmod_Su<-RCP85_secmod[RCP85_secmod$month %in% c(6,7,8),]
+RCP85_secmod_Su_pr<-RCP85_secmod_Su%>%group_by(year,model)
+head(RCP85_secmod_Su_pr,6)
+# Calculate mean precip. by model
+mod_means<-RCP85_secmod_Su_pr%>%group_by(model)%>%
+  summarize(mean_mod=mean(precipitation))
+print(mod_means)
+#Fit intercept only model
+anova0<-lm(precipitation~1,data=RCP85_secmod_Su_pr)
+summary(anova0)
+RCP85_secmod_Su_pr$model<-as.factor(RCP85_secmod_Su_pr$model)
+contrasts(RCP85_secmod_Su_pr$model)=contr.treatment(4)
+anova1<-lm(precipitation~model,data=RCP85_secmod_Su_pr)
+summary(anova1)
+
+```
+
 
 ### ANOVA Model Diagnostics
 
@@ -444,7 +475,7 @@ $$
 **Notation**
 
 | Quantity | Sum | Average |
-|:---|:---|:---|
+|:-----------------------|:-----------------------|:-----------------------|
 | Cell $(i,j)$ | $y_{ij\cdot} = \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{ij\cdot} = \frac{y_{ij\cdot}}{n}$ |
 | Row $i$ | $y_{i \cdot \cdot} = \sum_{j=1}^{b} \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{i \cdot \cdot} = \frac{y_{i \cdot \cdot}}{bn}$ |
 | Column $j$ | $y_{ \cdot j \cdot} = \sum_{i=1}^{a} \sum_{k=1}^{n} y_{ijk}$ | $\bar{y}_{ \cdot j \cdot} = \frac{y_{ \cdot j \cdot}}{an}$ |
@@ -548,7 +579,7 @@ $$
 **ANOVA table**
 
 | Source of variation | SS     | df           | MS                               |
-|:--------------------|:-------|:-------------|:---------------------------------|
+|:-----------------|:-----------------|:-----------------|:-----------------|
 | Factor A            | $SSA$  | $a-1$        | $MSA = \frac{SSA}{a-1}$          |
 | Factor B            | $SSB$  | $b-1$        | $MSB = \frac{SSB}{b-1}$          |
 | AB interactions     | $SSAB$ | $(a-1)(b-1)$ | $MSAB = \frac{SSAB}{(a-1)(b-1)}$ |
