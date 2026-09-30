@@ -314,6 +314,10 @@ The following models were fitted to the GCMs data set, after selecting 4 climate
 - `anova3`: ANOVA factor effects model with sum-to-zero parameterization $y_{ij}=\mu+\alpha_i+e_{ij}$, $\mu=\frac{1}{r}\sum_i \mu_i$, $\sum_i\alpha_i=0$
 
 ```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(zoo)
 RCP85<-read.csv("data/RCP8.5_raw.csv",header = TRUE) 
 RCP85$Date<-
   as.yearmon(with(RCP85,paste(year,month,sep="-")))
@@ -331,11 +335,24 @@ anova0<-lm(precipitation~1,data=RCP85_secmod_Su_pr)
 summary(anova0)
 RCP85_secmod_Su_pr$model<-as.factor(RCP85_secmod_Su_pr$model)
 contrasts(RCP85_secmod_Su_pr$model)=contr.treatment(4)
+# Reference cell model
 anova1<-lm(precipitation~model,data=RCP85_secmod_Su_pr)
 summary(anova1)
-
+# ANOVA means model (no intercept)
+anova2<-lm(precipitation~model-1,data=RCP85_secmod_Su_pr)
+summary(anova2)
+contrasts(RCP85_secmod_Su_pr$model)=contr.sum(4)
+# Sum-to-Zero model
+anova3<-lm(precipitation~model,data=RCP85_secmod_Su_pr)
+summary(anova3)
+# Extract coefficients for all models
+coef(anova0)
+coef(anova1)
+coef(anova2)
+coef(anova3)
 ```
 
+ `anova0` model estimates the mean of all group's means, while `anova1` estimates baseline group mean (mean precipitation for the Canadian model) and the effects $\alpha_i$ (mean change) of Models 2, 3 and 4 with respect to the baseline model. `anova2` model estimates each GCM's model mean separately; while the `anova3` model estimates the mean of means and the effects $\alpha_i$'s of GCM's models 1, 2 and 3 with respect to the global mean.
 
 ### ANOVA Model Diagnostics
 
