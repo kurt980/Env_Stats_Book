@@ -295,18 +295,19 @@ $$y_{ij} = \mu + \alpha_i + e_{ij}$$
 | Sum-to-Zero | $\mu = \frac{1}{r} \sum_i \mu_i$ | $\sum_{i} \alpha_i = 0$ |
 | Weighted Sum-to-Zero | $\mu = \frac{1}{n} \sum_i n_i \mu_i$ | $\sum_{i} n_i \alpha_i = 0$ |
 
+: One-way ANOVA model parameterizations
+
 The default in R is the Reference Cell model. The function `contrast` in R can handle these parameterizations.
 
 ***Types of Models***
 
-- Means model: $\mu=0$}: Parameters are the estimated means for each group.  In R fit model with no intercept.
-- Reference Cell Model: $\mu=\mu_1$ and $\alpha_1=0$}.  R default fit (contr.treatment). First parameter is the estimated mean of the baseline group $\hat{\mu_1}$. Remaining parameters are changes from the baseline.
-- Sum-to-Zero: $\sum_{i=1}^r \alpha_i=0$}. Use option contr.sum. First parameter is the estimated mean of the group means $\hat{\mu}=\frac{1}{r} \sum_{i=1}^r \hat{\mu_i}$. Remaining parameters are changes with respect to this mean.   
+- Means model: $\mu=0$}: Parameters are the estimated means for each group. In R fit model with no intercept.
+- Reference Cell Model: $\mu=\mu_1$ and $\alpha_1=0$}. R default fit (contr.treatment). First parameter is the estimated mean of the baseline group $\hat{\mu_1}$. Remaining parameters are changes from the baseline.
+- Sum-to-Zero: $\sum_{i=1}^r \alpha_i=0$}. Use option contr.sum. First parameter is the estimated mean of the group means $\hat{\mu}=\frac{1}{r} \sum_{i=1}^r \hat{\mu_i}$. Remaining parameters are changes with respect to this mean.
 
 ***Example: Models fitted to the GCMs data set***
 
 The following models were fitted to the GCMs data set, after selecting 4 climate models and precipitation data for the summer months:
-
 
 - `anova0`: Intercept only model $y_{ij}=\mu+e_{ij}$
 - `anova1`: ANOVA factor effects model with Reference cell $y_{ij}=\mu+\alpha_i+e_{ij}$ ($\mu=\mu_1$, $\alpha_1=0$)
@@ -352,7 +353,7 @@ coef(anova2)
 coef(anova3)
 ```
 
- `anova0` model estimates the mean of all group's means, while `anova1` estimates baseline group mean (mean precipitation for the Canadian model) and the effects $\alpha_i$ (mean change) of Models 2, 3 and 4 with respect to the baseline model. `anova2` model estimates each GCM's model mean separately; while the `anova3` model estimates the mean of means and the effects $\alpha_i$'s of GCM's models 1, 2 and 3 with respect to the global mean.
+`anova0` model estimates the mean of all group's means, while `anova1` estimates baseline group mean (mean precipitation for the Canadian model) and the effects $\alpha_i$ (mean change) of Models 2, 3 and 4 with respect to the baseline model. `anova2` model estimates each GCM's model mean separately; while the `anova3` model estimates the mean of means and the effects $\alpha_i$'s of GCM's models 1, 2 and 3 with respect to the global mean.
 
 ### ANOVA Model Diagnostics
 
