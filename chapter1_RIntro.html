@@ -967,17 +967,17 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           [,1]       [,2]        [,3]       [,4]       [,5]
-[1,] -0.2784229 -0.8186204  1.19686196 -0.6638230 -0.5918931
-[2,]  0.9448879  0.2194530  0.04891053  0.7685279  1.7089392
-[3,] -2.8427826  0.1822244  1.53352853  0.6600075  0.6784361
-[4,] -0.2863481 -0.3981562 -1.79210430 -2.1191045  2.5774242
-[5,] -0.7691427  0.6470781 -0.23692578 -0.3049570 -0.2131939</code></pre>
+[1,] -0.1659846  0.1080428  0.81346940 -0.1813102  0.7690867
+[2,]  1.4363950  0.2817196  0.64659018 -0.4040709  1.2947142
+[3,] -2.2069991  0.9382859  0.30464605 -0.3616381  1.0198216
+[4,]  0.3545455 -1.6372172 -0.08295212 -0.2292734 -1.7296252
+[5,]  0.8860192  0.7875302  0.27620141  2.0848693 -1.9742066</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">apply</span>(df, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="at">mean=</span><span class="fu">mean</span>(x), <span class="at">sd=</span><span class="fu">sd</span>(x)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           [,1]        [,2]      [,3]       [,4]      [,5]
-mean -0.6463617 -0.03360422 0.1500542 -0.3318698 0.8319425
-sd    1.3817022  0.57512976 1.3173620  1.1725848 1.3189969</code></pre>
+<pre><code>           [,1]       [,2]      [,3]      [,4]       [,5]
+mean 0.06079521 0.09567225 0.3915910 0.1817153 -0.1240419
+sd   1.40123862 1.02790290 0.3496682 1.0678334  1.5905956</code></pre>
 </div>
 </div>
 <ul>
