@@ -6,18 +6,18 @@ The aim of this chapter is to understand and model the stochastic mechanism that
 
 It is important to keep in mind that
 
--   A time series is a set of data collected over time.
--   Data can not be assumed independent.
--   Time series models are designed to incorporate time dependence.
+- A time series is a set of data collected over time.
+- Data can not be assumed independent.
+- Time series models are designed to incorporate time dependence.
 
 Among the time series application we can mentioned:
 
--   Economics (monthly unemployment figures, weekly interest rates, daily stock market values);
--   Meteorology (annual precipitation and drought index, global annual temperature series);
--   Agriculture (annual crop production, food consumption, cultivated area);
--   Biological Sciences (cell tissue hourly growth rate, daily seed germination rate);
--   Ecology (annual species abundance, monthly deforestation rate, annual carbon stock rate);
--   Medicine (daily blood pressure measurements, brain MRI time series, number of annual breast cancer cases)
+- Economics (monthly unemployment figures, weekly interest rates, daily stock market values);
+- Meteorology (annual precipitation and drought index, global annual temperature series);
+- Agriculture (annual crop production, food consumption, cultivated area);
+- Biological Sciences (cell tissue hourly growth rate, daily seed germination rate);
+- Ecology (annual species abundance, monthly deforestation rate, annual carbon stock rate);
+- Medicine (daily blood pressure measurements, brain MRI time series, number of annual breast cancer cases)
 
 **Time series examples**
 
@@ -389,7 +389,7 @@ $$
 | Error | $n-r$ | $SSE$ | $MSE=SSE/(n-q)$ |  |
 | Total | $n-q$ | $SSE_r$ |  |  |
 
-: Analysis of Variance Table. {#tbl-anova}
+: Analysis of Variance Table.
 
 Special case: $r=1$ and $z_{t1}=1$. In this case the model becomes:
 
@@ -419,9 +419,9 @@ $$
 
 where $SSE_k$ is the residual sum of squares under the model with $k$ regression coefficients.
 
--   Use the F test to compare one model against another
--   Use the test in a stepwise manner, by adding and/or deleting variables (stepwise multiple regression)
--   Evaluate each model on its own merits, using the maximum likelihood estimator variance
+- Use the F test to compare one model against another
+- Use the test in a stepwise manner, by adding and/or deleting variables (stepwise multiple regression)
+- Evaluate each model on its own merits, using the maximum likelihood estimator variance
 
 The F test assumes that the time series $Y_t$ has an approximate Normal distribution, and model comparison is possible for nested models. The Akaike information criteria (AIC) and Bayesian Information criteria (BIC) can be used to compare non-nested models.
 
@@ -449,8 +449,8 @@ $$
 
 Simulation studies:
 
--   $BIC$: Better for large samples
--   $AIC_c$: Better for smaller samples
+- $BIC$: Better for large samples
+- $AIC_c$: Better for smaller samples
 
 ::: callout-note
 Linear versus quadratic trend for the Northern Hemisphere mean Temperature anomalies.

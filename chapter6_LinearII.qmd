@@ -127,11 +127,11 @@ All these statistics measure the departures of the ECDF from the theoretical CDF
 
 <!-- TODO: replace draft placeholder text with substantive chapter content. Source placeholder: "beep beep". -->
 
-| Test | Population Assumption | Location parameter $\mu_0$ |
-|---|---|---|
-| **Student's *t*** | *iid* $N(\mu, \sigma^2)$ | mean (same as median) |
-| **Signed Rank** | *iid* symmetric distribution | median |
-| **Sign** | *iid* | median |
+| Test              | Population Assumption        | Location parameter $\mu_0$ |
+|-------------------|------------------------------|----------------------------|
+| **Student's *t*** | *iid* $N(\mu, \sigma^2)$     | mean (same as median)      |
+| **Signed Rank**   | *iid* symmetric distribution | median                     |
+| **Sign**          | *iid*                        | median                     |
 
 ## Summary
 

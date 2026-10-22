@@ -95,13 +95,13 @@ Neural networks (NN) were created around the 1980s and became very popular aroun
 
 In a simple *feed-forward neural network*, a quantitative response $Y$ can be modeled as a function of a set of $K$ hidden units available in a hidden layer in two steps:
 
--   First, $K$ activation units $A_k$ $(k = 1, \ldots, K)$ are built as functions of the input variables or input features $X_1, X_2, \ldots, X_p$ using a nonlinear activation function $g(z)$:
+- First, $K$ activation units $A_k$ $(k = 1, \ldots, K)$ are built as functions of the input variables or input features $X_1, X_2, \ldots, X_p$ using a nonlinear activation function $g(z)$:
 
 $$
 A_k = g\left(w_{k0} + \sum_{j=1}^p w_{kj}X_j\right).
 $$
 
--   These $K$ activation units $A_k$ are then used as inputs to the output layer:
+- These $K$ activation units $A_k$ are then used as inputs to the output layer:
 
 $$
 f(X) = \beta_0 + \sum_{k=1}^K \beta_k A_k.
@@ -595,7 +595,7 @@ $$
 
 Here, $C$ is a penalty parameter that controls the trade-off between achieving a low error on the training data and maintaining a large margin.
 
--   **Dual Formulation**
+- **Dual Formulation**
 
 To simplify solving this optimization problem, SVM formulations often convert this "primal" problem into its "dual" form. The dual problem focuses on maximizing a Lagrangian based on conditions derived from the primal problem:
 
@@ -634,16 +634,16 @@ The kernel function $K(\mathbf{x}_i, \mathbf{x}_j)$ computes the dot product of 
 Some common kernel functions are:
 
 1.  **Linear Kernel**:
-    -   $K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i \cdot \mathbf{x}_j$
-    -   This is essentially the dot product of the vectors in the original space, corresponding to the no-kernel scenario.
+    - $K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i \cdot \mathbf{x}_j$
+    - This is essentially the dot product of the vectors in the original space, corresponding to the no-kernel scenario.
 2.  **Polynomial Kernel**:
-    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = (\gamma \mathbf{x}\_i \cdot \mathbf{x}\_j + r)^d$
-    -   Where $\gamma$, $d$, and $r$ are kernel parameters. This kernel looks at not only the given features but also their combinations up to the $d$-th degree.
+    - $K(\mathbf{x}\_i, \mathbf{x}\_j) = (\gamma \mathbf{x}\_i \cdot \mathbf{x}\_j + r)^d$
+    - Where $\gamma$, $d$, and $r$ are kernel parameters. This kernel looks at not only the given features but also their combinations up to the $d$-th degree.
 3.  **Radial Basis Function (RBF) or Gaussian Kernel**:
-    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = \exp(-\gamma \|\mathbf{x}\_i - \mathbf{x}\_j\|^2)$
-    -   Here, $\gamma$ is a parameter that defines the spread of the kernel. It maps the data into an infinite-dimensional space, providing a powerful way to handle complex non-linear relationships.
+    - $K(\mathbf{x}\_i, \mathbf{x}\_j) = \exp(-\gamma \|\mathbf{x}\_i - \mathbf{x}\_j\|^2)$
+    - Here, $\gamma$ is a parameter that defines the spread of the kernel. It maps the data into an infinite-dimensional space, providing a powerful way to handle complex non-linear relationships.
 4.  **Sigmoid Kernel**:
-    -   $K(\mathbf{x}\_i, \mathbf{x}\_j) = \tanh(\gamma \mathbf{x}\_i \cdot \mathbf{x}\_j + r)$
+    - $K(\mathbf{x}\_i, \mathbf{x}\_j) = \tanh(\gamma \mathbf{x}\_i \cdot \mathbf{x}\_j + r)$
 
 #### SVM Classifier (Binary and Multi-label)
 
@@ -806,8 +806,8 @@ Each internal node in a decision tree represents a test on a feature, each branc
 
 In classification problems, decision trees divide the data into regions that are as pure as possible in terms of class labels. Common splitting criteria include:
 
--   **Gini index:** $G = \sum_{k=1}^{K} \hat{p}_k (1 - \hat{p}_k)$
--   **Entropy:** $H = -\sum_{k=1}^{K} \hat{p}_k \log \hat{p}_k$
+- **Gini index:** $G = \sum_{k=1}^{K} \hat{p}_k (1 - \hat{p}_k)$
+- **Entropy:** $H = -\sum_{k=1}^{K} \hat{p}_k \log \hat{p}_k$
 
 Here, $\hat{p}_k$ is the proportion of observations in a node belonging to class $k$.
 

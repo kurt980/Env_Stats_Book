@@ -12,25 +12,25 @@ $$
 
 In this case $Z$ is the attribute we observe, for example:
 
--   Corn Yield
--   Ozone level (ppm)
--   Number of Influenza cases
+- Corn Yield
+- Ozone level (ppm)
+- Number of Influenza cases
 
 $\mathbf{d}$ is the location where we observe $Z$. We can write it as a vector of size $(s\times 1)$. Usually $\mathbf{s}$ lies in a two dimensional space ($d=2$). This means $\mathbf{s}=(x,y)'$
 
 The type of spatial data is linked to the nature of the domain D.
 
--   Geostatistical Data
--   Lattice, Regional or Areal Data
--   Point Pattern Data
+- Geostatistical Data
+- Lattice, Regional or Areal Data
+- Point Pattern Data
 
 **Geostatistical data**
 
--   Domain $D$ is continuous and fixed: $Z(\mathbf{s})$ can be observed anywhere within $D$ and points in $D$ are not stochastic.
--   Geostatistical data also called *spatial data with continuous variation*
--   Attribute $Z$ can be continuous or discrete
--   Since $D$ is continuous it can not be sampled everywhere. We normally have a set of points where $Z$ is measured.
--   An important goal of the statistical analysis is to reconstruct the surface of the $Z$ attribute to be able to map $Z(\mathbf{s})$
+- Domain $D$ is continuous and fixed: $Z(\mathbf{s})$ can be observed anywhere within $D$ and points in $D$ are not stochastic.
+- Geostatistical data also called *spatial data with continuous variation*
+- Attribute $Z$ can be continuous or discrete
+- Since $D$ is continuous it can not be sampled everywhere. We normally have a set of points where $Z$ is measured.
+- An important goal of the statistical analysis is to reconstruct the surface of the $Z$ attribute to be able to map $Z(\mathbf{s})$
 
 **Example 1: August precipitation**
 
@@ -42,12 +42,12 @@ The type of spatial data is linked to the nature of the domain D.
 
 **Lattice data, Regional or Areal data**
 
--   The domain $D$ is fixed and discrete.
--   The number of locations can be large but are countable
--   Examples are associated to attributes collected in regions, for example, by Zip code, census tract, remote sensing data reported by pixels.
--   Need to define a representative location for the region, for example, the centroid.
--   To calculate distances between regions, we need to adopt a convention, for example, distances between counties, are distances between their centroids.
--   Data is aggregated per regions: Examples: number of crimes reported by county; soil moisture associated to a pixel; yield measured on a farm, etc.
+- The domain $D$ is fixed and discrete.
+- The number of locations can be large but are countable
+- Examples are associated to attributes collected in regions, for example, by Zip code, census tract, remote sensing data reported by pixels.
+- Need to define a representative location for the region, for example, the centroid.
+- To calculate distances between regions, we need to adopt a convention, for example, distances between counties, are distances between their centroids.
+- Data is aggregated per regions: Examples: number of crimes reported by county; soil moisture associated to a pixel; yield measured on a farm, etc.
 
 **Example 1: Spatial distribution of Twitter users based on a Streaming API sample**
 
@@ -59,16 +59,16 @@ The type of spatial data is linked to the nature of the domain D.
 
 **Notation for Lattice data**
 
--   Very often the notation for lattice data is $Z(\mathbf{s}_i)$, which coincides with the notation of Geostatistics data.
--   The lattice data implies integration of a continuous spatial attribute, e.g., average corn yield per plot, or enumeration of a counting measure, e.g. number of children with elevated blood lead level per county for a particular state and year.
--   To emphasize the areal nature of the lattice data you could use the notation $Z(A_i)$, where $A_i$ is the *ith* areal unit. $A_i$ is called the spatial support of the data.
--   The aim of the analysis is very often to study the spatial patterns of the response of interest, as a function of other spatial factors.
+- Very often the notation for lattice data is $Z(\mathbf{s}_i)$, which coincides with the notation of Geostatistics data.
+- The lattice data implies integration of a continuous spatial attribute, e.g., average corn yield per plot, or enumeration of a counting measure, e.g. number of children with elevated blood lead level per county for a particular state and year.
+- To emphasize the areal nature of the lattice data you could use the notation $Z(A_i)$, where $A_i$ is the *ith* areal unit. $A_i$ is called the spatial support of the data.
+- The aim of the analysis is very often to study the spatial patterns of the response of interest, as a function of other spatial factors.
 
 **Point Patterns data**
 
--   While for Geostatistics and Areal Data the domain $D$ is static and fixed (it does not change from one realization of the process to the next) in Point pattern data the domain $D$ can change for the different realizations of the process. Example: Locations for lightning occurrence.
--   The importance of point pattern data is the random domain and not the nature of the attribute being measured. In this case we talk about **unmarked patterns.**
--   If in addition to the location of the process, we observed the stochastic intensity of the attribute $Z$, we can talk about a **marked pattern**.
+- While for Geostatistics and Areal Data the domain $D$ is static and fixed (it does not change from one realization of the process to the next) in Point pattern data the domain $D$ can change for the different realizations of the process. Example: Locations for lightning occurrence.
+- The importance of point pattern data is the random domain and not the nature of the attribute being measured. In this case we talk about **unmarked patterns.**
+- If in addition to the location of the process, we observed the stochastic intensity of the attribute $Z$, we can talk about a **marked pattern**.
 
 **Example 1: Laryngeal cancer cases (black crosses) in the vicinity of an industrial incinerator (blue mark)**
 
@@ -82,18 +82,18 @@ The type of spatial data is linked to the nature of the domain D.
 
 **Spatial random fields**
 
--   A spatial random field is a collection of random variables indexed by some set $D \subset \mathtt{R}^2$ containing spatial coordinates $\mathbf{s}=[s_1,s_2,\ldots,s_d]'$.
--   We view the spatial data $Z(\mathbf{s})$ as a stochastic process. There is a random mechanism to generate the data.
--   If the dimension $d$ of the index set of the stochastic process is greater than one, the stochastic process is often referred to as a **random field**.
--   We will be mostly concerned with spatial processes in $\mathtt{R}^2$
--   A particular realization $\omega$ of this random mechanism, produces a surface $Z(.,\omega)$. Because the surface from which the samples are drawn is the result from this random experiment, $Z(\mathbf{s})$ is also referred as a **random function**
--   The collection of $n$ georeferenced spatial data do not represent a sample size of size $n$
--   They represent an incomplete observation of a single realization of a random experiment. This is a sample of size one from an n-dimensional distribution.
--   We can talk about $E[Z(\mathbf{s})]=\mu(\mathbf{s})$. This is the long run average of the attribute $Z$ at location $\mathbf{s}$
--   The expected value is taken over the distribution of all possible realizations $\omega$ of the random experiment.
--   How can we make progress in statistical inference with a sample of size one?
--   Normally we do not have replications of the spatial data in the sense of observing independent realizations of the process
--   Fortunately, we can make inference on the process by assuming certain stationarity assumptions
+- A spatial random field is a collection of random variables indexed by some set $D \subset \mathtt{R}^2$ containing spatial coordinates $\mathbf{s}=[s_1,s_2,\ldots,s_d]'$.
+- We view the spatial data $Z(\mathbf{s})$ as a stochastic process. There is a random mechanism to generate the data.
+- If the dimension $d$ of the index set of the stochastic process is greater than one, the stochastic process is often referred to as a **random field**.
+- We will be mostly concerned with spatial processes in $\mathtt{R}^2$
+- A particular realization $\omega$ of this random mechanism, produces a surface $Z(.,\omega)$. Because the surface from which the samples are drawn is the result from this random experiment, $Z(\mathbf{s})$ is also referred as a **random function**
+- The collection of $n$ georeferenced spatial data do not represent a sample size of size $n$
+- They represent an incomplete observation of a single realization of a random experiment. This is a sample of size one from an n-dimensional distribution.
+- We can talk about $E[Z(\mathbf{s})]=\mu(\mathbf{s})$. This is the long run average of the attribute $Z$ at location $\mathbf{s}$
+- The expected value is taken over the distribution of all possible realizations $\omega$ of the random experiment.
+- How can we make progress in statistical inference with a sample of size one?
+- Normally we do not have replications of the spatial data in the sense of observing independent realizations of the process
+- Fortunately, we can make inference on the process by assuming certain stationarity assumptions
 
 ## Stationarity
 
@@ -131,11 +131,11 @@ The mean is constant and the covariance is only a function of the spatial separa
 
 ### Covariance function
 
--   The function $C(\mathbf{h})$ is called the **Covariance Function**
--   $C(\mathbf{h})$ does not depend on the absolute coordinates
--   $$
-    Cov[Z(\mathbf{s}), Z(\mathbf{s + 0})]=
-    $$
+- The function $C(\mathbf{h})$ is called the **Covariance Function**
+- $C(\mathbf{h})$ does not depend on the absolute coordinates
+- $$
+  Cov[Z(\mathbf{s}), Z(\mathbf{s + 0})]=
+  $$
 
 $$
 Cov[Z(\mathbf{s}), Z(\mathbf{s})]=C(\mathbf{0})
@@ -149,13 +149,13 @@ This implies that the variability of a second order stationary random field is t
 
 Properties of the Covariance function of a second-order stationary random field:
 
--   $C(\mathbf{0})\geq 0$
--   $C(\mathbf{h})$=$C(-\mathbf{h})$
--   $C(\mathbf{0})\geq |C(\mathbf{h})|$
--   $C(\mathbf{h})=Cov[Z(\mathbf{s}),Z(\mathbf{s+h})]=Cov[Z(\mathbf{0}),Z(\mathbf{h})]$
--   If $C_j(\mathbf{h})$ are valid covariance functions, $j=1,\ldots,k$, then $\sum_{j=1}^k b_j C_j(\mathbf{h} )$ is a valid covariance function, if $b_j\geq 0$ $\forall j$
--   If $C_j(\mathbf{h})$ are valid covariance functions, $j=1,\ldots,k$, then $\prod_{j=1}^k C_j(\mathbf{h} )$ is a valid covariance function
--   If $C(\mathbf{h})$ is a valid covariance function in $\mathtt{R}^d$, then it is also a valid covariance function in $\mathtt{R}^p$, $p<d$
+- $C(\mathbf{0})\geq 0$
+- $C(\mathbf{h})$=$C(-\mathbf{h})$
+- $C(\mathbf{0})\geq |C(\mathbf{h})|$
+- $C(\mathbf{h})=Cov[Z(\mathbf{s}),Z(\mathbf{s+h})]=Cov[Z(\mathbf{0}),Z(\mathbf{h})]$
+- If $C_j(\mathbf{h})$ are valid covariance functions, $j=1,\ldots,k$, then $\sum_{j=1}^k b_j C_j(\mathbf{h} )$ is a valid covariance function, if $b_j\geq 0$ $\forall j$
+- If $C_j(\mathbf{h})$ are valid covariance functions, $j=1,\ldots,k$, then $\prod_{j=1}^k C_j(\mathbf{h} )$ is a valid covariance function
+- If $C(\mathbf{h})$ is a valid covariance function in $\mathtt{R}^d$, then it is also a valid covariance function in $\mathtt{R}^p$, $p<d$
 
 **Positive Definiteness conditions**
 
@@ -181,16 +181,16 @@ $$
 
 The function $\gamma(\mathbf{h})$ is called the **semivariogram** of the spatial process.
 
--   It can be shown that the class of intrinsic stationary processes is larger than the second-order stationary processes (Cressie, 1993).
--   **Exercise**: Proof that a second order stationary process is also intrinsically stationary. The reverse is not true. For this is sufficient to examine: $Var[Z(\mathbf{s})-Z(\mathbf{s+h})]$
--   Because of the relationship $\gamma(\mathbf{h})=C(\mathbf{0})-C(\mathbf{h})$, statistical methods can be developed in terms of $\gamma(\mathbf{h})$ or $C(\mathbf{h})$.
+- It can be shown that the class of intrinsic stationary processes is larger than the second-order stationary processes (Cressie, 1993).
+- **Exercise**: Proof that a second order stationary process is also intrinsically stationary. The reverse is not true. For this is sufficient to examine: $Var[Z(\mathbf{s})-Z(\mathbf{s+h})]$
+- Because of the relationship $\gamma(\mathbf{h})=C(\mathbf{0})-C(\mathbf{h})$, statistical methods can be developed in terms of $\gamma(\mathbf{h})$ or $C(\mathbf{h})$.
 
 ### Isotropy
 
--   For a second order stationary process the covariance depends on the separation vector $\mathbf{h}$
--   The covariance function can depend on the direction
--   When the covariance does not depend on the direction but only on the absolute distance between two points $||\mathbf{h}||$, the covariance function is called **isotropic**
--   If the random field is second order stationary with an isotropic covariance function, then
+- For a second order stationary process the covariance depends on the separation vector $\mathbf{h}$
+- The covariance function can depend on the direction
+- When the covariance does not depend on the direction but only on the absolute distance between two points $||\mathbf{h}||$, the covariance function is called **isotropic**
+- If the random field is second order stationary with an isotropic covariance function, then
 
 $$
 C(\mathbf{h})=C^*(|\mathbf{h}||)
@@ -212,13 +212,13 @@ The reverse is not true. This means that even if $Z(\mathbf{s_i}) \sim G(\mu(\ma
 
 ### Model Representation of a Random Field
 
--   The type of statistical model we will use is the mathematical representation of the data-generating mechanism with the following additive structure:
+- The type of statistical model we will use is the mathematical representation of the data-generating mechanism with the following additive structure:
 
 $$
 Data = Structure + Error
 $$
 
--   The structure is the large scale trend and the error represents the stochastic variation and covariation among responses.
+- The structure is the large scale trend and the error represents the stochastic variation and covariation among responses.
 
 Intrinsic and weak stationarity require $E[Z(\mathbf{s})]=\mu$. But normally the large-scale trend changes with location. Therefore: $E[Z(\mathbf{s})]=\mu(\mathbf{s})$
 
@@ -228,8 +228,8 @@ $$
 Z(\mathbf{s})-\mu(\mathbf{s})
 $$
 
--   Normally the stationarity assumption is intended for the de-trended version of $Z(\mathbf{s})$.
--   Usually we consider:
+- Normally the stationarity assumption is intended for the de-trended version of $Z(\mathbf{s})$.
+- Usually we consider:
 
 $$
 Z(\mathbf{s}) = f(\mathbf{X,s,\boldsymbol{\beta}}) + e(\mathbf{s})
@@ -237,7 +237,7 @@ $$
 
 where $Z(\mathbf{s})=[Z(\mathbf{s}_1),Z(\mathbf{s}_2),\ldots,Z(\mathbf{s}_n)]$; $\mathbf{X}$ is a $(n\times p)$ matrix of covariates, $\boldsymbol{\beta}$ is a vector of parameters, and $e(\mathbf{s})$ is a random error vector with $\mathbf{0}$ mean and $Var[e(\mathbf{s})]=\Sigma(\theta)$.
 
--   The function $f$ might be non-linear. It can be represented as:
+- The function $f$ might be non-linear. It can be represented as:
 
 $$
 f(\mathbf{X,s,\boldsymbol{\beta}})=
@@ -249,13 +249,13 @@ f(x_n,\mathbf{s}_n,\boldsymbol{\beta})
 \end{bmatrix}
 $$
 
--   It follows that $E[Z(\mathbf{s})]=f(\mathbf{X,s,\boldsymbol{\beta}})$. This is the large scale structure of the process.
--   Stationary assumption is meant for $e(\mathbf{s})$
--   The stationarity assumption is used to build the structure of $Var[e(\mathbf{s})]=\Sigma(\theta)$. The entries of this matrix can be built from the function $C(\mathbf{h})$ of a second order stationarity process.
--   The large scale structure can be expressed as a linear function of the spatial coordinates: $E[Z(\mathbf{s})]=\mathbf{X(s)}\boldsymbol{\beta}$. The matrix $\mathbf{X(s)}$ can involve other variables apart from the location.
--   The main parameters to be estimated are $\theta$ for the Covariance function and $\boldsymbol{\beta}$ for the large scale trend
--   Usually for spatial regression $\boldsymbol{\beta}$ has more importance and $\theta$ is considered a nuisance parameter
--   For spatial prediction, $\theta$ estimates are critical since they drive the mean square prediction error
+- It follows that $E[Z(\mathbf{s})]=f(\mathbf{X,s,\boldsymbol{\beta}})$. This is the large scale structure of the process.
+- Stationary assumption is meant for $e(\mathbf{s})$
+- The stationarity assumption is used to build the structure of $Var[e(\mathbf{s})]=\Sigma(\theta)$. The entries of this matrix can be built from the function $C(\mathbf{h})$ of a second order stationarity process.
+- The large scale structure can be expressed as a linear function of the spatial coordinates: $E[Z(\mathbf{s})]=\mathbf{X(s)}\boldsymbol{\beta}$. The matrix $\mathbf{X(s)}$ can involve other variables apart from the location.
+- The main parameters to be estimated are $\theta$ for the Covariance function and $\boldsymbol{\beta}$ for the large scale trend
+- Usually for spatial regression $\boldsymbol{\beta}$ has more importance and $\theta$ is considered a nuisance parameter
+- For spatial prediction, $\theta$ estimates are critical since they drive the mean square prediction error
 
 Since the errors can contain more than a single component Cressie(1993) proposed the following decomposition:
 
@@ -263,10 +263,10 @@ $$
 Z(\mathbf{s}) = \mu(\mathbf{s}) + W(\mathbf{s}) +\eta(\mathbf{s}) +\varepsilon(\mathbf{s})
 $$
 
--   $\mu(\mathbf{s})$ is the **large scale trend**
--   $W(\mathbf{s})$ is the **smoothed-scale variation**: stationary process with covariance function $C_W(\mathbf{h})$. The range of the process is larger that the smallest distance between the observed data points.
--   $\eta(\mathbf{s})$ is the **micro-scale variation**: stationary process with range lower than the minimum distance between data points. The spatial structure of this process can not be estimated from the observed data. Maybe the variance $Var(\eta(\mathbf{s}))=\sigma_\eta^2$ could be estimated.
--   $\varepsilon(\mathbf{s})$ is a white noise measurement error with variance $Var(\varepsilon(\mathbf{s}))=\sigma_\varepsilon^2$
+- $\mu(\mathbf{s})$ is the **large scale trend**
+- $W(\mathbf{s})$ is the **smoothed-scale variation**: stationary process with covariance function $C_W(\mathbf{h})$. The range of the process is larger that the smallest distance between the observed data points.
+- $\eta(\mathbf{s})$ is the **micro-scale variation**: stationary process with range lower than the minimum distance between data points. The spatial structure of this process can not be estimated from the observed data. Maybe the variance $Var(\eta(\mathbf{s}))=\sigma_\eta^2$ could be estimated.
+- $\varepsilon(\mathbf{s})$ is a white noise measurement error with variance $Var(\varepsilon(\mathbf{s}))=\sigma_\varepsilon^2$
 
 Usually $\sigma_\eta^2$ and $\sigma_\varepsilon^2$ can not be estimated in a separate form. One can consider the model:
 
@@ -362,8 +362,8 @@ $$
 
 where $\bar{Z} =\frac{1}{n}\sum_{i=1}^n Z(\mathbf{s}_i)$
 
--   If $Z(\mathbf{s})$ intrinsically stationary, $\hat{\gamma}(\mathbf{h})$ for $\mathbf{h=s_i-s_j}$ is an unbiased estimator of $\gamma(\mathbf{h})$.
--   It can be demonstrated that **(Exercise)**:
+- If $Z(\mathbf{s})$ intrinsically stationary, $\hat{\gamma}(\mathbf{h})$ for $\mathbf{h=s_i-s_j}$ is an unbiased estimator of $\gamma(\mathbf{h})$.
+- It can be demonstrated that **(Exercise)**:
 
 $$
 \hat{\gamma}(\mathbf{h})\neq \hat{C}(\mathbf{0}) - \hat{C}(\mathbf{h})
@@ -432,28 +432,28 @@ $$
 Z(\mathbf{s})=X(\mathbf{s})\boldsymbol{\beta}  + e(\mathbf{s}), \;\;e(\mathbf{s}) \sim N(\mathbf{0}, \Sigma)
 $$
 
--   Estimation: $E[Z(\mathbf{s})]=X(\mathbf{s})\boldsymbol{\beta}$
--   Prediction: $\hat{Z}(\mathbf{s_0})$
+- Estimation: $E[Z(\mathbf{s})]=X(\mathbf{s})\boldsymbol{\beta}$
+- Prediction: $\hat{Z}(\mathbf{s_0})$
 
 **Geostatistical prediction**
 
 Kriging: Statistical tools for predicting $g(Z(\mathbf{s_0}))$ from a set of observed data.
 
--   Term coined by Matheron in honor of the South African mining engineer D.G. Krige for his work on ore-grade estimation (Krige, 1951).
--   Other important sources: Gandin, 1963; Chil\`es and Delfiner, 1999; Deutsh and Journel, 1992; Cressie, 1993
+- Term coined by Matheron in honor of the South African mining engineer D.G. Krige for his work on ore-grade estimation (Krige, 1951).
+- Other important sources: Gandin, 1963; Chil\`es and Delfiner, 1999; Deutsh and Journel, 1992; Cressie, 1993
 
 **Functions for prediction**
 
 The function $g(Z(\mathbf{s_0}))$ can have several forms
 
--   The identity function: Predicting the process itself: $g(Z(\mathbf{s_0}))=Z(\mathbf{s_0})$
--   Predicting the Average in a region B of volume $|B|$:
+- The identity function: Predicting the process itself: $g(Z(\mathbf{s_0}))=Z(\mathbf{s_0})$
+- Predicting the Average in a region B of volume $|B|$:
 
 $$
 g(Z(B))=\frac{1}{|B|}\int _B Z(\mathbf{u}) d\mathbf{u}
 $$
 
--   Predicting a binary variable indicating whether $Z(\mathbf{s})$ exceeds a certain threshold $c$:
+- Predicting a binary variable indicating whether $Z(\mathbf{s})$ exceeds a certain threshold $c$:
 
 $$
 g(Z(\mathbf{s_0}))=\left \{\begin{array}{cc}
@@ -634,8 +634,8 @@ $$
 p_{sk}(Z; [\mathbf{s_1,s_2,\ldots,s_n}])=\mu(\mathbf{s})+\Sigma\Sigma^{-1}(Z(\mathbf{s})-\mu(\mathbf{s}))=Z(\mathbf{s})
 $$
 
--   The property of being an exact interpolator is a desirable one.
--   But if the process contains a nugget effect and the nugget effect includes a measurement error, we might not want the predictor to interpolate the data.
+- The property of being an exact interpolator is a desirable one.
+- But if the process contains a nugget effect and the nugget effect includes a measurement error, we might not want the predictor to interpolate the data.
 
 ### Ordinary Kriging
 
@@ -735,9 +735,9 @@ This formulation makes the connection with the Gaussian random field best predic
 
 **Ordinary Kriging in terms of the semivariogram**
 
--   The kriging equations can also be expressed in terms of the semivariogram of the process.
--   This is helpful for processes that are intrinsically stationary but not second order stationary.
--   It is necessary to use the matrix $\Gamma=[\gamma(\mathbf{s_i -s_j})]$ and the vector $\gamma(\mathbf{s_0})=[\gamma(\mathbf{s_0-s_1}),\hdots,\gamma(\mathbf{s_0-s_n})]$
+- The kriging equations can also be expressed in terms of the semivariogram of the process.
+- This is helpful for processes that are intrinsically stationary but not second order stationary.
+- It is necessary to use the matrix $\Gamma=[\gamma(\mathbf{s_i -s_j})]$ and the vector $\gamma(\mathbf{s_0})=[\gamma(\mathbf{s_0-s_1}),\hdots,\gamma(\mathbf{s_0-s_n})]$
 
 ### Ordinary Kriging in terms of the semivariogram
 
@@ -888,8 +888,8 @@ $$
 \gamma_I(\textbf{h})=\frac{1}{2} Var[I(\textbf{s+h},z)-I(\textbf{s},z)]
 $$
 
--   Ordinary kriging provides an estimate to $E[Z(\mathbf{s_0} )|Z(\mathbf{s_1}), Z(\mathbf{s_2}),\hdots, Z(\mathbf{s_n})]$
--   Indicator kriging provides an approximation to: $E[I(\mathbf{s_0},z )|I(\mathbf{s_1},z), I(\mathbf{s_2},z),\hdots, I(\mathbf{s_n},z)]=Pr[Z(\mathbf{s})\leq z|I(\mathbf{s_1},z), I(\mathbf{s_2},z),\hdots, I(\mathbf{s_n},z)]$
+- Ordinary kriging provides an estimate to $E[Z(\mathbf{s_0} )|Z(\mathbf{s_1}), Z(\mathbf{s_2}),\hdots, Z(\mathbf{s_n})]$
+- Indicator kriging provides an approximation to: $E[I(\mathbf{s_0},z )|I(\mathbf{s_1},z), I(\mathbf{s_2},z),\hdots, I(\mathbf{s_n},z)]=Pr[Z(\mathbf{s})\leq z|I(\mathbf{s_1},z), I(\mathbf{s_2},z),\hdots, I(\mathbf{s_n},z)]$
 
 Note that: $Pr[Z(\mathbf{s})\leq z|I(\mathbf{s_1},z), I(\mathbf{s_2},z),\hdots, I(\mathbf{s_n},z)]$ is not the same as: $Pr[Z(\mathbf{s})\leq z|Z(\mathbf{s_1}),Z(\mathbf{s_2})\hdots,Z(\mathbf{s_n})]$, therefore considerable information is lost when applying the indicator function. In practice the Indicator Kriging is a raw estimator of the conditional probability of interest.
 
