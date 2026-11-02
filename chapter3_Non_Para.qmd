@@ -127,7 +127,7 @@ We want to check whether there has been a shift in the distributions of the mean
 
 We will use the function *wilcox.test(x,y)*, where $x$ is the sample vector from the random variable $X$, and $y$ is the sample vector from random variable $Y$.
 
-```{r}
+```{r, message=FALSE}
 wilcox.test(hwf1$mean_duration,hwf2$mean_duration)
 ```
 
@@ -137,7 +137,7 @@ For a comparison of the location parameters among 3 or more populations we can u
 
 The Kruskal-Wallis test is a powerful non-parametric statistical test designed to address situations where the assumptions of normality and homogeneity of variances required by traditional analysis of variance (ANOVA) cannot be met. This test is particularly useful when you have three or more independent groups or conditions and you want to determine whether there are statistically significant differences in the central tendencies of these groups.
 
-In cases where the data is not normally distributed or the group variances are unequal, the Kruskal-Wallis test provides a reliable alternative to traditional ANOVA. Instead of relying on means and variances, the Kruskal-Wallis test operates on the ranks of the data, making it robust to deviations from normality and homoscedasticity.
+In cases where the data is not normally distributed or the group variances are unequal, the Kruskal-Wallis test provides a reliable alternative to traditional ANOVA. Instead of relying on means and variances, the Kruskal-Wallis test operates on the ranks of the data, making it robust to deviations from normality and homocedasticity.
 
 Imagine a clinical trial comparing the pain relief efficacy of three different treatments. Patients' pain relief scores may not follow a normal distribution, and the variability in responses between treatments could be quite different. In this scenario, the Kruskal-Wallis test allows researchers to determine whether there are statistically significant differences in pain relief among the treatments without the need for stringent parametric assumptions.
 
@@ -145,7 +145,110 @@ In summary, the Kruskal-Wallis test is a valuable tool in situations where you n
 
 **Example**
 
-Increased greenhouse gas concentrations in the atmosphere as a consequence of human activities, might modify the behaviour of rainfall extreme events. To investigate that, we use data from the CMIP5 project consisting of simulated values of daily rainfall for three different scenarios: historical conditions, RCP4.5 and RCP8.5 climate scenarios proposed by the IPCC, being the last one the worst case scenario with the highest radiative forcing level (8.5 $Watts/m^2$) for the projected future climate. We want to study potential changes in the location parameter of the maximum annual daily rainfall. The Generalized Extreme Value (GEV) distribution (to be discussed in Chapter XX) was fitted to the simulated daily annual maximum for the three experiments (historical, RCP4.5 and RCP8.5) using simulated data from 30 General Circulation Models (GCMs). The location, scale and shape parameters of the GEV fitted models were estimated using maximum likelihood; and the Kruskal-Wallis test was used to assess whether significant differences in the model parameters for the three experiments are observed.
+Increased greenhouse gas concentrations in the atmosphere as a consequence of human activities, might modify the behaviour of rainfall extreme events. To investigate that, we use data from the CMIP5 project consisting of simulated values of daily rainfall for three different scenarios: historical conditions, RCP4.5 and RCP8.5 climate scenarios proposed by the IPCC, being the last one the worst case scenario with the highest radiative forcing level (8.5 $Watts/m^2$) for the projected future climate. We want to study potential changes in the location, scale and shape parameters of the maximum annual daily rainfall. The Generalized Extreme Value (GEV) distribution (to be discussed in Chapter XX) was fitted to the simulated daily annual maximum for the three experiments (historical, RCP4.5 and RCP8.5) using simulated data from 30 General Circulation Models (GCMs). The location, scale and shape parameters of the GEV fitted models were estimated using maximum likelihood; and the Kruskal-Wallis test was used to assess whether significant differences in the model parameters for the three experiments are observed.
+
+The null hypothesis for the Kruskal-Wallis test is: $$H_0: \mbox{All groups have the same population median}\;\; vs \;\;
+H_a: \mbox{At least one pair of medians are different from each other}$$
+
+In this case the target populations are the true parameter values of the GEV distribution.
+
+```{r,message=FALSE}
+library(tidyverse)
+library(dplyr)
+
+kw_df <- readRDS("data/KW-Example.rds")
+
+#create boxplots with x= model, measure = y, group = experiment
+location_bp = as_tibble(kw_df) |>
+  #select(model, location, experiment) |>
+  ggplot() +
+  aes(x = model, y = location, fill = experiment) +
+  geom_boxplot(outlier.shape = NA) +
+  facet_wrap(~experiment) +
+  coord_cartesian(ylim = c(4.5, 6.5)) +
+  theme_bw()
+location_bp
+
+#create boxplot with x= experiment, y = measure
+location_bp_byexperiment = as_tibble(kw_df) |>
+  #select(model, location, experiment) |>
+  ggplot() +
+  geom_boxplot() +
+  aes(x = experiment, y = location) +
+  theme_bw()
+location_bp_byexperiment
+
+scale_bp_byexperiment = as_tibble(kw_df) |>
+  #select(model, scale, experiment) |>
+  ggplot() +
+  aes(x = experiment, y = scale) +
+  geom_boxplot() +
+  theme_bw()
+scale_bp_byexperiment
+
+shape_bp_byexperiment = as_tibble(kw_df) |>
+  #select(model, shape, experiment) |>
+  ggplot() +
+  aes(x = experiment, y = shape) +
+  geom_boxplot() +
+  theme_bw()
+shape_bp_byexperiment
+
+# Kruskal-Wallis tests (Zoey)
+
+kw_location <- kruskal.test(location ~ experiment,data = kw_df)
+
+kw_scale <- kruskal.test(scale ~ experiment, data = kw_df)
+
+kw_shape <- kruskal.test(shape ~ experiment,data = kw_df)
+
+kw_location
+kw_scale
+kw_shape
+
+
+##Make a summary mean median and sd for each parameter by experiment, 
+##and do the hypothesis test
+
+# Summary statistics (Zoey)
+summary_stats <- kw_df |>
+  group_by(experiment) |>
+  summarise(
+    location_mean = mean(location, na.rm = TRUE),
+    location_median = median(location, na.rm = TRUE),
+    location_sd = sd(location, na.rm = TRUE),
+    
+    shape_mean = mean(shape, na.rm = TRUE),
+    shape_median = median(shape, na.rm = TRUE),
+    shape_sd = sd(shape, na.rm = TRUE),
+    
+    scale_mean = mean(scale, na.rm = TRUE),
+    scale_median = median(scale, na.rm = TRUE),
+    scale_sd = sd(scale, na.rm = TRUE)
+  )
+
+summary_stats
+
+summary_stats_ppt <- kw_df |>
+  group_by(experiment) |>
+  summarise(
+    location_mean = mean(location, na.rm = TRUE),
+    location_min = min(location, na.rm = TRUE),
+    location_max = max(location, na.rm = TRUE),
+    
+    shape_mean = mean(shape, na.rm = TRUE),
+    shape_min = min(shape, na.rm = TRUE),
+    shape_max = max(shape, na.rm = TRUE),
+    
+    scale_mean = mean(scale, na.rm = TRUE),
+    scale_min = min(scale, na.rm = TRUE),
+    scale_max = max(scale, na.rm = TRUE)
+  )
+
+summary_stats_ppt
+##end of working code
+```
+
 
 ## Non-parametric correlation measures
 
@@ -181,7 +284,7 @@ In order to calculate the standard error of the sample median of a given sample,
 
 We can demonstrate this procedure using the following R code. Suppose that your data is stored in a vector $x$. We can re-sample `x` 5,000 times with replacement, and obtain the median for each sample:
 
-```{r}
+```{r, message=FALSE}
 # Original data
 x <- c(12, 15, 18, 20, 21, 24, 30, 35, 40)
 # Number of bootstrap samples
@@ -196,7 +299,7 @@ se.median
 
 We can use a simulated data set:
 
-```{r}
+```{r, message=FALSE}
 set.seed(123)
 # Sample from a skewed distribution
 x <- rexp(100, rate = 0.2)
@@ -213,7 +316,7 @@ cat("Bootstrap SE =", se.median, "\n")
 
 The library `boot` is a more general library:
 
-```{r}
+```{r, message=FALSE}
 library(boot)
 # Statistic of interest
 median.fun <- function(data, indices) {
@@ -234,13 +337,13 @@ Once the standard error is estimated, we can calculate the confidence interval f
 
 The types of confidence intervals to be calculated can be defined with argument `type`:
 
-```{r}
+```{r, message=FALSE}
 boot.ci(results, type = "perc")
 ```
 
 The probability distribution of the bootstrap sample estimates is an approximation of the sampling distribution of the estimate.
 
-```{r}
+```{r, message=FALSE}
 # Kernel density estimate
 kd <- density(results$t)
 
