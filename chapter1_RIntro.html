@@ -966,18 +966,18 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">25</span>), <span class="at">ncol =</span> <span class="dv">5</span>) <span class="co"># 100 random variables organzied into 5 columns</span></span>
 <span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           [,1]       [,2]       [,3]       [,4]       [,5]
-[1,]  1.7743632  1.2172102 -1.1482359  0.9101208  0.1379696
-[2,] -0.8487721 -0.4355697 -0.8180323 -0.4980032  0.5569323
-[3,] -0.3862108 -1.0392213 -1.8671376 -1.6098302 -1.2344660
-[4,]  0.4154153  0.4394743  0.6076096  0.5766558 -0.8369269
-[5,]  0.5620321 -0.2390638 -0.2638605  0.3577401 -0.6375264</code></pre>
+<pre><code>           [,1]       [,2]        [,3]       [,4]        [,5]
+[1,]  0.8949622 -0.1819219  0.20412015 -1.3817599  0.04152018
+[2,]  0.2418601  0.8855722  0.16776408 -1.2284937 -0.36124641
+[3,] -1.2701671 -1.8693963  0.90872948 -2.3071881  0.07609045
+[4,]  1.6487845  1.2868333 -1.03918864 -1.8226858 -1.48613445
+[5,]  1.5637630 -1.5656255  0.02648523 -0.2064836 -0.47908389</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">apply</span>(df, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="at">mean=</span><span class="fu">mean</span>(x), <span class="at">sd=</span><span class="fu">sd</span>(x)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          [,1]        [,2]       [,3]        [,4]       [,5]
-mean 0.3033655 -0.01143408 -0.6979313 -0.05266333 -0.4028035
-sd   1.0057627  0.86616077  0.9323487  1.01421438  0.7329305</code></pre>
+<pre><code>          [,1]       [,2]       [,3]       [,4]       [,5]
+mean 0.6158405 -0.2889077 0.05358206 -1.3893222 -0.4417708
+sd   1.1979488  1.4143692 0.70033178  0.7834718  0.6325192</code></pre>
 </div>
 </div>
 <ul>
